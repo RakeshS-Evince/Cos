@@ -21,6 +21,7 @@ db.sequelize = sequelize;
 db.accounts = require("./accounts")(sequelize, DataTypes);
 db.customer = require("./customer")(sequelize, DataTypes);
 db.iceCream = require("./iceCream")(sequelize, DataTypes);
+db.cart = require("./cart")(sequelize, DataTypes);
 db.order = require("./order")(sequelize, DataTypes);
 db.orderItem = require("./orderItem")(sequelize, DataTypes);
 db.role = require('./role')(sequelize, DataTypes)
@@ -29,9 +30,11 @@ db.customer.belongsTo(db.accounts, { foreingKey: ["accountId"] });
 db.order.belongsTo(db.customer, { foreingKey: ['customerId'] });
 db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
 db.order.belongsToMany(db.iceCream, { through: db.orderItem, foreingKey: ["iceCreamId"] });
-db.iceCream.belongsToMany(db.order, { through: db.orderItem, foreingKey: ["iceCreamId"] })
+db.iceCream.belongsToMany(db.order, { through: db.orderItem, foreingKey: ["iceCreamId"] });
+db.customer.hasOne(db.cart, { foreingKey: ["id", 'customerId'] });
+db.cart.belongsTo(db.customer, { foreingKey: ["id", 'customerId'] });
 // sequelize
-//     .sync({ force: true })
+//     .sync({ alter: true })
 //     .then(() => {
 //         console.log("Table Altered");
 //     })

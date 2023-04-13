@@ -1,0 +1,20 @@
+.cart_wrapper {
+    position: fixed;
+    height: 100vh;
+    background-color: rgb(255, 255, 255);
+    top: 56px;
+    right: -550px;
+    z-index: 5;
+    width: 300px;
+    transition: all ease-in-out 0.3s;
+
+    &_show {
+        transition: all ease-in-out 0.3s;
+        right: 0;
+    }
+
+}
+
+.toggleButton {
+    display: none;
+}

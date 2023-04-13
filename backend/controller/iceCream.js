@@ -16,11 +16,25 @@ const addIceCream = async (req, res, next) => {
     res.send({ message: "IceCream added" });
 }
 const updateIceCream = async (req, res, next) => {
-    const data = await IceCream.create(req.body, { where: { id: req.params.id } });
-    if (!data) {
-        res.send({ message: "Some error occured while updating icecream" })
+    const data = await IceCream.update(req.body, { where: { id: req.params.id } });
+    if (!data[0]) {
+        res.send({ message: "Some error occured while updating icecream" });
+        return
     }
     res.send({ message: "IceCream Updated" });
 }
 
-module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream }
+const saveCart = async (req, res, next) => {
+    try {
+        const data = await db.cart.create({ IceCreams: req.body.iceCreams, customerId: req.body.customerId });
+        if (!data) {
+            res.send({ message: "Unable to save item in cart" });
+            return
+        }
+        res.send({ message: "Cart saved" })
+    } catch (e) {
+        res.send({ message: e.message })
+    }
+}
+
+module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, saveCart }
