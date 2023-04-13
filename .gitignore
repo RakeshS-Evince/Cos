@@ -1,0 +1,3 @@
+backend/.env
+backend/node_modules/.bin/nopt
+backend/node_modules/
