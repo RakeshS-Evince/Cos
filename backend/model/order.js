@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER
         },
         price: {
-            type: DataTypes.INTEGER
+            type: DataTypes.FLOAT(10, 2)
         },
         paymentMethod: {
             type: DataTypes.STRING

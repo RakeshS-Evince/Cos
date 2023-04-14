@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
@@ -17,11 +16,11 @@ function Home() {
         axios.get(BASE_URL + ICECREAM).then((res) => setData(res?.data)).catch(e => console.log(e))
     }, [])
     return (
-        <Container className='mt-5'>
+        <>
             <h1>All Icecreams</h1>
             <Row className='g-3'>
                 {data.length && data.map((ele, i) => (
-                    <Col key={i}>
+                    <Col key={i} lg={3} sm={4}>
                         <Card>
                             <Card.Img variant="top" src={ele.image + "/100px180"} />
                             <Card.Body>
@@ -30,7 +29,7 @@ function Home() {
                                     Some quick example text to build on the card title and make up the
                                     bulk of the card's content.
                                 </Card.Text>
-                                <span className='mt-2'>Price: ₹{ele.price}.00</span>
+                                <span className='mt-2'>Price: ₹{parseFloat(ele.price).toFixed(2)}</span>
                                 <div className='d-flex justify-content-end'>
                                     <i className='bi bi-cart-plus btn btn-primary' onClick={() => {
                                         showCart();
@@ -40,16 +39,18 @@ function Home() {
                                             image: ele.image,
                                             price: ele.price,
                                             available: ele.quantity,
-                                            quantity: 1
+                                            quantity: 1,
                                         }))
-                                    }}></i>
+                                    }}>
+                                    </i>
                                 </div>
                             </Card.Body>
                         </Card>
                     </Col>
                 ))}
             </Row>
-        </Container>
+        </>
+
     )
 }
 

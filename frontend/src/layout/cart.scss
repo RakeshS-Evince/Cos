@@ -1,0 +1,39 @@
+.cart_wrapper {
+    position: fixed;
+    height: 100vh;
+    background-color: rgb(255, 255, 255);
+    top: 56px;
+    right: -550px;
+    z-index: 5;
+    width: 500px;
+    padding-bottom: 80px;
+    overflow: auto;
+    transition: all ease-in-out 0.3s;
+
+    &_show {
+        transition: all ease-in-out 0.3s;
+        right: 0;
+    }
+}
+
+.checkout {
+    position: fixed;
+    bottom: 0;
+}
+
+@media only screen and (max-width: 550px) {
+    .cart_wrapper {
+        width: calc(100vw - 100px);
+
+        &_show {
+            transition: all ease-in-out 0.3s;
+            right: 0;
+        }
+    }
+
+
+}
+
+.toggleButton {
+    display: none;
+}
