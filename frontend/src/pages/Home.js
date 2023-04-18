@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
@@ -6,8 +6,10 @@ import axios from "axios";
 import { BASE_URL, ICECREAM } from "../constants/constant"
 import { addToCart } from '../feature/cartSlice'
 import { useDispatch } from 'react-redux'
+import { UserContext } from '../context/UserContextProvider';
 function Home() {
     const [data, setData] = useState([]);
+    const { user } = useContext(UserContext);
     const showCart = () => {
         document.getElementById('cartSidebar').classList.add('cart_wrapper_show');
     }

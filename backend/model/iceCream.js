@@ -17,9 +17,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         quantity: {
             type: DataTypes.INTEGER
-        },
-        brand: {
-            type: DataTypes.STRING
         }
     },
         {

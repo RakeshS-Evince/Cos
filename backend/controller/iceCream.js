@@ -1,12 +1,22 @@
-const db = require('../model/index');
+const { db } = require('../model/index');
 const IceCream = db.iceCream;
 const getAllIceCreams = async (req, res, next) => {
-    const data = await IceCream.findAll();
-    res.send(data);
+    try {
+        const data = await IceCream.findAll();
+        res.send(data);
+    } catch (e) {
+        res.status(400).send({ message: e.message })
+    }
+
 }
 const getOneIceCream = async (req, res, next) => {
-    const data = await IceCream.findOne({ where: { id: req.params.id } });
-    res.send(data);
+    try {
+        const data = await IceCream.findOne({ where: { id: req.params.id } });
+        res.send(data);
+    } catch ({ message }) {
+        res.status(400).send({ message: message })
+    }
+
 }
 const addIceCream = async (req, res, next) => {
     const data = await IceCream.create(req.body);

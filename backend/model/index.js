@@ -20,19 +20,66 @@ const db = {};
 db.sequelize = sequelize;
 db.accounts = require("./accounts")(sequelize, DataTypes);
 db.customer = require("./customer")(sequelize, DataTypes);
+db.address = require("./address")(sequelize, DataTypes);
+db.staff = require("./staff")(sequelize, DataTypes);
 db.iceCream = require("./iceCream")(sequelize, DataTypes);
+db.brands = require("./brands")(sequelize, DataTypes);
 db.cart = require("./cart")(sequelize, DataTypes);
 db.order = require("./order")(sequelize, DataTypes);
 db.orderItem = require("./orderItem")(sequelize, DataTypes);
 db.role = require('./role')(sequelize, DataTypes)
-db.accounts.belongsTo(db.role, { foreingKey: ["roleId"] })
-db.customer.belongsTo(db.accounts, { foreingKey: ["accountId"] });
-db.order.belongsTo(db.customer, { foreingKey: ['customerId'] });
+db.accounts.belongsTo(db.role, {
+    foreingKey: ["roleId"],
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL"
+})
+db.customer.belongsTo(db.accounts, {
+    foreingKey: ["accountId"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+});
+db.staff.belongsTo(db.accounts, {
+    foreingKey: ["accountId"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+});
+db.order.belongsTo(db.customer, {
+    foreingKey: ['customerId'],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+});
 db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
-db.order.belongsToMany(db.iceCream, { through: db.orderItem, foreingKey: ["iceCreamId"] });
-db.iceCream.belongsToMany(db.order, { through: db.orderItem, foreingKey: ["iceCreamId"] });
-db.customer.hasOne(db.cart, { foreingKey: ["id", 'customerId'] });
-db.cart.belongsTo(db.customer, { foreingKey: ["id", 'customerId'] });
+db.order.belongsToMany(db.iceCream, {
+    through: db.orderItem,
+    foreingKey: ["iceCreamId"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+});
+db.iceCream.belongsToMany(db.order, {
+    through: db.orderItem,
+    foreingKey: ["iceCreamId"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+});
+db.customer.hasOne(db.cart, {
+    foreingKey: ["id", 'customerId'],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+});
+
+db.cart.belongsTo(db.customer, {
+    foreingKey: ["id", 'customerId'],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+});
+db.iceCream.belongsTo(db.brands, {
+    foreingKey: ['name', 'brandName'], onUpdate: "CASCADE",
+    onDelete: "SET NULL"
+});
+db.address.belongsTo(db.customer, {
+    foreingKey: ["id", 'customerId'], onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+})
 // sequelize
 //     .sync({ alter: true })
 //     .then(() => {
@@ -42,4 +89,4 @@ db.cart.belongsTo(db.customer, { foreingKey: ["id", 'customerId'] });
 //         console.log("Error in table modification:", err);
 //     });
 
-module.exports = db;
+module.exports = { db, sequelize };

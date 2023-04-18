@@ -1,139 +1,212 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { selectCart } from '../feature/cartSlice'
+import useAuth from '../axios/useApi';
+import { ADDRESS, ADDRESS_DEFAULT, BASE_URL } from '../constants/constant';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+const intitalAddress = {
+    firstname: "",
+    lastname: "",
+    phone: "",
+    email: "",
+    address: "",
+    city: "",
+    house: "",
+    zip: "",
+    state: "",
+
+}
 function Checkout() {
     const items = useSelector(selectCart);
-    const total = useSelector(state => state.cart.total)
-    const [discount, setDiscount] = useState(60);
+    const authApi = useAuth();
+    const total = useSelector(state => state.cart.total);
+    const [states, setStates] = useState({});
+    const [discount, setDiscount] = useState(0);
+    const [isEditable, setIsEditable] = useState(false);
+    const [addAddress, setAddAddress] = useState(false);
+    const [addressId, setAddressId] = useState();
+    const [address, setAddress] = useState(intitalAddress);
+    const [payment, setPayment] = useState({
+        creditCard: false,
+        debitCard: false,
+        cod: true
+    })
     const shippingCost = 40;
+    useEffect(() => {
+        authApi.get(ADDRESS_DEFAULT)
+            .then(res => {
+                if (!res.data) {
+                    setAddAddress(true);
+                    setIsEditable(true);
+                    return
+                }
+                setAddress(res.data);
+                setAddressId(res.data.id);
+            })
+            .catch(e => console.log(e));
+        axios.get(BASE_URL + 'states').then(({ data }) => setStates(data));
+    }, []);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (address.state === '' || address.city === '') {
+            alert('Please fill required fields');
+            return
+        }
+        if (addAddress) {
+            authApi.post(ADDRESS, { ...address, default: true })
+                .then(res => {
+                    setIsEditable(!isEditable);
+                    setAddAddress(false);
+                    Swal.fire(res.data.message);
+                })
+                .catch(e => console.log(e.respones.data.message))
+            return
+        }
+
+        authApi.put(ADDRESS + "/" + addressId, address)
+            .then(res => {
+                setIsEditable(!isEditable);
+                Swal.fire(res.data.message);
+            })
+            .catch(e => console.log(e.respones.data.message))
+
+    }
     return (
-        <div className="row">
+        items.length ? <div className="row">
             <div className="col-xl-8 col-lg-8 mb-4">
                 <div className="card shadow-0 border">
                     <div className="p-4">
-                        <h5 className="card-title mb-3">Guest checkout</h5>
-                        <div className="row">
-                            <div className="col-6 mb-3">
-                                <p className="mb-0">First name</p>
-                                <div className="form-outline">
-                                    <input type="text" id="typeText" placeholder="Type here" className="form-control" />
+                        <h5 className="card-title mb-3">Checkout</h5>
+                        <p>This address is selected as default address in your account.</p>
+                        <form onSubmit={handleSubmit}>
+                            <div className="row">
+                                <div className="col-6 mb-3">
+                                    <p className="mb-0">First name</p>
+                                    <div className="form-outline">
+                                        <input type="text" id="typeText" placeholder="Type here" className="form-control" value={address?.firstname} onChange={e => setAddress({ ...address, firstname: e.target.value })} disabled={!isEditable} />
+                                    </div>
+                                </div>
+
+                                <div className="col-6">
+                                    <p className="mb-0">Last name</p>
+                                    <div className="form-outline">
+                                        <input type="text" id="typeText" placeholder="Type here" value={address?.lastname} className="form-control" onChange={e => setAddress({ ...address, lastname: e.target.value })} disabled={!isEditable} />
+                                    </div>
+                                </div>
+
+                                <div className="col-6 mb-3">
+                                    <p className="mb-0">Phone</p>
+                                    <div className="form-outline">
+                                        <input type="tel" id="typePhone" value={address?.phone} className="form-control" onChange={e => setAddress({ ...address, phone: e.target.value })} disabled={!isEditable} />
+                                    </div>
+                                </div>
+
+                                <div className="col-6 mb-3">
+                                    <p className="mb-0">Email</p>
+                                    <div className="form-outline">
+                                        <input type="email" id="typeEmail" placeholder="example@gmail.com" value={address?.email} className="form-control" onChange={e => setAddress({ ...address, email: e.target.value })} disabled={!isEditable} />
+                                    </div>
+                                </div>
+                            </div>
+                            <hr className="my-4" />
+
+                            <h5 className="card-title mb-3">Shipping info</h5>
+                            <div className="row">
+                                <div className="col-sm-8 mb-3">
+                                    <p className="mb-0">Address</p>
+                                    <div className="form-outline">
+                                        <input type="text" id="typeText" placeholder="Type here" value={address?.address} className="form-control" onChange={e => setAddress({ ...address, address: e.target.value })} disabled={!isEditable} />
+                                    </div>
+                                </div>
+
+                                <div className="col-sm-4 mb-3">
+                                    <p className="mb-0">States</p>
+                                    <select className="form-select" disabled={!isEditable} value={address.state} onChange={(e) => setAddress({ ...address, state: e.target.value })} >
+                                        <option></option>
+                                        {Object.keys(states)?.map((ele, i) => (
+                                            <option key={i}>{ele}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-sm-4 mb-3">
+                                    <p className="mb-0">City</p>
+                                    <select className="form-select" disabled={!isEditable} value={address.city} onChange={e => setAddress({ ...address, city: e.target.value })}>
+                                        <option ></option>
+                                        {states[address?.state]?.map((ele, i) => (
+                                            <option key={i}>{ele}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="col-sm-4 mb-3">
+                                    <p className="mb-0">House</p>
+                                    <div className="form-outline">
+                                        <input type="text" id="typeText" value={address?.house} placeholder="Type here" className="form-control" onChange={e => setAddress({ ...address, house: e.target.value })} disabled={!isEditable} />
+                                    </div>
+                                </div>
+
+
+                                <div className="col-sm-4 col-6 mb-3">
+                                    <p className="mb-0">Zip</p>
+                                    <div className="form-outline">
+                                        <input type="text" id="typeText" value={address?.zip} className="form-control" onChange={e => setAddress({ ...address, zip: e.target.value })} disabled={!isEditable} />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="col-6">
-                                <p className="mb-0">Last name</p>
-                                <div className="form-outline">
-                                    <input type="text" id="typeText" placeholder="Type here" className="form-control" />
-                                </div>
-                            </div>
 
-                            <div className="col-6 mb-3">
-                                <p className="mb-0">Phone</p>
-                                <div className="form-outline">
-                                    <input type="tel" id="typePhone" className="form-control" />
-                                </div>
-                            </div>
-
-                            <div className="col-6 mb-3">
-                                <p className="mb-0">Email</p>
-                                <div className="form-outline">
-                                    <input type="email" id="typeEmail" placeholder="example@gmail.com" className="form-control" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                            <label className="form-check-label" htmlFor="flexCheckDefault">Keep me up to date on news</label>
-                        </div>
-
-                        <hr className="my-4" />
-
-                        <h5 className="card-title mb-3">Shipping info</h5>
-                        <div className="row">
-                            <div className="col-sm-8 mb-3">
-                                <p className="mb-0">Address</p>
-                                <div className="form-outline">
-                                    <input type="text" id="typeText" placeholder="Type here" className="form-control" />
-                                </div>
-                            </div>
-
-                            <div className="col-sm-4 mb-3">
-                                <p className="mb-0">City</p>
-                                <select className="form-select">
-                                    <option value="1">New York</option>
-                                    <option value="2">Moscow</option>
-                                    <option value="3">Samarqand</option>
-                                </select>
-                            </div>
-
-                            <div className="col-sm-4 mb-3">
-                                <p className="mb-0">House</p>
-                                <div className="form-outline">
-                                    <input type="text" id="typeText" placeholder="Type here" className="form-control" />
-                                </div>
-                            </div>
-
-                            <div className="col-sm-4 col-6 mb-3">
-                                <p className="mb-0">Postal code</p>
-                                <div className="form-outline">
-                                    <input type="text" id="typeText" className="form-control" />
-                                </div>
-                            </div>
-
-                            <div className="col-sm-4 col-6 mb-3">
-                                <p className="mb-0">Zip</p>
-                                <div className="form-outline">
-                                    <input type="text" id="typeText" className="form-control" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="form-check mb-3">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault1" />
-                            <label className="form-check-label" htmlFor="flexCheckDefault1">Save this address</label>
-                        </div>
+                            {!addAddress && <span className='btn btn-sm btn-primary' onClick={() => {
+                                setAddAddress(true);
+                                setIsEditable(true)
+                                setAddress(intitalAddress);
+                            }}>Deliver to new address</span>}
+                            {!addAddress && <span className='btn btn-sm btn-primary mx-2' onClick={() => setIsEditable(true)}>Edit this address</span>}
+                            {isEditable && <button className='btn btn-sm btn-primary mx-2' type='submit' onClick={() => setIsEditable(true)}>Save</button>}
+                        </form>
                         <h4 className="mb-3">Payment</h4>
                         <div className="d-block my-3">
                             <div className="custom-control custom-radio">
-                                <input id="credit" name="paymentMethod" type="radio" className="custom-control-input" required="" />
-                                <label className="custom-control-label" htmlFor="credit">Credit card</label>
+                                <input id="credit" name="paymentMethod" checked={payment.creditCard} disabled onChange={() => setPayment({ debitCard: false, cod: false, creditCard: true })} type="radio" className="custom-control-input" required="" />
+                                <label className="custom-control-label" htmlFor="credit">Credit card</label><p className='text-muted mx-2'> currently unavailable</p>
                             </div>
                             <div className="custom-control custom-radio">
-                                <input id="debit" name="paymentMethod" type="radio" className="custom-control-input" required="" />
-                                <label className="custom-control-label" htmlFor="debit">Debit card</label>
+                                <input id="debit" name="paymentMethod" checked={payment.debitCard} disabled onChange={() => setPayment({ creditCard: false, cod: false, debitCard: true })} type="radio" className="custom-control-input" required="" />
+                                <label className="custom-control-label" htmlFor="debit">Debit card</label><p className='text-muted mx-2'> currently unavailable</p>
                             </div>
                             <div className="custom-control custom-radio">
-                                <input id="COD" name="paymentMethod" type="radio" className="custom-control-input" required="" />
+                                <input id="COD" name="paymentMethod" checked={payment.cod} onChange={() => setPayment({ creditCard: false, debitCard: false, cod: true })} type="radio" className="custom-control-input" required="" />
                                 <label className="custom-control-label" htmlFor="COD">COD</label>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label htmlFor="cc-name">Name on card</label>
-                                <input type="text" className="form-control" id="cc-name" placeholder="" required="" />
-                                <small className="text-muted">Full name as displayed on card</small>
-                                <div className="invalid-feedback"> Name on card is required </div>
+                        {(payment.debitCard || payment.creditCard) && <>
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label htmlFor="cc-name">Name on card</label>
+                                    <input type="text" className="form-control" id="cc-name" placeholder="" required="" />
+                                    <small className="text-muted">Full name as displayed on card</small>
+                                    <div className="invalid-feedback"> Name on card is required </div>
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label htmlFor="cc-number">Credit card number</label>
+                                    <input type="text" className="form-control" id="cc-number" placeholder="" required="" />
+                                    <div className="invalid-feedback"> Credit card number is required </div>
+                                </div>
                             </div>
-                            <div className="col-md-6 mb-3">
-                                <label htmlFor="cc-number">Credit card number</label>
-                                <input type="text" className="form-control" id="cc-number" placeholder="" required="" />
-                                <div className="invalid-feedback"> Credit card number is required </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-3 mb-3">
-                                <label htmlFor="cc-expiration">Expiration</label>
-                                <input type="text" className="form-control" id="cc-expiration" placeholder="" required="" />
-                                <div className="invalid-feedback"> Expiration date required </div>
-                            </div>
-                            <div className="col-md-3 mb-3">
-                                <label htmlFor="cc-cvv">CVV</label>
-                                <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
-                                <div className="invalid-feedback"> Security code required </div>
-                            </div>
-                        </div>
+                            <div className="row">
+                                <div className="col-md-3 mb-3">
+                                    <label htmlFor="cc-expiration">Expiration</label>
+                                    <input type="text" className="form-control" id="cc-expiration" placeholder="" required="" />
+                                    <div className="invalid-feedback"> Expiration date required </div>
+                                </div>
+                                <div className="col-md-3 mb-3">
+                                    <label htmlFor="cc-cvv">CVV</label>
+                                    <input type="text" className="form-control" id="cc-cvv" placeholder="" required="" />
+                                    <div className="invalid-feedback"> Security code required </div>
+                                </div>
+                            </div></>}
                         <div className="float-end">
                             <button className="btn btn-light border">Cancel</button>
                             <button className="btn btn-success shadow-0 border">Continue</button>
@@ -142,7 +215,7 @@ function Checkout() {
 
                 </div>
 
-            </div>
+            </div >
             <div className="col-xl-4 col-lg-4 d-flex justify-content-lg-end" >
                 <div className="ms-lg-4 mt-4 mt-lg-0" >
                     <h6 className="mb-3">Summary</h6>
@@ -193,7 +266,8 @@ function Checkout() {
                     {items.length > 4 && `And ${items.length - 4} more ${items.length - 4 === 1 ? "item" : "items"} in the cart`}
                 </div>
             </div>
-        </div>
+        </div > : <><h3>No items added in the cart.</h3><Link className='btn btn-primary' to="/">Goto Shop</Link></>
+
 
     )
 }

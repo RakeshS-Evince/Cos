@@ -22,8 +22,9 @@ export const cartSlice = createSlice({
             state.total += action.payload.price
         },
         removeFromCart: (state, action) => {
-            state.items.pop(action.payload);
-            state.total -= action.payload.price
+            console.log(action.payload)
+            state.items.pop(action.payload)
+            state.total -= (action.payload.price * action.payload.quantity)
         },
         increaseQuantity: (state, action) => {
             let find = state.items.findIndex(item => action.payload.id === item.id);

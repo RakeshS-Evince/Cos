@@ -1,2 +1,7 @@
 export const BASE_URL = "http://localhost:3000/"
 export const ICECREAM = "ice-creams"
+export const LOGIN = "auth/login"
+export const REGISTER = "auth/register"
+export const PROFILE = "user/profile"
+export const ADDRESS_DEFAULT = "user/address-default/"
+export const ADDRESS = "user/address"

@@ -1,4 +1,4 @@
-const db = require("../model")
+const { db } = require("../model")
 
 const Order = db.order;
 const OrderItem = db.orderItem;
