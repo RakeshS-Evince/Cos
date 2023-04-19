@@ -27,7 +27,7 @@ export default function Header() {
                         {!user?.isLoggedIn ? <Link to="/login" className='nav-link'>Sign in</Link> :
                             <NavDropdown title="Account" id="collasible-nav-dropdown">
                                 <NavDropdown.Item onClick={() => navigate('/profile')}>Profile</NavDropdown.Item>
-                                <NavDropdown.Item>Orders</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => navigate('/my-orders')}>Orders</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={() => logout()} >
                                     Logout

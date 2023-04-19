@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './profile.scss'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,6 +9,7 @@ import { PROFILE } from '../constants/constant';
 import Swal from 'sweetalert2';
 import useApi from '../axios/useApi';
 import Address from './Address';
+import { Link } from 'react-router-dom';
 const schema = yup.object({
     fullname: yup.string().required("fullname is required"),
     email: yup.string().required("email is required"),
@@ -50,7 +51,7 @@ function Profile() {
                                 <hr className="my-4" />
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6>Orders</h6>
+                                        <h6><Link to="/my-orders">Orders</Link></h6>
                                     </li>
                                     <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                         <h6>Cards</h6>

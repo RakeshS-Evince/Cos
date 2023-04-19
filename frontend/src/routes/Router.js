@@ -21,9 +21,9 @@ function Router() {
                 <Route element={<ProtectedRoutes />}>
                     <Route path="/profile" exact element={<Profile />} />
                     <Route path="/checkout" exact element={<Checkout />} />
+                    <Route path="/my-orders" exact element={<Orders />} />
+                    <Route path="/order-details/:id" exact element={<OrderDetails />} />
                 </Route>
-                <Route path="/orders" exact element={<Orders />} />
-                <Route path="/order-details/:id" exact element={<OrderDetails />} />
                 <Route path="/categories" exact element={<Categories />} />
             </Route>
         </Routes>

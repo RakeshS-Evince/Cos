@@ -49,6 +49,8 @@ db.order.belongsTo(db.customer, {
     onDelete: "CASCADE"
 });
 db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
+db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
+db.order.hasMany(db.orderItem, { foreingKey: ['id', "orderId"] })
 db.order.belongsToMany(db.iceCream, {
     through: db.orderItem,
     foreingKey: ["iceCreamId"],

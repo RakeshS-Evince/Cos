@@ -1,29 +1,35 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('order', {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.STRING,
             primaryKey: true,
-            allowNull: false,
         },
         customerId: {
             type: DataTypes.INTEGER
         },
-        price: {
+        totalPrice: {
+            type: DataTypes.FLOAT(10, 2)
+        },
+        shippingCharge: {
+            type: DataTypes.FLOAT(10, 2)
+        },
+        couponDiscount: {
             type: DataTypes.FLOAT(10, 2)
         },
         paymentMethod: {
             type: DataTypes.STRING
+        },
+        orderAddress: {
+            type: DataTypes.TEXT('long')
         },
         date: {
             type: DataTypes.STRING
         },
         status: {
             type: DataTypes.STRING
-        }
+        },
+
     },
-        {
-            timestamps: false
-        }
+
     )
 }

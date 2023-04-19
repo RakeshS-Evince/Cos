@@ -24,7 +24,7 @@ function Home() {
                 {data.length && data.map((ele, i) => (
                     <Col key={i} lg={3} sm={4}>
                         <Card>
-                            <Card.Img variant="top" src={ele.image + "/100px180"} />
+                            <Card.Img variant="top" src={ele.image + "/100px180"} height={"250px"} />
                             <Card.Body>
                                 <Card.Title>{ele.name}</Card.Title>
                                 <Card.Text>
