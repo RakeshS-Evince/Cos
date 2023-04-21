@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { MY_ORDERS } from '../constants/constant';
+import { BASE_URL, MY_ORDERS } from '../constants/constant';
 import { Link } from 'react-router-dom';
 
 function Orders() {
@@ -8,7 +8,7 @@ function Orders() {
     const authApi = useAuth();
     useEffect(() => {
         authApi.get(MY_ORDERS).then(({ data }) => setOrders(data)).catch(e => console.log(e.message))
-    }, [authApi])
+    }, [authApi]);
     return (
         <div>
             <h2>My Orders</h2>
@@ -21,15 +21,15 @@ function Orders() {
                             <div className='d-flex'>
                                 <div className="me-3 position-relative">
                                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
-                                        {ele.iceCreams[0].order_item.quantity}
+                                        {ele.iceCreams[0]?.order_item?.quantity}
                                     </span>
-                                    <img alt="ice cream" src={ele.iceCreams[0].image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                    <img alt="ice cream" src={BASE_URL + 'images/' + ele.iceCreams[0]?.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                 </div>
                                 <div className="">
-                                    {ele.iceCreams[0].name}
+                                    {ele.iceCreams[0]?.name}
                                 </div>
                             </div> <br />
-                            {ele.iceCreams.length > 1 && `and ${ele.iceCreams.length - 1} items more.`} <Link to={"/order-details/" + ele.id} style={{ textDecoration: "none" }}>View all</Link>
+                            {ele.iceCreams?.length > 1 && `and ${ele.iceCreams?.length - 1} items more.`} <Link to={"/my-orders/" + ele.id} style={{ textDecoration: "none" }}>View all</Link>
                         </div>
 
                         <div className='mt-3 d-flex justify-content-between'>
@@ -53,8 +53,7 @@ function Orders() {
                 </div>
             ))
             }
-
-        </div >
+        </div>
     )
 }
 

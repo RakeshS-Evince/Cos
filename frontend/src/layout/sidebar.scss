@@ -1,0 +1,44 @@
+.sidebar_wrapper {
+    position: fixed;
+    height: 100vh;
+    background-color: rgb(255, 255, 255);
+    top: 56px;
+    left: -550px;
+    z-index: 3;
+    width: 250px;
+    padding-bottom: 80px;
+    overflow: auto;
+    transition: all ease-in-out 0.3s;
+
+    &_show {
+        transition: all ease-in-out 0.3s;
+        left: 0;
+    }
+}
+
+ul {
+    padding-top: 15px;
+}
+
+ul>li {
+    padding: 15px 25px;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+ul>li>a {
+    text-decoration: none;
+    color: rgb(30, 82, 224);
+}
+
+@media only screen and (max-width: 992px) {
+    .sidebar_wrapper {
+
+        &_show {
+            transition: all ease-in-out 0.3s;
+            left: -550px;
+        }
+    }
+
+
+}

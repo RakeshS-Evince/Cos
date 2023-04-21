@@ -36,11 +36,18 @@ const login = async (req, res) => {
         if (!data) return res.status(404).send({ message: 'User not found' });
         const isMatched = await bcrypt.compare(password, data.dataValues.password);
         if (!isMatched) return res.status(400).send({ message: 'Incorrect password' });
-        let cdata = await Customer.findOne({ where: { accountId: data.dataValues.id }, attributes: ['id'] },)
-        let token = jwt.sign({ accountId: data.dataValues.id, roleId: data.dataValues.roleId, customerId: cdata.dataValues.id }, "secretKey", {
+        if (data.dataValues.roleId === 1) {
+            let cdata = await Customer.findOne({ where: { accountId: data.dataValues.id }, attributes: ['id'] },)
+            let token = jwt.sign({ accountId: data.dataValues.id, roleId: data.dataValues.roleId, customerId: cdata.dataValues.id }, "secretKey", {
+                expiresIn: "24h",
+            })
+            res.send({ message: 'Login successful', token: token, id: cdata.dataValues.id });
+            return
+        }
+        let token = jwt.sign({ accountId: data.dataValues.id, roleId: data.dataValues.roleId }, "secretKey", {
             expiresIn: "24h",
         })
-        res.send({ message: 'Login successful', token: token, id: cdata.dataValues.id });
+        res.send({ message: 'Login successful', token: token });
     } catch (e) {
         res.status(400).send({ message: e.message })
     }

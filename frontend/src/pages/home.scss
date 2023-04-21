@@ -1,0 +1,24 @@
+.HORIZONTAL_SCROLL_NAV {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.HORIZONTAL_SCROLL_NAV>div {
+    margin: 0;
+}
+
+li {
+    list-style: none
+}
+
+::-webkit-scrollbar {
+    height: 6px;
+    width: 4px;
+    background: #a8c6fe;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    background: #2268ec;
+    border-radius: 20px;
+}

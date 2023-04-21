@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
 import { Link, useParams } from 'react-router-dom';
 import './orderDetails.scss'
+import { BASE_URL } from '../constants/constant';
 function OrderDetails() {
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderAddress, setOrderAddress] = useState(null)
@@ -17,14 +18,14 @@ function OrderDetails() {
                 <div className='card-body p-3 row g-2'>
                     <h5> Order Id: {id}</h5>
                     <hr />
-                    {orderDetails?.iceCreams.map((ele, i) => {
+                    {orderDetails?.iceCreams?.map((ele, i) => {
                         return (
                             <div key={i} className="d-flex mb-4">
                                 <div className="me-3 position-relative">
                                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
                                         {ele.order_item?.quantity}
                                     </span>
-                                    <img alt="ice cream" src={ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                    <img alt="ice cream" src={BASE_URL + 'images/' + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                 </div>
                                 <div className="">
                                     <Link to="#" className="nav-link">
@@ -51,9 +52,25 @@ function OrderDetails() {
                                 <div className="col-12">
                                     <ul id="progressbar" className="text-center">
                                         <li className="active step0" />
-                                        <li className="active step0" />
-                                        <li className="active step0" />
-                                        <li className="step0" />
+                                        {orderDetails?.status === 'Confirmed'
+                                            ?
+                                            <>
+                                                <li className='active step0' />
+                                                <li className='step0' />
+                                            </>
+                                            : orderDetails?.status === 'Delivered'
+                                                ?
+                                                <>
+                                                    <li className='active step0' />
+                                                    <li className='active step0' />
+                                                </>
+                                                :
+                                                <>
+                                                    <li className='step0' />
+                                                    <li className='step0' />
+                                                </>
+                                        }
+
                                     </ul>
                                 </div>
                             </div>
@@ -62,7 +79,6 @@ function OrderDetails() {
                                     <ul id="sub-progressbar" className="text-center">
                                         <li className=" ">Placed</li>
                                         <li className=" ">Conifrmed</li>
-                                        <li className=" ">Out for delivery</li>
                                         <li className="" >Delivered</li>
                                     </ul>
                                 </div>

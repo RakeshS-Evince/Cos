@@ -32,7 +32,7 @@ function Login() {
                 title: res.data.message
             })
             saveUser({ isLoggedIn: true, token: res.data.token, userId: res.data.id });
-            navigate('/profile')
+            navigate('/')
         } catch (e) {
             Swal.fire({ title: e.response.data.message })
         }

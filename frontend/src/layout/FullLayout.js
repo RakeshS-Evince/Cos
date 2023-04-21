@@ -3,13 +3,20 @@ import Container from 'react-bootstrap/Container'
 import { Outlet } from 'react-router-dom'
 import CartSidebar from './CartSidebar'
 import Headers from './Header'
+import Sidebar from './Sidebar'
+import useRoleCheck from '../hooks/useRoleCheck'
+import AdminHeader from './AdminHeader'
+
+
 
 
 function FullLayout() {
+    const { isAdmin, isStaff } = useRoleCheck()
     return (
         <>
             <header>
-                <Headers />
+                {!(isAdmin || isStaff) ?
+                    <Headers /> : <AdminHeader />}
             </header>
             <main>
                 <div id="main">
@@ -17,6 +24,7 @@ function FullLayout() {
                         <Outlet />
                     </Container>
                 </div>
+                {(isAdmin || isStaff) && <Sidebar />}
                 <CartSidebar />
             </main>
         </>

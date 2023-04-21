@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './profile.scss'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,7 +18,8 @@ const schema = yup.object({
     city: yup.string().required("city is required"),
 }).required("Password is required");
 function Profile() {
-    const authApi = useApi()
+    const authApi = useApi();
+    const [displayAddreses, setDisplayAddress] = useState(false);
     const { register, handleSubmit, formState: { errors }, getValues } = useForm({
         resolver: yupResolver(schema), defaultValues: () => authApi.get(PROFILE).then(({ data }) => data)
     })
@@ -33,7 +34,9 @@ function Profile() {
             Swal.fire({ title: e.response.data.message })
         }
     }
-
+    const toggleDisplayAddress = () => {
+        setDisplayAddress(!displayAddreses)
+    }
     return (
         <div>
             <div className="main-body">
@@ -51,13 +54,10 @@ function Profile() {
                                 <hr className="my-4" />
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6><Link to="/my-orders">Orders</Link></h6>
+                                        <h6><Link to="/my-orders" style={{ textDecoration: "none" }}>Orders</Link></h6>
                                     </li>
-                                    <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6>Cards</h6>
-                                    </li>
-                                    <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                        <h6>Addresses</h6>
+                                    <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap" style={{ cursor: 'pointer' }}>
+                                        <h6 className='text-primary' onClick={() => toggleDisplayAddress()}>Addresses</h6>
                                     </li>
                                 </ul>
                             </div>
@@ -141,7 +141,7 @@ function Profile() {
                                 </form>
                             </div>
                         </div>
-                        <div className="row">
+                        {displayAddreses && <div className="row">
                             <div className="col-sm-12">
                                 <div className="card">
                                     <div className="card-body">
@@ -153,7 +153,7 @@ function Profile() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 </div>
             </div>

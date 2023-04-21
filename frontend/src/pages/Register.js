@@ -27,7 +27,6 @@ function Register() {
     });
 
     const onSubmit = async (data) => {
-        data.roleId = 1
         try {
             const res = await api.post(REGISTER, data);
             Swal.fire({
@@ -80,12 +79,21 @@ function Register() {
                                                     </Form.Control.Feedback>
                                                 </InputGroup>
                                             </div>
-                                            <div className="form-group mb-5">
-                                                <label htmlFor="confirmPassword">Confirm Password</label>
+                                            <div className="form-group">
+                                                <label htmlFor="role">Confirm Password</label>
                                                 <InputGroup hasValidation>
-                                                    <Form.Control type="confirmPassword" isInvalid={errors?.confirmPassword?.message} id='confirmPassword' {...register('confirmPassword')} />
+                                                    <Form.Control type="password" isInvalid={errors?.confirmPassword?.message} id='confirmPassword' {...register('confirmPassword')} />
                                                     <Form.Control.Feedback type="invalid" >
                                                         {errors?.confirmPassword?.message}
+                                                    </Form.Control.Feedback>
+                                                </InputGroup>
+                                            </div>
+                                            <div className="form-group mb-5">
+                                                <label htmlFor="number">Role</label>
+                                                <InputGroup hasValidation>
+                                                    <Form.Control type="number" isInvalid={errors?.roleId?.message} id='roleId' {...register('roleId')} />
+                                                    <Form.Control.Feedback type="invalid" >
+                                                        {errors?.roleId?.message}
                                                     </Form.Control.Feedback>
                                                 </InputGroup>
                                             </div>

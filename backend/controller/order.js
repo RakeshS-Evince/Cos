@@ -3,6 +3,7 @@ const { db } = require("../model");
 const Order = db.order;
 const OrderItem = db.orderItem;
 const IceCream = db.iceCream;
+const Customer = db.customer;
 
 const placeOrder = async (req, res, next) => {
     try {
@@ -64,5 +65,33 @@ const findOneOrder = async (req, res, next) => {
     }
 
 }
+const findAllOrders = async (req, res, next) => {
+    try {
+        const data = await Order.findAll({
+            include: [{
+                model: Customer,
+                attributes: ['id', "fullname"],
+            }],
+        });
+        if (!data) {
+            throw Error('No Orders found');
+        }
+        res.send(data);
+    } catch (e) {
+        res.status(400).send({ message: e.message })
+    }
+}
+const updateOrderStatus = async (req, res, next) => {
+    try {
+        const data = await Order.update({ status: req.body.status }, { where: { id: req.params.id } })
+        if (!data) {
+            throw Error('No Orders found');
+        }
+        res.send({ message: 'Order status updated' });
+    } catch (e) {
+        res.status(400).send({ message: e.message })
+    }
 
-module.exports = { placeOrder, findOrder, findOneOrder }
+}
+
+module.exports = { placeOrder, findOrder, findOneOrder, findAllOrders, updateOrderStatus }

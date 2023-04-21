@@ -18,6 +18,15 @@ const getOneIceCream = async (req, res, next) => {
     }
 
 }
+const deleteIceCream = async (req, res, next) => {
+    try {
+        const data = await IceCream.destroy({ where: { id: req.params.id } });
+        res.send({ message: 'Ice-cream deleted' });
+    } catch ({ message }) {
+        res.status(400).send({ message: message })
+    }
+
+}
 const addIceCream = async (req, res, next) => {
     const data = await IceCream.create(req.body);
     if (!data) {
@@ -47,4 +56,4 @@ const saveCart = async (req, res, next) => {
     }
 }
 
-module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, saveCart }
+module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, deleteIceCream }

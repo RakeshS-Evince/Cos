@@ -279,7 +279,7 @@ function Checkout() {
                                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
                                         {ele.quantity}
                                     </span>
-                                    <img alt="ice cream" src={ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                    <img alt="ice cream" src={BASE_URL + 'images/' + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                 </div>
                                 <div className="">
                                     <Link to="#" className="nav-link">
