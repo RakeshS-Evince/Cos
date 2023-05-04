@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import './signIn.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form";
@@ -13,15 +13,11 @@ import { UserContext } from '../context/UserContextProvider';
 const schema = yup.object({
     username: yup.string().required("Username is required"),
     password: yup.string().required("Password is required")
-        .min(8, 'Password must be 8 characters long')
-        .matches(/[0-9]/, 'Password requires a number')
-        .matches(/[a-z]/, 'Password requires a lowercase letter')
-        .matches(/[A-Z]/, 'Password requires an uppercase letter')
-        .matches(/[^\w]/, 'Password requires a symbol'),
-}).required("Password is required");
+}).required();
 function Login() {
     const navigate = useNavigate();
     const { saveUser } = useContext(UserContext)
+    const [checked, setChecked] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
@@ -31,7 +27,7 @@ function Login() {
             Swal.fire({
                 title: res.data.message
             })
-            saveUser({ isLoggedIn: true, token: res.data.token, userId: res.data.id });
+            saveUser({ isLoggedIn: true, token: res.data.token, userId: res.data.id,username:res.data.username });
             navigate('/')
         } catch (e) {
             Swal.fire({ title: e.response.data.message })
@@ -64,11 +60,19 @@ function Login() {
                                             <div className="form-group mb-5">
                                                 <label htmlFor="password">Password</label>
                                                 <InputGroup hasValidation>
-                                                    <Form.Control type="password" isInvalid={errors?.password?.message} id='password' {...register('password')} />
+                                                    <Form.Control type={checked ? 'text' : "password"} isInvalid={errors?.password?.message} id='password' {...register('password')} />
                                                     <Form.Control.Feedback type="invalid" >
                                                         {errors?.password?.message}
                                                     </Form.Control.Feedback>
+                                                    <span style={{
+                                                        position:"absolute",
+                                                        right:0,
+                                                        top:0,
+                                                        padding:"8px",
+                                                        cursor:"pointer"
+                                                    }} onClick={()=>setChecked(!checked)}><i title={!checked?'show':'hide'} className={`bi bi-eye${!checked?'':'-slash'}`}></i></span>
                                                 </InputGroup>
+                                                
                                             </div>
                                             <div className='d-flex justify-content-between'>
                                                 <button type="submit" className="btn" style={{
@@ -76,25 +80,19 @@ function Login() {
                                                     borderColor: "#5369f8",
                                                     color: "#fff"
                                                 }}>Login</button>
-                                                <Link to="" className="text-right text-primary">Forgot password?</Link></div>
+                                                <Link to="/forgot-password" className="text-right text-primary mt-2" style={{ textDecoration: "none" }}>Forgot password?</Link></div>
                                         </form>
                                     </div>
                                 </div>
 
                                 <div className="col-lg-6 d-none d-lg-inline-block">
                                     <div className="account-block rounded-right">
-                                        <div className="overlay rounded-right"></div>
-                                        <div className="account-testimonial">
-                                            <h4 className="text-white mb-4">This  beautiful theme yours!</h4>
-                                            <p className="lead text-white">"Best investment i made for a long time. Can only recommend it for other users."</p>
-                                            <p>- Admin User</p>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p className="text-muted text-center mt-3 mb-0">Don't have an account? <Link to="/register" className="text-primary ml-1">Register</Link></p>
+                    <p className="text-muted text-center mt-3 mb-0">Don't have an account? <Link to="/register" className="text-primary ml-1" style={{ textDecoration: "none" }}>Register</Link></p>
                 </div>
             </div>
         </div>

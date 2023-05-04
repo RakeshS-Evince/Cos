@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card'
 import axios from "axios";
 
 import { BASE_URL, ICECREAM } from "../constants/constant"
+import { Link } from 'react-router-dom';
 function Brands() {
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -19,7 +20,7 @@ function Brands() {
                         <Card>
                             <Card.Img variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
                             <Card.Body>
-                                <Card.Title>{ele.name}</Card.Title>
+                                <Card.Title><Link to={"/brands/" + ele.name} style={{textDecoration:"none"}}>{ele.name}</Link> </Card.Title>
                             </Card.Body>
                         </Card>
                     </Col>

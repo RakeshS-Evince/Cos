@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
+import useApi from '../axios/useApi'
+import { BASE_URL } from '../constants/constant';
 
 
 function AdminDashboard() {
@@ -9,16 +11,21 @@ function AdminDashboard() {
                 id: "basic-bar"
             },
             xaxis: {
-                categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+                categories: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
             }
         },
         series: [
             {
                 name: "series-1",
-                data: [30, 40, 45, 50, 49, 60, 70, 91]
+                data: [30, 40, 45, 50, 49, 60, 67, 33, 45, 30, 39, 23,]
             }
         ]
     })
+    const authApi = useApi()
+    const [counts, setCounts] = useState(null)
+    useEffect(() => {
+        authApi.get(BASE_URL + "dashboard").then(res => setCounts(res.data)).catch(e => console.log(e.response.data.message))
+    }, [])
     return (
         <div>
             <h3>Dashboard</h3>
@@ -32,7 +39,7 @@ function AdminDashboard() {
                                 </div>
                                 <div className="ms-3">
                                     <h3 className="mb-0 font-weight-bold">IceCreams</h3>
-                                    <small className="">Total:10</small>
+                                    <small className="">Total:{counts?.iceCreams}</small>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +54,7 @@ function AdminDashboard() {
                                 </div>
                                 <div className="ms-3">
                                     <h3 className="mb-0 font-weight-bold">Brands</h3>
-                                    <small className="">Total:20</small>
+                                    <small className="">Total:{counts?.brands}</small>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +69,7 @@ function AdminDashboard() {
                                 </div>
                                 <div className="ms-3">
                                     <h3 className="mb-0 font-weight-bold">Orders Pending</h3>
-                                    <small className="">Total:30</small>
+                                    <small className="">Total:{counts?.pending}</small>
                                 </div>
                             </div>
                         </div>
@@ -77,20 +84,29 @@ function AdminDashboard() {
                                 </div>
                                 <div className="ms-3">
                                     <h3 className="mb-0 font-weight-bold">Order success</h3>
-                                    <small className="">Total:40</small>
+                                    <small className="">Total:{counts?.success}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='card p-3 mt-5 col-lg-9'>
-                <Chart
-                    options={state.options}
-                    series={state.series}
-                    type="bar"
-                />
+            <div className='row justify-content-between'>
+                <div className=' col-lg-7'>
+                    <div className='card p-3 mt-5 me-2'>
+                    <Chart
+                        options={state.options}
+                        series={state.series}
+                        type="bar"
+                    /></div>
+                </div>
+                <div className='col-lg-5'>
+                    {/* <div className='card p-3 mt-5'>
+                        <h5>Logs</h5>
+                    </div> */}
+                </div>
             </div>
+
         </div>
     )
 }

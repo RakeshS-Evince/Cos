@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         fullname: {
             type: DataTypes.STRING,
+            defauldValue:""
         },
         city: {
             type: DataTypes.STRING,

@@ -29,7 +29,7 @@ function Orders() {
                                     {ele.iceCreams[0]?.name}
                                 </div>
                             </div> <br />
-                            {ele.iceCreams?.length > 1 && `and ${ele.iceCreams?.length - 1} items more.`} <Link to={"/my-orders/" + ele.id} style={{ textDecoration: "none" }}>View all</Link>
+                            {ele.iceCreams?.length > 1 && `and ${ele.iceCreams?.length - 1} items more.`} <Link to={"/my-orders/" + ele.id} style={{ textDecoration: "none" }}>View Details</Link>
                         </div>
 
                         <div className='mt-3 d-flex justify-content-between'>

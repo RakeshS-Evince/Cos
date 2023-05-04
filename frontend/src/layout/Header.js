@@ -19,14 +19,15 @@ export default function Header() {
     const { isAdmin, isStaff } = useRoleCheck()
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed='top'>
-            <Container>
+            <Container fluid>
                 <Navbar.Brand href="/">Ice-Cream Shop</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
+                        <Nav.Link onClick={() => navigate('/menu')} >Menu</Nav.Link>
                         <Nav.Link onClick={() => navigate('/brands')} >Brands</Nav.Link>
-                        <Nav.Link   >About</Nav.Link>
-                        <Nav.Link   >Contact</Nav.Link>
+                        <Nav.Link  onClick={() => navigate('/about')} >About</Nav.Link>
+                        <Nav.Link  onClick={() => navigate('/contact')} >Contact</Nav.Link>
                         {!user?.isLoggedIn ? <Link to="/login" className='nav-link'>Sign in</Link> :
                             <NavDropdown title="Account" id="collasible-nav-dropdown">
                                 <NavDropdown.Item onClick={() => navigate('/profile')}>Profile</NavDropdown.Item>

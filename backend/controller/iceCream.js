@@ -9,6 +9,16 @@ const getAllIceCreams = async (req, res, next) => {
     }
 
 }
+
+const getIceCreamByBrand = async (req, res, next) => {
+    try {
+        const data = await IceCream.findAll({ where: { brandName: req.params.name } });
+        res.send(data);
+    } catch ({ message }) {
+        res.status(400).send({ message: message })
+    }
+
+}
 const getOneIceCream = async (req, res, next) => {
     try {
         const data = await IceCream.findOne({ where: { id: req.params.id } });
@@ -56,4 +66,4 @@ const saveCart = async (req, res, next) => {
     }
 }
 
-module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, deleteIceCream }
+module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, deleteIceCream,getIceCreamByBrand }

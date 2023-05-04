@@ -7,6 +7,10 @@
 .HORIZONTAL_SCROLL_NAV>div {
     margin: 0;
 }
+.home{
+background-image: url('../assets/images/home-bg.jpg');
+
+}
 
 li {
     list-style: none
@@ -21,4 +25,12 @@ li {
 ::-webkit-scrollbar-thumb:horizontal {
     background: #2268ec;
     border-radius: 20px;
+}
+
+.home_bg {
+    padding: 0;
+    background-image:url('../assets/images/home_bg.jpg');
+    background-repeat: no-repeat;
+    background-size:cover;
+    height: 100%;
 }

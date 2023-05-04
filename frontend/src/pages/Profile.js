@@ -48,7 +48,7 @@ function Profile() {
                                     <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" className="rounded-circle p-1 bg-primary" width="110" />
                                     <div className="mt-3">
                                         <h4>{getValues('username')}</h4>
-                                        <button className="btn btn-outline-primary">Account Setting</button>
+                                        {/* <button className="btn btn-outline-primary">Account Setting</button> */}
                                     </div>
                                 </div>
                                 <hr className="my-4" />
@@ -145,7 +145,10 @@ function Profile() {
                             <div className="col-sm-12">
                                 <div className="card">
                                     <div className="card-body">
-                                        <h4>Saved Addresses</h4>
+                                        <div className='d-flex justify-content-between'>
+                                            <h4>Saved Addresses</h4>
+                                            <Link to='/address/add' className='btn btn-primary'>Add</Link>
+                                        </div>
                                         <p>Please check one to make default address for your orders.</p>
                                         <div className='row'>
                                             <Address />

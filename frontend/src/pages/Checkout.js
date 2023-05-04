@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { selectCart } from '../feature/cartSlice'
+import { clearCart, selectCart } from '../feature/cartSlice'
 import useAuth from '../axios/useApi';
 import { ADDRESS, ADDRESS_DEFAULT, BASE_URL, PLACE_ORDER } from '../constants/constant';
 import Swal from 'sweetalert2';
@@ -20,6 +20,7 @@ const intitalAddress = {
 }
 function Checkout() {
     const items = useSelector(selectCart);
+    const dispatch=useDispatch();
     const authApi = useAuth();
     const total = useSelector(state => state.cart.total);
     const [states, setStates] = useState({});
@@ -93,6 +94,7 @@ function Checkout() {
         }
         authApi.post(PLACE_ORDER, orderDetails).then(({ data }) => {
             Swal.fire(data.message, `Order id: ${data.orderId}`, "success");
+            dispatch(clearCart());
         })
     }
 
@@ -183,6 +185,7 @@ function Checkout() {
                                 <span className='btn btn-sm btn-primary' onClick={() => {
                                     setIsEditable(true);
                                     setAddress(intitalAddress);
+                                    setAddAddress(true);
                                 }}>Deliver to new address</span>}
                             {!addAddress &&
                                 <span className='btn btn-sm btn-primary mx-2' onClick={() => setIsEditable(true)}>Edit this address</span>}

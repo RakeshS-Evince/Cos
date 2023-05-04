@@ -40,6 +40,22 @@ const editAddress = async (req, res, next) => {
         res.status(400).send({ message: e.message });
     }
 }
+const getOneAddress = async (req, res, next) => {
+    try {
+        const data = await Address.findOne({ where: { id: req.params.id } });
+        res.send(data);
+    } catch (e) {
+        res.status(400).send({ message: e.message });
+    }
+}
+const deleteOneAddress = async (req, res, next) => {
+    try {
+        const data = await Address.destroy({ where: { id: req.params.id } });
+        res.send({ message: "Address deleted" });
+    } catch (e) {
+        res.status(400).send({ message: e.message });
+    }
+}
 const addAddress = async (req, res, next) => {
     try {
         const addData = await Address.update({ default: false }, { where: { customerId: req.user.customerId, default: true } });
@@ -82,6 +98,8 @@ const updateProfile = async (req, res, next) => {
 
 }
 
+
+
 module.exports = {
     profile,
     updateProfile,
@@ -89,5 +107,7 @@ module.exports = {
     makeDefaultAddress,
     getDefaultAddress,
     editAddress,
-    addAddress
+    addAddress,
+    getOneAddress,
+    deleteOneAddress
 }

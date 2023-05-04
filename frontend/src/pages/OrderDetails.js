@@ -3,6 +3,7 @@ import useAuth from '../axios/useApi';
 import { Link, useParams } from 'react-router-dom';
 import './orderDetails.scss'
 import { BASE_URL } from '../constants/constant';
+import Swal from 'sweetalert2';
 function OrderDetails() {
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderAddress, setOrderAddress] = useState(null)
@@ -10,10 +11,28 @@ function OrderDetails() {
     const { id } = useParams()
     useEffect(() => {
         authApi.get('order-details/' + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
-    }, [id])
+    }, [id, authApi])
+    const requestCancel = () => {
+        Swal.fire({
+            title: 'Are you sure to cancel this order?',
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+
+            confirmButtonText: 'Yes, Cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                authApi.put('/order-status-update/' + id, { status: 'Canceled' }).then((res) => Swal.fire("Your request submitted successfully"));
+            }
+        })
+
+    }
     return (
         <div>
-            <h2>Order details</h2>
+            <div className='d-flex justify-content-between'><h2>Order details</h2>
+            <Link to='/my-orders'>Back to My Orders</Link></div>
+            
+            
             <div className='card' style={{ zIndex: 0 }}>
                 <div className='card-body p-3 row g-2'>
                     <h5> Order Id: {id}</h5>
@@ -33,10 +52,11 @@ function OrderDetails() {
                                     </Link>
                                     <div className="price text-muted">Price: ₹ {parseFloat(ele.order_item?.quantity * ele.price).toFixed(2)}</div>
                                 </div>
+
                             </div>
                         )
                     })}
-
+                    {!(orderDetails?.status === 'Canceled'||orderDetails?.status ==='Delivered')? <button className='btn btn-danger col-auto' onClick={() => { requestCancel() }} >Request Cancel</button>:"" }
                     <h5 className='mt-5'>Shipping details</h5>
                     <hr />
                     <div className='row g-2'>
@@ -52,7 +72,7 @@ function OrderDetails() {
                                 <div className="col-12">
                                     <ul id="progressbar" className="text-center">
                                         <li className="active step0" />
-                                        {orderDetails?.status === 'Confirmed'
+                                        {orderDetails?.status !== 'Canceled' ? orderDetails?.status === 'Confirmed'
                                             ?
                                             <>
                                                 <li className='active step0' />
@@ -68,13 +88,14 @@ function OrderDetails() {
                                                 <>
                                                     <li className='step0' />
                                                     <li className='step0' />
-                                                </>
-                                        }
-
+                                                </> : <>
+                                            <li className='active step0' />
+                                        </>}
+                                        
                                     </ul>
                                 </div>
                             </div>
-                            <div className="row d-flex justify-content-center">
+                            {orderDetails?.status !== 'Canceled' ? <div className="row d-flex justify-content-center">
                                 <div className="col-12">
                                     <ul id="sub-progressbar" className="text-center">
                                         <li className=" ">Placed</li>
@@ -82,7 +103,14 @@ function OrderDetails() {
                                         <li className="" >Delivered</li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> : <div className="row d-flex justify-content-center">
+                                <div className="col-12">
+                                    <ul id="sub-progressbar" className="text-center">
+                                        <li className=" ">Placed</li>
+                                        <li className=" ">Canceled</li>
+                                    </ul>
+                                </div>
+                            </div>}
                         </div>
                         <h5 className='mt-5'>Price details</h5>
                         <hr />
@@ -104,7 +132,7 @@ function OrderDetails() {
                             <h5>₹{parseFloat(orderDetails?.totalPrice + orderDetails?.shippingCharge - orderDetails?.couponDiscount).toFixed(2)}</h5>
                         </div>
                         <div className='d-flex'>
-                            <h5>Payment made by :</h5>
+                            <h5>Payment method :</h5>
                             <h5>{orderDetails?.paymentMethod}</h5>
                         </div>
                     </div>

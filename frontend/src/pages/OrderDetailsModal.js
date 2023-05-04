@@ -73,7 +73,7 @@ function OrderDetailsModal({ id, setId }) {
                                     <h5>₹{parseFloat(orderDetails?.totalPrice + orderDetails?.shippingCharge - orderDetails?.couponDiscount).toFixed(2)}</h5>
                                 </div>
                                 <div className='d-flex'>
-                                    <h5>Payment made by :</h5>
+                                    <h5>Payment method :</h5>
                                     <h5>{orderDetails?.paymentMethod}</h5>
                                 </div>
                             </div>
