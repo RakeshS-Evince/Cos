@@ -51,7 +51,7 @@ function Profile() {
                                         {/* <button className="btn btn-outline-primary">Account Setting</button> */}
                                     </div>
                                 </div>
-                                <hr className="my-4" />
+                                <hr className="my-3" />
                                 <ul className="list-group list-group-flush">
                                     <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                         <h6><Link to="/my-orders" style={{ textDecoration: "none" }}>Orders</Link></h6>

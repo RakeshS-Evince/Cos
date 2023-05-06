@@ -7,9 +7,6 @@ import Sidebar from './Sidebar'
 import useRoleCheck from '../hooks/useRoleCheck'
 import AdminHeader from './AdminHeader'
 
-
-
-
 function FullLayout() {
     const { isAdmin, isStaff } = useRoleCheck();
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -39,7 +36,7 @@ function FullLayout() {
             </header>
             <main>
                 <div id="main">
-                    <Container fluid={!(isAdmin || isStaff) } style={{ paddingTop: "70px", paddingBottom: "50px" }}>
+                    <Container fluid={!(isAdmin || isStaff) } id='layout' style={{ paddingTop: "70px", paddingBottom: "50px" }}>
                         <Outlet />
                     </Container>
                 </div>

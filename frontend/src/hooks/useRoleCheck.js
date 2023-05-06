@@ -1,5 +1,5 @@
-import { useContext, useEffect } from 'react'
-import UserContextProvider, { UserContext } from '../context/UserContextProvider'
+import { useContext } from 'react'
+import  { UserContext } from '../context/UserContextProvider'
 import jwt_decode from "jwt-decode";
 
 function useRoleCheck() {

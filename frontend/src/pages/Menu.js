@@ -9,14 +9,13 @@ import { addToCart } from '../feature/cartSlice'
 import { useDispatch } from 'react-redux'
 import { UserContext } from '../context/UserContextProvider';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+
 function Menu() {
     const [data, setData] = useState([]);
     const { user } = useContext(UserContext);
     const showCart = () => {
         document.getElementById('cartSidebar').classList.add('cart_wrapper_show');
     }
-    const navigate = useNavigate()
     const dispatch = useDispatch();
     useEffect(() => {
         axios.get(BASE_URL + ICECREAM).then((res) => setData(res?.data)).catch(e => console.log(e))
@@ -29,18 +28,19 @@ function Menu() {
         showCart();
         dispatch(addToCart(data))
     }
+
     return (
         <>
             <div className='d-flex justify-content-between mb-3'>
                 <h3>All Icecreams</h3>
                 <div className='d-flex align-items-center'>
-                    <label>Filter: </label>
+                    {/* <label>Filter: </label>
                     <select className='form-control ms-2' >
-                        <option>Newer first</option>
+                        <option >Newer first</option>
                         <option>Older first</option>
                         <option>Price Low to High</option>
                         <option>Price High to Low</option>
-                    </select>
+                    </select> */}
                 </div>
             </div>
             <Row className='g-3'>
@@ -71,7 +71,7 @@ function Menu() {
                             </Card.Body>
                         </Card>
                     </Col>
-                )):<p>No ice-creams are there</p>}
+                )) : <p>No ice-creams are there</p>}
             </Row>
         </>
 

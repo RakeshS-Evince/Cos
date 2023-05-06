@@ -12,7 +12,7 @@ function BrandTable() {
     const [refetchData, setRefetchData] = useState(false)
     useEffect(() => {
         authApi.get(BASE_URL + "brands").then(({ data }) => setData(data)).catch(e => console.log(e.message))
-    }, [refetchData])
+    }, [refetchData,authApi])
     const deleteHandler = (name) => {
         Swal.fire({
             title: 'Do you want to delete this brand?',
@@ -44,29 +44,31 @@ function BrandTable() {
                 <div className='card mt-2'>
                     <div className='card-body'>
                         <button className='btn btn-primary mb-2' onClick={() => setShowBrandForm(true)}>Add</button>
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Image</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data?.length && data.map((ele, i) => (
-                                    <tr key={i}>
-                                        <th scope="row">{i + 1}</th>
-                                        <td>{ele.name}</td>
-                                        <td><img src={BASE_URL + 'images/' + ele.image} height={'40px'} width={'40px'} /></td>
-                                        <td>
-                                            <button className='btn btn-info me-2' onClick={() => { setShowBrandForm(true); setBrandName(ele.name) }}>Edit</button>
-                                            <button className='btn btn-danger' onClick={() => deleteHandler(ele.name)}>Delete</button>
-                                        </td>
+                        <div className='table-responsive'>
+                            <table className="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Action</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {data?.length && data.map((ele, i) => (
+                                        <tr key={i}>
+                                            <th scope="row">{i + 1}</th>
+                                            <td>{ele.name}</td>
+                                            <td><img src={BASE_URL + 'images/' + ele.image} height={'40px'} width={'40px'} alt='brand'/></td>
+                                            <td>
+                                                <button className='btn btn-info me-2' onClick={() => { setShowBrandForm(true); setBrandName(ele.name) }}>Edit</button>
+                                                <button className='btn btn-danger' onClick={() => deleteHandler(ele.name)}>Delete</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

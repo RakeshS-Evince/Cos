@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux';
 import UserContextProvider from './context/UserContextProvider';
 import { Suspense } from 'react';
+
 const persistor = persistStore(store);
 function App() {
   return (

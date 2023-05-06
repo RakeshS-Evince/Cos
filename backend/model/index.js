@@ -18,6 +18,7 @@ sequelize
 
 const db = {};
 db.sequelize = sequelize;
+db.messages = require("./messages")(sequelize, DataTypes);
 db.accounts = require("./accounts")(sequelize, DataTypes);
 db.customer = require("./customer")(sequelize, DataTypes);
 db.address = require("./address")(sequelize, DataTypes);

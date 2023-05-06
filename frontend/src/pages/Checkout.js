@@ -24,7 +24,7 @@ function Checkout() {
     const authApi = useAuth();
     const total = useSelector(state => state.cart.total);
     const [states, setStates] = useState({});
-    const [discount, setDiscount] = useState(0);
+    const [discount] = useState(0);
     const [isEditable, setIsEditable] = useState(false);
     const [addAddress, setAddAddress] = useState(false);
     const [addressId, setAddressId] = useState();

@@ -19,7 +19,7 @@ function IceCreamByBrand() {
     const dispatch = useDispatch();
     useEffect(() => {
         axios.get(BASE_URL + 'ice-creams-by-brand/' + name).then((res) => setData(res?.data)).catch(e => console.log(e))
-    }, [])
+    }, [name])
     const cartClickHandler = (data) => {
         if (!user?.isLoggedIn) {
             Swal.fire('You are not logged in please login and add items to cart');

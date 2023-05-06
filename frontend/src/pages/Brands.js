@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import axios from "axios";
 
-import { BASE_URL, ICECREAM } from "../constants/constant"
+import { BASE_URL} from "../constants/constant"
 import { Link } from 'react-router-dom';
 function Brands() {
     const [data, setData] = useState([]);
@@ -15,7 +15,7 @@ function Brands() {
         <>
             <h3>All Brands</h3>
             <Row className='g-3'>
-                {data.length && data.map((ele, i) => (
+                {data.length ? data.map((ele, i) => (
                     <Col key={i} lg={3} sm={4}>
                         <Card>
                             <Card.Img variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
@@ -24,7 +24,7 @@ function Brands() {
                             </Card.Body>
                         </Card>
                     </Col>
-                ))}
+                )):<p>No brands are there</p>}
             </Row>
         </>
 

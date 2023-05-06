@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
 import useApi from '../axios/useApi'
 import { BASE_URL } from '../constants/constant';
+import { Link } from 'react-router-dom';
 
 
 function AdminDashboard() {
-    const [state, setState] = useState({
+    const [state] = useState({
         options: {
             chart: {
                 id: "basic-bar"
@@ -22,10 +23,24 @@ function AdminDashboard() {
         ]
     })
     const authApi = useApi()
-    const [counts, setCounts] = useState(null)
+    const [counts, setCounts] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const timeConverter = (time) => {
+        let timeInMinute = Math.floor((new Date() - new Date(time)) / 60000);
+        if (timeInMinute > 60 && timeInMinute < 1440) {
+            return Math.floor(timeInMinute / 60) === 1 ? Math.floor(timeInMinute / 60) + ' hour ago' : Math.floor(timeInMinute / 60) + ' hours ago'
+        }
+        if (timeInMinute > 1440) {
+            return Math.floor(timeInMinute / 1440) === 1 ? Math.floor(timeInMinute / 60) + ' day ago' : Math.floor(timeInMinute / 60) + ' days ago'
+        }
+        if (timeInMinute < 1) return Math.floor((new Date() - new Date(time)) / 1000) + ' seconds ago';
+        return timeInMinute === 1 ? timeInMinute + ' minute ago' : timeInMinute + " minutes ago"
+
+    }
     useEffect(() => {
-        authApi.get(BASE_URL + "dashboard").then(res => setCounts(res.data)).catch(e => console.log(e.response.data.message))
-    }, [])
+        authApi.get(BASE_URL + "dashboard").then(res => setCounts(res.data)).catch(e => console.log(e.response.data.message));
+        authApi.get(BASE_URL + 'messages').then(res => setMessages(res.data)).catch(e => e.response.data.message);
+    }, [authApi])
     return (
         <div>
             <h3>Dashboard</h3>
@@ -94,16 +109,30 @@ function AdminDashboard() {
             <div className='row justify-content-between'>
                 <div className=' col-lg-7'>
                     <div className='card p-3 mt-5 me-2'>
-                    <Chart
-                        options={state.options}
-                        series={state.series}
-                        type="bar"
-                    /></div>
+                        <Chart
+                            options={state.options}
+                            series={state.series}
+                            type="bar"
+                        /></div>
                 </div>
                 <div className='col-lg-5'>
-                    {/* <div className='card p-3 mt-5'>
-                        <h5>Logs</h5>
-                    </div> */}
+                    <div className='card p-3 mt-5'>
+                        <h4>Messages to us</h4>
+                      
+                        {messages?.slice(0,5)?.map(ele => (
+                            <>
+                                <div className='d-flex justify-content-between mt-2'>
+                                    <div>
+                                        <h6>{ele.name}</h6>
+                                        <span className='text-muted'>{ele.message}</span>
+                                    </div>
+                                    <span className='text-small text-muted'>{timeConverter(ele.createdAt)}</span>
+                                </div>
+                                <hr style={{marginBottom:"2px"}}/>
+                            </>
+                        ))}
+                        <Link to={'/messages'} className='text-end' style={{textDecoration:'none'}}>View more</Link>
+                    </div>
                 </div>
             </div>
 

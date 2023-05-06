@@ -22,8 +22,9 @@ import Home from '../pages/Home'
 import Unauthorized from '../pages/Unauthorized'
 import NotFound from '../pages/NotFound'
 import AddressForm from '../pages/AddressForm'
-import About from '../pages/About'
-import Contact from '../pages/Contact'
+import About from '../pages/About/About'
+import Contact from '../pages/Contact/Contact'
+import MessagesTable from '../pages/MessagesTable'
 const Profile = React.lazy(() => import('../pages/Profile'))
 function Router() {
     const { isAdmin, isStaff } = useRoleCheck();
@@ -53,6 +54,7 @@ function Router() {
                         <Route path="/orders-table" exact element={<OrderTable />} />
                         <Route path="/brands-table" exact element={<BrandTable />} />
                         <Route path="/ice-creams-table" exact element={<IceCreamTable />} />
+                        <Route path="/messages" exact element={<MessagesTable />} />
                     </Route>
                 </Route>
                 <Route path="/brands" exact element={<Brands />} />

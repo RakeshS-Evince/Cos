@@ -3,10 +3,8 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContextProvider';
 function AdminHeader() {
-    const navigate = useNavigate()
     const { user, logout } = useContext(UserContext);
     const toggleSidebar = () => {
         document.getElementById('sidebar').classList.toggle('sidebar_wrapper_show');

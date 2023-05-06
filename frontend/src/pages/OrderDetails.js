@@ -18,11 +18,11 @@ function OrderDetails() {
             text: "",
             icon: 'warning',
             showCancelButton: true,
-
             confirmButtonText: 'Yes, Cancel it!'
         }).then((result) => {
             if (result.isConfirmed) {
                 authApi.put('/order-status-update/' + id, { status: 'Canceled' }).then((res) => Swal.fire("Your request submitted successfully"));
+                window.location.reload();
             }
         })
 

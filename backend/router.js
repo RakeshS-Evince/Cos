@@ -6,7 +6,7 @@ const { profile, updateProfile, getAllAddress, makeDefaultAddress, getDefaultAdd
 const { verifyAuth } = require('./middleware/auth');
 const { upload } = require('./middleware/multer');
 const { getAllBrands, addBrands, updateBrands, deleteBrands } = require('./controller/brands');
-const { dashboardDetails } = require('./controller/dashboard');
+const { dashboardDetails, getAllMessages, postMessages } = require('./controller/dashboard');
 const router = express.Router();
 router.get('/home', (req, res) => res.send('home page'))
 // Authentication
@@ -26,6 +26,9 @@ router.get('/brands', getAllBrands);
 router.post('/brands', upload.single('image'), addBrands);
 router.put('/brands/:name', upload.single('image'), updateBrands);
 router.delete('/brands/:name', deleteBrands);
+//messages
+router.get('/messages', verifyAuth, getAllMessages)
+router.post('/messages', verifyAuth, postMessages)
 //Orders
 router.post('/order/place', verifyAuth, placeOrder);
 router.get('/my-orders', verifyAuth, findOrder);

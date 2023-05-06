@@ -10,7 +10,7 @@ function OrderDetailsModal({ id, setId }) {
 
     useEffect(() => {
         authApi.get('order-details/' + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
-    }, [id])
+    }, [id,authApi])
     return (
         <>
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

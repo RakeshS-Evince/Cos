@@ -13,7 +13,7 @@ function IceCreamTable() {
     const [refetchData, setRefetchData] = useState(false)
     useEffect(() => {
         authApi.get(BASE_URL + ICECREAM).then(({ data }) => setData(data)).catch(e => console.log(e.message))
-    }, [refetchData])
+    }, [refetchData,authApi])
     const deleteHandler = (id) => {
         Swal.fire({
             title: 'Do you want to delete this Icecream?',
@@ -62,7 +62,7 @@ function IceCreamTable() {
                                             <tr key={i}>
                                                 <td>{i + 1}</td>
                                                 <td>{ele.name}</td>
-                                                <td><img src={BASE_URL + 'images/' + ele.image} height={'40px'} width={'40px'} /></td>
+                                                <td><img src={BASE_URL + 'images/' + ele.image} height={'40px'} width={'40px'} alt='ice-creams' /></td>
                                                 <td>{ele.price}</td>
                                                 <td>{ele.quantity}</td>
                                                 <td>

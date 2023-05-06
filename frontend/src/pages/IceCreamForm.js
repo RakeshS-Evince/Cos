@@ -4,7 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { authApi } from '../axios/axios';
 import useAuth from '../axios/useApi';
 import { BASE_URL, BRANDS, ICECREAM } from '../constants/constant';
 import Swal from 'sweetalert2';
@@ -22,7 +21,7 @@ function IceCreamForm({ id, setShowIcecreamForm, setId, refetch }) {
         resolver: yupResolver(iceCreamSchema),
         defaultValues: id ? () => authApi.get(BASE_URL + ICECREAM + '/' + id).then(({ data }) => data).catch(e => console.log(e.response.messsage)) : {}
     })
-    useEffect(() => { authApi.get(BASE_URL + BRANDS).then((res) => setBrands(res.data)) }, [])
+    useEffect(() => { authApi.get(BASE_URL + BRANDS).then((res) => setBrands(res.data)) }, [authApi])
     const onSubmit = (data) => {
         const formData = new FormData();
         formData.append('name', data.name)
