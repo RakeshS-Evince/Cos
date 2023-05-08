@@ -7,7 +7,10 @@ function Orders() {
     const [orders, setOrders] = useState([]);
     const authApi = useAuth();
     useEffect(() => {
-        authApi.get(MY_ORDERS).then(({ data }) => setOrders(data)).catch(e => console.log(e.message))
+        authApi.get(MY_ORDERS).then(({ data }) => {
+            let reversed = data?.reverse();
+            setOrders(reversed)
+        }).catch(e => console.log(e.message))
     }, [authApi]);
     return (
         <div>
@@ -15,7 +18,9 @@ function Orders() {
             {orders?.map((ele, i) => (
                 <div className='card my-3' key={i}>
                     <div className='card-body p-3 row g-2'>
-                        <h5> Order Id: {ele.id}</h5>
+                        <div className='d-flex justify-content-between'><h5> Order Id: {ele.id}</h5>
+                            <span>Date: {new Date(ele.createdAt).toDateString()}</span>
+                        </div>
                         <hr />
                         <div>
                             <div className='d-flex'>

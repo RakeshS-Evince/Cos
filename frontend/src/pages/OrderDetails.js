@@ -30,12 +30,14 @@ function OrderDetails() {
     return (
         <div>
             <div className='d-flex justify-content-between'><h2>Order details</h2>
-            <Link to='/my-orders'>Back to My Orders</Link></div>
-            
-            
+                <Link to='/my-orders'>Back to My Orders</Link></div>
+
+
             <div className='card' style={{ zIndex: 0 }}>
                 <div className='card-body p-3 row g-2'>
-                    <h5> Order Id: {id}</h5>
+                    <div className='d-flex justify-content-between'><h5>{id}</h5>
+                        <span>Date: {new Date(orderDetails?.createdAt).toDateString()}</span>
+                    </div>
                     <hr />
                     {orderDetails?.iceCreams?.map((ele, i) => {
                         return (
@@ -56,7 +58,7 @@ function OrderDetails() {
                             </div>
                         )
                     })}
-                    {!(orderDetails?.status === 'Canceled'||orderDetails?.status ==='Delivered')? <button className='btn btn-danger col-auto' onClick={() => { requestCancel() }} >Request Cancel</button>:"" }
+                    {!(orderDetails?.status === 'Canceled' || orderDetails?.status === 'Delivered') ? <button className='btn btn-danger col-auto' onClick={() => { requestCancel() }} >Request Cancel</button> : ""}
                     <h5 className='mt-5'>Shipping details</h5>
                     <hr />
                     <div className='row g-2'>
@@ -91,7 +93,7 @@ function OrderDetails() {
                                                 </> : <>
                                             <li className='active step0' />
                                         </>}
-                                        
+
                                     </ul>
                                 </div>
                             </div>

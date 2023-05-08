@@ -18,7 +18,11 @@ export default function Header() {
     const { user, logout } = useContext(UserContext);
     const { isAdmin, isStaff } = useRoleCheck()
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed='top'>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed='top' style={{
+            background: '#6a11cb',
+            background: '-webkit-linear-gradient(to right, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.9))',
+            background:' linear-gradient(to right, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.9))',
+          }}>
             <Container fluid>
                 <Navbar.Brand href="/">Ice-Cream Shop</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
