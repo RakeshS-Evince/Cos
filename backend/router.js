@@ -7,6 +7,8 @@ const { verifyAuth } = require('./middleware/auth');
 const { upload } = require('./middleware/multer');
 const { getAllBrands, addBrands, updateBrands, deleteBrands } = require('./controller/brands');
 const { dashboardDetails, getAllMessages, postMessages } = require('./controller/dashboard');
+const { getAllCustomers } = require('./controller/customers');
+const { getCustomerReview, addRating, getAllReviews } = require('./controller/reviews');
 const router = express.Router();
 router.get('/home', (req, res) => res.send('home page'))
 // Authentication
@@ -18,14 +20,14 @@ router.put('/auth/reset-password', resetPassword);
 router.get('/ice-creams', getAllIceCreams);
 router.get('/ice-creams/:id', getOneIceCream);
 router.get('/ice-creams-by-brand/:name', getIceCreamByBrand);
-router.post('/ice-creams', upload.single('image'), addIceCream);
-router.put('/ice-creams/:id', upload.single('image'), updateIceCream);
-router.delete('/ice-creams/:id', deleteIceCream);
+router.post('/ice-creams', verifyAuth, upload.single('image'), addIceCream);
+router.put('/ice-creams/:id', verifyAuth, upload.single('image'), updateIceCream);
+router.delete('/ice-creams/:id', verifyAuth, deleteIceCream);
 // Brands CRUD
 router.get('/brands', getAllBrands);
-router.post('/brands', upload.single('image'), addBrands);
-router.put('/brands/:name', upload.single('image'), updateBrands);
-router.delete('/brands/:name', deleteBrands);
+router.post('/brands', verifyAuth, upload.single('image'), addBrands);
+router.put('/brands/:name', verifyAuth, upload.single('image'), updateBrands);
+router.delete('/brands/:name', verifyAuth, deleteBrands);
 //messages
 router.get('/messages', verifyAuth, getAllMessages)
 router.post('/messages', verifyAuth, postMessages)
@@ -45,6 +47,10 @@ router.post('/user/address', verifyAuth, addAddress);
 router.put('/user/address/:id', verifyAuth, editAddress);
 router.put('/user/address-default/:id', verifyAuth, makeDefaultAddress);
 router.get('/user/address-default/', verifyAuth, getDefaultAddress);
+router.get('/user/reviews/', verifyAuth, getCustomerReview);
+router.put('/user/reviews/', verifyAuth, addRating);
+//customer routes
 router.get('/dashboard', verifyAuth, dashboardDetails);
-
+router.get('/customers', verifyAuth, getAllCustomers);
+router.get('/reviews', verifyAuth, getAllReviews);
 module.exports = router

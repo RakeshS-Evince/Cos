@@ -12,23 +12,21 @@ const register = async (req, res) => {
     const encrypted = await bcrypt.hash(password, 10);
     try {
         let data = await Account.create({ username: username, password: encrypted, email: email, roleId: roleId });
-        if (data) {
-            if (Number(roleId) === 1) {
-                let info = await Customer.create({ email: email, accountId: data.dataValues.id });
-                res.send({ message: 'Account created' });
-                return
-            }
-            if (Number(roleId) === 2) {
-                let info = await Staff.create({ email: email, accountId: data.dataValues.id });
-                res.send({ message: 'Account created' });
-                return
-            }
+        if (!data) {
+            res.send({ message: "Unable to create account" });
+            return
         }
+        if (Number(roleId) === 1) {
+            let info = await Customer.create({ email: email, accountId: data.dataValues.id });
+            res.send({ message: 'Account created' });
+            return
+        }
+
     } catch (e) {
         res.status(400).send({ message: "Username/email aleready in use." });
         return
     }
-    res.send({ message: "Unable to create account" });
+
 }
 const login = async (req, res) => {
     try {
@@ -42,13 +40,13 @@ const login = async (req, res) => {
             let token = jwt.sign({ accountId: data.dataValues.id, roleId: data.dataValues.roleId, customerId: cdata.dataValues.id }, "secretKey", {
                 expiresIn: "24h",
             })
-            res.send({ message: 'Login successful',username:data.dataValues.username, token: token, id: cdata.dataValues.id });
+            res.send({ message: 'Login successful', username: data.dataValues.username, token: token, id: cdata.dataValues.id });
             return
         }
         let token = jwt.sign({ accountId: data.dataValues.id, roleId: data.dataValues.roleId }, "secretKey", {
             expiresIn: "24h",
         })
-        res.send({ message: 'Login successful',username:data.dataValues.username, token: token });
+        res.send({ message: 'Login successful', username: data.dataValues.username, token: token });
     } catch (e) {
         res.status(400).send({ message: e.message })
     }

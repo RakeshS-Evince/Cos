@@ -1,9 +1,9 @@
 const { db } = require("../model");
-
 const Order = db.order;
 const OrderItem = db.orderItem;
 const IceCream = db.iceCream;
 const Customer = db.customer;
+
 
 const placeOrder = async (req, res, next) => {
     try {
@@ -46,7 +46,6 @@ const findOrder = async (req, res, next) => {
 const findOneOrder = async (req, res, next) => {
     try {
         const data = await Order.findOne({
-
             include: [{
                 model: IceCream,
                 attributes: ['id', "name", 'brandName', 'image', 'price'],
@@ -56,9 +55,15 @@ const findOneOrder = async (req, res, next) => {
             },
         },
         );
+        // let icIdArr = [];
+        // data.dataValues?.iceCreams?.forEach(element => {
+        //     icIdArr.push(element.id)
+        // });
+        // const revData = await Review.findAll({ where: Sequelize.and({ customerId: data.dataValues.customerId }, { iceCreamId: { [Op.in]: icIdArr } }), })
         if (!data) {
             throw Error('No Orders found');
         }
+
         res.send(data);
     } catch (e) {
         res.status(400).send({ message: e.message })
@@ -70,7 +75,7 @@ const findAllOrders = async (req, res, next) => {
         const data = await Order.findAll({
             include: [{
                 model: Customer,
-                attributes: ['id', "fullname"],
+                attributes: ['id', "fullname"]
             }],
         });
         if (!data) {

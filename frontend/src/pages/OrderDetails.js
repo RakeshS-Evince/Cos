@@ -31,8 +31,6 @@ function OrderDetails() {
         <div>
             <div className='d-flex justify-content-between'><h2>Order details</h2>
                 <Link to='/my-orders'>Back to My Orders</Link></div>
-
-
             <div className='card' style={{ zIndex: 0 }}>
                 <div className='card-body p-3 row g-2'>
                     <div className='d-flex justify-content-between'><h5>{id}</h5>
@@ -41,21 +39,23 @@ function OrderDetails() {
                     <hr />
                     {orderDetails?.iceCreams?.map((ele, i) => {
                         return (
-                            <div key={i} className="d-flex mb-4">
-                                <div className="me-3 position-relative">
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
-                                        {ele.order_item?.quantity}
-                                    </span>
-                                    <img alt="ice cream" src={BASE_URL + 'images/' + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                            <>
+                                <div key={i} className="d-flex">
+                                    <div className="me-3 position-relative">
+                                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
+                                            {ele.order_item?.quantity}
+                                        </span>
+                                        <img alt="ice cream" src={BASE_URL + 'images/' + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                    </div>
+                                    <div className="">
+                                        <Link to="#" className="nav-link">
+                                            {ele.name} <br />
+                                        </Link>
+                                        <div className="price text-muted">Price: ₹ {parseFloat(ele.order_item?.quantity * ele.price).toFixed(2)}</div>
+                                    </div>
                                 </div>
-                                <div className="">
-                                    <Link to="#" className="nav-link">
-                                        {ele.name} <br />
-                                    </Link>
-                                    <div className="price text-muted">Price: ₹ {parseFloat(ele.order_item?.quantity * ele.price).toFixed(2)}</div>
-                                </div>
-
-                            </div>
+                                <Link to={`/review/cid=${orderDetails.customerId}&iid=${ele.id}`} className='mb-3' style={{ textDecoration: 'none' }}>Write a review</Link>
+                            </>
                         )
                     })}
                     {!(orderDetails?.status === 'Canceled' || orderDetails?.status === 'Delivered') ? <button className='btn btn-danger col-auto' onClick={() => { requestCancel() }} >Request Cancel</button> : ""}

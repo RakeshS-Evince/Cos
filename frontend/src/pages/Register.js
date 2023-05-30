@@ -10,7 +10,7 @@ import { api } from '../axios/axios'
 import { REGISTER } from '../constants/constant';
 import Swal from 'sweetalert2';
 const schema = yup.object({
-    username: yup.string().required("Fullname is required"),
+    username: yup.string().required("Username is required"),
     email: yup.string().email().required("Email is required"),
     password: yup.string().required("Password is required")
         .min(8, 'Password must be 8 characters long')
@@ -99,24 +99,24 @@ function Register() {
                                                     </Form.Control.Feedback>
                                                 </InputGroup>
                                             </div>
-                                                <button type="submit" className="btn" style={{
-                                                    backgroundColor: "#5369f8",
-                                                    borderColor: "#5369f8",
-                                                    color: "#fff"
-                                                }}>Register</button>
+                                            <button type="submit" className="btn" style={{
+                                                backgroundColor: "#5369f8",
+                                                borderColor: "#5369f8",
+                                                color: "#fff"
+                                            }}>Register</button>
                                         </form>
                                     </div>
                                 </div>
 
                                 <div className="col-lg-6 d-none d-lg-inline-block">
                                     <div className="account-block rounded-right">
-                                    
-                                </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p className="text-muted text-center mt-3 mb-0">Already have an account? <Link to="/login" className="text-primary ml-1" style={{textDecoration:"none"}}>Login</Link></p>
+                    <p className="text-muted text-center mt-3 mb-0">Already have an account? <Link to="/login" className="text-primary ml-1" style={{ textDecoration: "none" }}>Login</Link></p>
                 </div>
             </div>
         </div>

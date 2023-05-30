@@ -25,13 +25,16 @@ import AddressForm from '../pages/AddressForm'
 import About from '../pages/About/About'
 import Contact from '../pages/Contact/Contact'
 import MessagesTable from '../pages/MessagesTable'
+import Customers from '../pages/Customers'
+import ReviewForm from '../pages/ReviewForm'
+import ReviewsTable from '../pages/ReviewsTable'
 const Profile = React.lazy(() => import('../pages/Profile'))
 function Router() {
     const { isAdmin, isStaff } = useRoleCheck();
     return (
         <Routes>
             <Route path="*" exact element={<NotFound />} />
-                <Route path="/unauthorized" exact element={<Unauthorized />} />
+            <Route path="/unauthorized" exact element={<Unauthorized />} />
             <Route element={<FullLayout />}>
                 <Route path="/" element={!(isAdmin || isStaff) ? <Home /> : <AdminDashboard />} />
                 <Route path="/menu" exact element={<Menu />} />
@@ -49,12 +52,15 @@ function Router() {
                         <Route path="/checkout" exact element={<Checkout />} />
                         <Route path="/my-orders" exact element={<Orders />} />
                         <Route path="/my-orders/:id" exact element={<OrderDetails />} />
+                        <Route path="/review/:info" element={<ReviewForm />} />
                     </Route>
                     <Route element={(isAdmin || isStaff) ? <Outlet /> : <Navigate to='/unauthorized' />}>
                         <Route path="/orders-table" exact element={<OrderTable />} />
                         <Route path="/brands-table" exact element={<BrandTable />} />
                         <Route path="/ice-creams-table" exact element={<IceCreamTable />} />
                         <Route path="/messages" exact element={<MessagesTable />} />
+                        <Route path="/customers" exact element={<Customers />} />
+                        <Route path="/reviews" exact element={<ReviewsTable />} />
                     </Route>
                 </Route>
                 <Route path="/brands" exact element={<Brands />} />

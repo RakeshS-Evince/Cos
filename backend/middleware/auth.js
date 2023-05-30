@@ -13,4 +13,5 @@ const verifyAuth = (req, res, next) => {
         res.status(401).send({ message: e.message })
     }
 }
+
 module.exports = { verifyAuth }

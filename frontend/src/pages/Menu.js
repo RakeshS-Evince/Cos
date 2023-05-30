@@ -50,10 +50,10 @@ function Menu() {
                             <Card.Img variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
                             <Card.Body>
                                 <Card.Title>{ele.name}</Card.Title>
-                                {/* <Card.Text>
+                                <Card.Text>
                                     Some quick example text to build on the card title and make up the
                                     bulk of the card's content.
-                                </Card.Text> */}
+                                </Card.Text>
                                 <span className='mt-2'>Price: ₹{parseFloat(ele.price).toFixed(2)}</span>
                                 <div className='d-flex justify-content-end'>
                                     <i className='bi bi-cart-plus btn btn-primary' onClick={() => {

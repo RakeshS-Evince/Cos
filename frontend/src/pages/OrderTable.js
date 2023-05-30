@@ -13,7 +13,7 @@ function OrderTable() {
     const [refetch, setRefetch] = useState(false)
     useEffect(() => {
         authApi.get(BASE_URL + ORDERS).then(res => setOrders(res.data)).catch(e => console.log(e.response.data.message));
-    }, [refetch,authApi]);
+    }, [refetch, authApi]);
     const toggleRefetch = () => { setRefetch(!refetch) }
     const changeStatus = () => {
         if (status === 'Select status' || !status) {
@@ -71,7 +71,7 @@ function OrderTable() {
                                 <tr key={i}>
                                     <th>{i + 1}</th>
                                     <td>{ele.id}</td>
-                                    <td>{ele.customer.fullname}</td>
+                                    <td>{ele.customer.fullname || ele.username}</td>
                                     <td>{ele.status}</td>
                                     <td>{ele.date}</td>
                                     <td>{ele.totalPrice}</td>

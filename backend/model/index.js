@@ -29,6 +29,7 @@ db.cart = require("./cart")(sequelize, DataTypes);
 db.order = require("./order")(sequelize, DataTypes);
 db.orderItem = require("./orderItem")(sequelize, DataTypes);
 db.role = require('./role')(sequelize, DataTypes)
+db.review = require('./reviews')(sequelize, DataTypes)
 db.accounts.belongsTo(db.role, {
     foreingKey: ["roleId"],
     onUpdate: "CASCADE",
@@ -52,6 +53,9 @@ db.order.belongsTo(db.customer, {
 db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
 db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
 db.order.hasMany(db.orderItem, { foreingKey: ['id', "orderId"] })
+db.iceCream.hasMany(db.review, { foreingKey: ['id', "iceCreamId"] })
+db.customer.hasMany(db.review, { foreingKey: ['id', "customerId"] })
+db.review.belongsTo(db.customer, { foreingKey: ['id', "customerId"] })
 db.order.belongsToMany(db.iceCream, {
     through: db.orderItem,
     foreingKey: ["iceCreamId"],
