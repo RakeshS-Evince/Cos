@@ -3,15 +3,16 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import axios from "axios";
-import { BASE_URL} from "../constants/constant"
+import { BASE_URL } from "../constants/constant"
 import { addToCart } from '../feature/cartSlice'
 import { useDispatch } from 'react-redux'
 import { UserContext } from '../context/UserContextProvider';
 import Swal from 'sweetalert2';
-import {useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 function IceCreamByBrand() {
     const [data, setData] = useState([]);
     const { user } = useContext(UserContext);
+    const navigate = useNavigate()
     const showCart = () => {
         document.getElementById('cartSidebar').classList.add('cart_wrapper_show');
     }
@@ -30,9 +31,10 @@ function IceCreamByBrand() {
     }
     return (
         <>
+
             <div className='d-flex justify-content-between mb-3'>
                 <h3>{name} Icecreams</h3>
-                <div className='d-flex align-items-center'>
+                {/* <div className='d-flex align-items-center'>
                     <label>Filter: </label>
                     <select className='form-control ms-2' >
                         <option>Newer first</option>
@@ -40,19 +42,19 @@ function IceCreamByBrand() {
                         <option>Price Low to High</option>
                         <option>Price High to Low</option>
                     </select>
-                </div>
+                </div> */}
             </div>
             <Row className='g-3'>
                 {data.length ? data.map((ele, i) => (
                     <Col key={i} lg={3} sm={4}>
-                        <Card>
-                            <Card.Img variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
+                        <Card className='menu-card'>
+                            <Card.Img className='menu-image' onClick={() => navigate('/icecream-details/' + ele.id)} variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
                             <Card.Body>
-                                <Card.Title>{ele.name}</Card.Title>
-                                {/* <Card.Text>
+                                <Card.Title className='menu-title' onClick={() => navigate('/icecream-details/' + ele.id)}>{ele.name}</Card.Title>
+                                <Card.Text>
                                     Some quick example text to build on the card title and make up the
                                     bulk of the card's content.
-                                </Card.Text> */}
+                                </Card.Text>
                                 <span className='mt-2'>Price: ₹{parseFloat(ele.price).toFixed(2)}</span>
                                 <div className='d-flex justify-content-end'>
                                     <i className='bi bi-cart-plus btn btn-primary' onClick={() => {
@@ -70,7 +72,7 @@ function IceCreamByBrand() {
                             </Card.Body>
                         </Card>
                     </Col>
-                )):<p>No ice-creams are there</p>}
+                )) : <p>No ice-creams are there</p>}
             </Row>
         </>
 

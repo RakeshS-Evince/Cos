@@ -5,7 +5,10 @@ function MessagesTable() {
     const [messages, setMessages] = useState([]);
     const authApi = useAuth();
     useEffect(() => {
-        authApi.get(BASE_URL + 'messages').then(res => setMessages(res.data)).catch(e => e.response.data.message);
+        authApi.get(BASE_URL + 'messages').then((res) => {
+            let reversed = res.data?.reverse();
+            setMessages(reversed)
+        }).catch(e => e.response.data.message);
     }, [authApi])
     return (
         <div>

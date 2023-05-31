@@ -33,7 +33,7 @@ function Address() {
     }
     return (
         <>
-            {address?.length && address.map((ele, i) => (
+            {address?.length ? address.map((ele, i) => (
                 <div key={i} className='col-md-6'>
                     <div className='card'>
                         <div className='card-body'>
@@ -49,7 +49,7 @@ function Address() {
                         </div>
                     </div>
                 </div>
-            ))}
+            )) : <span>No addresses are saved, please add one</span>}
         </>
     )
 }

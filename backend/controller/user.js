@@ -86,7 +86,6 @@ const updateProfile = async (req, res, next) => {
             return
         }
         const dataToUpdate = (({ username, ...rest }) => rest)(req.body);
-        console.log(dataToUpdate);
         let data = await Customer.update(dataToUpdate, { where: { accountId: user?.accountId } });
         if (!data) {
             res.status(400).send({ message: "Profile updated successfully" });

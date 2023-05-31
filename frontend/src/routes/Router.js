@@ -28,6 +28,8 @@ import MessagesTable from '../pages/MessagesTable'
 import Customers from '../pages/Customers'
 import ReviewForm from '../pages/ReviewForm'
 import ReviewsTable from '../pages/ReviewsTable'
+import IceCreamDetails from '../pages/IceCreamDetails'
+import CustomerOrders from '../pages/CustomerOrders'
 const Profile = React.lazy(() => import('../pages/Profile'))
 function Router() {
     const { isAdmin, isStaff } = useRoleCheck();
@@ -37,13 +39,18 @@ function Router() {
             <Route path="/unauthorized" exact element={<Unauthorized />} />
             <Route element={<FullLayout />}>
                 <Route path="/" element={!(isAdmin || isStaff) ? <Home /> : <AdminDashboard />} />
-                <Route path="/menu" exact element={<Menu />} />
-                <Route path="/about" exact element={<About />} />
-                <Route path="/contact" exact element={<Contact />} />
-                <Route path="/register" exact element={<Register />} />
-                <Route path="/login" exact element={<Login />} />
-                <Route path="/forgot-password" exact element={<ForgotPassword />} />
-                <Route path="/reset-password/:token" exact element={<ResetPassword />} />
+                <Route element={!(isAdmin || isStaff) ? <Outlet /> : <Navigate to="/" />}>
+                    <Route path="/register" exact element={<Register />} />
+                    <Route path="/login" exact element={<Login />} />
+                    <Route path="/reset-password/:token" exact element={<ResetPassword />} />
+                    <Route path="/forgot-password" exact element={<ForgotPassword />} />
+                    <Route path="/menu" exact element={<Menu />} />
+                    <Route path="/about" exact element={<About />} />
+                    <Route path="/contact" exact element={<Contact />} />
+                    <Route path="/icecream-details/:id" element={<IceCreamDetails />} />
+                    <Route path="/brands" exact element={<Brands />} />
+                    <Route path="/brands/:name" exact element={<IceCreamByBrand />} />
+                </Route>
                 <Route element={<ProtectedRoutes />}>
                     <Route element={!(isAdmin || isStaff) ? <Outlet /> : <Navigate to='/unauthorized' />}>
                         <Route path="/profile" exact element={<Profile />} />
@@ -61,10 +68,10 @@ function Router() {
                         <Route path="/messages" exact element={<MessagesTable />} />
                         <Route path="/customers" exact element={<Customers />} />
                         <Route path="/reviews" exact element={<ReviewsTable />} />
+                        <Route path="/customer-orders/:cid" exact element={<CustomerOrders />} />
                     </Route>
+
                 </Route>
-                <Route path="/brands" exact element={<Brands />} />
-                <Route path="/brands/:name" exact element={<IceCreamByBrand />} />
             </Route>
         </Routes>
     )

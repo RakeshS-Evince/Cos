@@ -8,16 +8,16 @@ const speakeasy = require('speakeasy');
 const { sendMail } = require('./emailTemplate');
 
 const register = async (req, res) => {
-    const { username, email, password, roleId } = req.body
+    const { username, email, password, roleId, fullname, contact } = req.body
     const encrypted = await bcrypt.hash(password, 10);
     try {
-        let data = await Account.create({ username: username, password: encrypted, email: email, roleId: roleId });
+        let data = await Account.create({ username: username, password: encrypted, email: email, roleId: roleId, });
         if (!data) {
             res.send({ message: "Unable to create account" });
             return
         }
         if (Number(roleId) === 1) {
-            let info = await Customer.create({ email: email, accountId: data.dataValues.id });
+            let info = await Customer.create({ email: email, accountId: data.dataValues.id, fullname: fullname, contact: contact });
             res.send({ message: 'Account created' });
             return
         }

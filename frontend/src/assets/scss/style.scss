@@ -1,3 +1,16 @@
 @import "variables";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-icons/font/bootstrap-icons.scss";
+
+.menu-card:hover {
+    border: 1px solid greenyellow;
+}
+
+.menu-image:hover {
+    cursor: pointer;
+}
+
+.menu-title:hover {
+    cursor: pointer;
+    color: blueviolet;
+}

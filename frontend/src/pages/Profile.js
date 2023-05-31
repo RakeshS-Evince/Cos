@@ -12,10 +12,10 @@ import Address from './Address';
 import { Link } from 'react-router-dom';
 const schema = yup.object({
     fullname: yup.string().required("fullname is required"),
-    email: yup.string().required("email is required"),
-    contact: yup.string().required("contact is required"),
+    email: yup.string().email('Please enter a valid email').required("email is required"),
+    contact: yup.string().matches(/^[6-9]\d{9}$/, { message: "Please enter valid number.", excludeEmptyString: false }).required("contact is required"),
     username: yup.string().optional(),
-    city: yup.string().required("city is required"),
+    city: yup.string().optional(),
 }).required("Password is required");
 function Profile() {
     const authApi = useApi();

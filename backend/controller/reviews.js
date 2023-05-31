@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const { db, sequelize } = require("../model");
 const Review = db.review;
 const Customer = db.customer;
@@ -66,4 +66,25 @@ const addRating = async (req, res, next) => {
         next(e)
     }
 }
-module.exports = { getCustomerReview, addRating, getAllReviews }
+const getAllReviewsById = async (req, res, next) => {
+    try {
+        const data = await Review.findAll({
+            include: [{
+                model: Customer,
+                attributes: ['fullname']
+            }], where: Sequelize.and({ iceCreamId: req.params.id }, { title: { [Op.not]: null } })
+        });
+        if (!data[0]) {
+            res.status(404).send({ message: 'No reviews yet' });
+            return
+        }
+        let totalRating = data[0].dataValues?.rating;
+        for (let i = 1; i < data.length; i++) {
+            totalRating += data[i].dataValues.rating
+        }
+        res.send({ averageRating: totalRating / data.length, data: data });
+    } catch (e) {
+        next(e)
+    }
+}
+module.exports = { getCustomerReview, addRating, getAllReviews, getAllReviewsById }

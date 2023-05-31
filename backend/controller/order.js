@@ -98,5 +98,24 @@ const updateOrderStatus = async (req, res, next) => {
     }
 
 }
+const findAllOrdersByCustomerId = async (req, res, next) => {
+    try {
+        const data = await Order.findAll({
+            include: [{
+                model: IceCream,
+                attributes: ['id', "name", 'brandName', 'image'],
+            }],
+            where: {
+                customerId: req.params.cid
+            }
+        })
+        if (!data) {
+            throw Error('No Orders found');
+        }
+        res.send(data);
+    } catch (e) {
+        next(e)
+    }
+}
 
-module.exports = { placeOrder, findOrder, findOneOrder, findAllOrders, updateOrderStatus }
+module.exports = { placeOrder, findOrder, findOneOrder, findAllOrders, updateOrderStatus, findAllOrdersByCustomerId }

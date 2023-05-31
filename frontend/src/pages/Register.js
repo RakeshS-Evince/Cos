@@ -10,8 +10,10 @@ import { api } from '../axios/axios'
 import { REGISTER } from '../constants/constant';
 import Swal from 'sweetalert2';
 const schema = yup.object({
-    username: yup.string().required("Username is required"),
-    email: yup.string().email().required("Email is required"),
+    fullname: yup.string().required("fullname is required"),
+    email: yup.string().email('Please enter a valid email').required("email is required"),
+    contact: yup.string().matches(/^[6-9]\d{9}$/, { message: "Please enter valid number.", excludeEmptyString: false }).required("contact is required"),
+    username: yup.string().required('Username is required'),
     password: yup.string().required("Password is required")
         .min(8, 'Password must be 8 characters long')
         .matches(/[0-9]/, 'Password requires a number')
@@ -27,6 +29,7 @@ function Register() {
     });
 
     const onSubmit = async (data) => {
+
         try {
             const res = await api.post(REGISTER, data);
             Swal.fire({
@@ -51,11 +54,29 @@ function Register() {
                                         </div>
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <div className="form-group">
+                                                <label htmlFor="fullname">Fullname</label>
+                                                <InputGroup hasValidation>
+                                                    <Form.Control type="text" isInvalid={errors?.fullname?.message} id='fullname' {...register('fullname')} />
+                                                    <Form.Control.Feedback type="invalid" >
+                                                        {errors?.fullname?.message}
+                                                    </Form.Control.Feedback>
+                                                </InputGroup>
+                                            </div>
+                                            <div className="form-group">
                                                 <label htmlFor="email">Email</label>
                                                 <InputGroup hasValidation>
                                                     <Form.Control type="email" isInvalid={errors?.email?.message} id='email' {...register('email')} />
                                                     <Form.Control.Feedback type="invalid" >
                                                         {errors?.email?.message}
+                                                    </Form.Control.Feedback>
+                                                </InputGroup>
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="contact">Contact</label>
+                                                <InputGroup hasValidation>
+                                                    <Form.Control type="text" isInvalid={errors?.contact?.message} id='contact' {...register('contact')} />
+                                                    <Form.Control.Feedback type="invalid" >
+                                                        {errors?.contact?.message}
                                                     </Form.Control.Feedback>
                                                 </InputGroup>
                                             </div>

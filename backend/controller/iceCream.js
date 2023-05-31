@@ -46,7 +46,7 @@ const addIceCream = async (req, res, next) => {
 }
 const updateIceCream = async (req, res, next) => {
     const data = await IceCream.update(req.body, { where: { id: req.params.id } });
-    if (!data[0]) {
+    if (!data) {
         res.send({ message: "Some error occured while updating icecream" });
         return
     }
@@ -66,4 +66,4 @@ const saveCart = async (req, res, next) => {
     }
 }
 
-module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, deleteIceCream,getIceCreamByBrand }
+module.exports = { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, deleteIceCream, getIceCreamByBrand }

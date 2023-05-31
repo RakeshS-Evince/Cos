@@ -48,7 +48,7 @@ function OrderDetails() {
                                         <img alt="ice cream" src={BASE_URL + 'images/' + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                     </div>
                                     <div className="">
-                                        <Link to="#" className="nav-link">
+                                        <Link to={'/icecream-details/' + ele.id} className="nav-link">
                                             {ele.name} <br />
                                         </Link>
                                         <div className="price text-muted">Price: ₹ {parseFloat(ele.order_item?.quantity * ele.price).toFixed(2)}</div>

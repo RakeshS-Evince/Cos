@@ -12,7 +12,7 @@ import { BASE_URL } from '../constants/constant';
 const schema = yup.object({
     fullname: yup.string().required("Fullname is required"),
     title: yup.string().required("Title is required"),
-    description: yup.string().required("Description is required"),
+    description: yup.string().required("Description is required").min(50),
 }).required();
 function ReviewForm() {
     const authApi = useAuth()
@@ -31,7 +31,7 @@ function ReviewForm() {
             setValue('description', res.data?.description);
         }).catch(e => console.log(e))
 
-    }, [])
+    }, [authApi, info, setValue])
     const onSubmit = (data) => {
         authApi.put(`/user/reviews/?${info}`, data).then(res => alert(res.data.message)).catch(e => console.log(e.response.data.message))
     }
@@ -40,12 +40,12 @@ function ReviewForm() {
         <div>
             <Container>
                 <div className='card'>
-                    <div className='card-title'><h3 className='ms-3 pt-3'>Review IceCream</h3></div>
-                    <div className='row g-2'>
-                        <div className='col-md-5 p-md-2 p-lg-5'>
+                    <div className='row g-2 justify-content-center'>
+                        <div className='col-md-5 p-3 p-lg-5'>
                             <img src={BASE_URL + 'images/' + iceCreamData?.image} className='img-fluid' height='350px' width='350px' alt="rev" />
                             <h5>{iceCreamData?.name}</h5>
-                            <h5>{iceCreamData?.price}</h5>
+                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam, quisquam. Eos quasi mollitia, ipsa illo fugit</p>
+                            <h5>Price: ₹{iceCreamData?.price}</h5>
                         </div>
                         <div className='col-md-5'>
                             <Form onSubmit={handleSubmit(onSubmit)} className='p-3'>

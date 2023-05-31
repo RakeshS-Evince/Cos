@@ -1,14 +1,14 @@
 const express = require('express');
 const { register, login, forgotPassword, resetPassword } = require('./controller/auth');
 const { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, deleteIceCream, getIceCreamByBrand } = require('./controller/iceCream');
-const { placeOrder, findOrder, findOneOrder, findAllOrders, updateOrderStatus } = require('./controller/order');
+const { placeOrder, findOrder, findOneOrder, findAllOrders, updateOrderStatus, findAllOrdersByCustomerId } = require('./controller/order');
 const { profile, updateProfile, getAllAddress, makeDefaultAddress, getDefaultAddress, editAddress, addAddress, getOneAddress, deleteOneAddress } = require('./controller/user');
 const { verifyAuth } = require('./middleware/auth');
 const { upload } = require('./middleware/multer');
 const { getAllBrands, addBrands, updateBrands, deleteBrands } = require('./controller/brands');
 const { dashboardDetails, getAllMessages, postMessages } = require('./controller/dashboard');
 const { getAllCustomers } = require('./controller/customers');
-const { getCustomerReview, addRating, getAllReviews } = require('./controller/reviews');
+const { getCustomerReview, addRating, getAllReviews, getAllReviewsById } = require('./controller/reviews');
 const router = express.Router();
 router.get('/home', (req, res) => res.send('home page'))
 // Authentication
@@ -37,6 +37,7 @@ router.get('/my-orders', verifyAuth, findOrder);
 router.get('/order-details/:id', verifyAuth, findOneOrder);
 router.get('/orders', verifyAuth, findAllOrders);
 router.put('/order-status-update/:id', verifyAuth, updateOrderStatus);
+router.get('/orders/:cid', verifyAuth, findAllOrdersByCustomerId);
 // user details
 router.get('/user/profile', verifyAuth, profile);
 router.put('/user/profile', verifyAuth, updateProfile);
@@ -53,4 +54,5 @@ router.put('/user/reviews/', verifyAuth, addRating);
 router.get('/dashboard', verifyAuth, dashboardDetails);
 router.get('/customers', verifyAuth, getAllCustomers);
 router.get('/reviews', verifyAuth, getAllReviews);
+router.get('/user-reviews/:id', getAllReviewsById)
 module.exports = router

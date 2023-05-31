@@ -9,10 +9,12 @@ import { addToCart } from '../feature/cartSlice'
 import { useDispatch } from 'react-redux'
 import { UserContext } from '../context/UserContextProvider';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 function Menu() {
     const [data, setData] = useState([]);
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
     const showCart = () => {
         document.getElementById('cartSidebar').classList.add('cart_wrapper_show');
     }
@@ -46,13 +48,12 @@ function Menu() {
             <Row className='g-3'>
                 {data.length ? data.map((ele, i) => (
                     <Col key={i} lg={3} sm={4}>
-                        <Card>
-                            <Card.Img variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
+                        <Card className='menu-card'>
+                            <Card.Img className='menu-image' onClick={() => navigate('/icecream-details/' + ele.id)} variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
                             <Card.Body>
-                                <Card.Title>{ele.name}</Card.Title>
+                                <Card.Title className='menu-title' onClick={() => navigate('/icecream-details/' + ele.id)}>{ele.name}</Card.Title>
                                 <Card.Text>
-                                    Some quick example text to build on the card title and make up the
-                                    bulk of the card's content.
+                                    {ele.description}
                                 </Card.Text>
                                 <span className='mt-2'>Price: ₹{parseFloat(ele.price).toFixed(2)}</span>
                                 <div className='d-flex justify-content-end'>

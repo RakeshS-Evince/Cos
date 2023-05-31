@@ -11,6 +11,7 @@ const iceCreamSchema = yup.object({
     name: yup.string().required("Ice Cream name is required"),
     image: yup.mixed().required("Image is required"),
     price: yup.string().required("Price is required"),
+    description: yup.string().required("Description is required"),
     brandName: yup.string().required("BrandName is required"),
     quantity: yup.string().required('Quantity is required'),
 })
@@ -23,11 +24,13 @@ function IceCreamForm({ id, setShowIcecreamForm, setId, refetch }) {
     })
     useEffect(() => { authApi.get(BASE_URL + BRANDS).then((res) => setBrands(res.data)) }, [authApi])
     const onSubmit = (data) => {
+        if (!data.image[0]) alert('Please select an image');
         const formData = new FormData();
         formData.append('name', data.name)
         formData.append('price', data.price)
         formData.append('quantity', data.quantity)
         formData.append('brandName', data.brandName)
+        formData.append('description', data.description)
         formData.append('image', data.image[0]);
 
         if (id) {
@@ -56,6 +59,14 @@ function IceCreamForm({ id, setShowIcecreamForm, setId, refetch }) {
                             <div className='col-sm-10'><Form.Control type="text" isInvalid={errors?.name?.message} id='name' {...register('name')} />
                                 <Form.Control.Feedback type="invalid" >
                                     {errors?.name?.message}
+                                </Form.Control.Feedback>
+                            </div>
+                        </InputGroup>
+                        <InputGroup hasValidation className='row my-2'>
+                            <Form.Label htmlFor='description' className='col-sm-2 col-form-label'>Description: </Form.Label>
+                            <div className='col-sm-10'><Form.Control as={'textarea'} type="text" isInvalid={errors?.description?.message} id='description' {...register('description')} />
+                                <Form.Control.Feedback type="invalid" >
+                                    {errors?.desription?.message}
                                 </Form.Control.Feedback>
                             </div>
                         </InputGroup>
