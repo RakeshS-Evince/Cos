@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react"
 import { UserContext } from "../context/UserContextProvider";
 import { authApi } from "./axios";
+import Swal from "sweetalert2";
 function useAuth() {
     const { user, logout } = useContext(UserContext);
     useEffect(() => {
@@ -11,6 +12,7 @@ function useAuth() {
         let resInterceptor = authApi.interceptors.response.use(function (response) {
             return response;
         }, function (error) {
+            Swal.fire(error.response.data.message, "", "error")
             console.log(error.response.data.message)
         }
         );

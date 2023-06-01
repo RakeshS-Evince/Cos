@@ -3,7 +3,6 @@ import useAuth from '../axios/useApi';
 import { CUSTOMERS } from '../constants/constant';
 import { useNavigate } from 'react-router-dom';
 
-
 function Customers() {
     const [customers, setCustomers] = useState([]);
     const [customerInfo, setCustomerInfo] = useState({})
@@ -12,8 +11,6 @@ function Customers() {
     useEffect(() => {
         authApi.get(CUSTOMERS).then(res => setCustomers(res.data)).catch(e => console.log(e.response.data.message));
     }, [authApi]);
-    console.log(customerInfo)
-
     return (
         <div>
             <h3>
@@ -28,7 +25,7 @@ function Customers() {
                                 <th scope="col">FullName</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Contact</th>
-                                <th scope="col">City</th>
+                                <th scope="col">Username</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -39,7 +36,7 @@ function Customers() {
                                     <td>{ele.fullname}</td>
                                     <td>{ele.email}</td>
                                     <td>{ele.contact}</td>
-                                    <td>{ele.city}</td>
+                                    <td>{ele.username}</td>
                                     <td>
                                         <button className='btn btn-info me-2' onClick={() => {
                                             setCustomerInfo({
@@ -47,7 +44,6 @@ function Customers() {
                                                 fullname: ele.fullname,
                                                 email: ele.email,
                                                 contact: ele.contact,
-                                                city: ele.city,
                                                 username: ele.username
                                             })
                                         }} data-bs-toggle="modal" data-bs-target="#cModal">View More</button>
@@ -71,7 +67,7 @@ function Customers() {
                             <h5 className='pt-3'>Email: {customerInfo?.email}</h5>
                             <h5 className='pt-3'>Username: {customerInfo?.username}</h5>
                             <h5 className='pt-3'>Contact: {customerInfo?.contact}</h5>
-                            <h5 className='pt-3'>City: {customerInfo?.city}</h5>
+
                         </div>
                         <div className="modal-footer">
                             <button className='btn btn-primary' onClick={() => navigate('/customer-orders/' + customerInfo?.id, { state: { name: customerInfo.fullname } })} data-bs-dismiss="modal">View orders</button>

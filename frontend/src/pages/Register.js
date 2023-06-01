@@ -107,20 +107,7 @@ function Register() {
                                                     </Form.Control.Feedback>
                                                 </InputGroup>
                                             </div>
-                                            <div className="form-group mb-5">
-                                                <label htmlFor="number">Role</label>
-                                                <InputGroup hasValidation>
-                                                    <select className='form-select' isInvalid={errors?.roleId?.message} id='roleId' {...register('roleId')} >
-                                                        <option>1</option>
-                                                        <option>2</option>
-                                                        <option>3</option>
-                                                    </select>
-                                                    <Form.Control.Feedback type="invalid" >
-                                                        {errors?.roleId?.message}
-                                                    </Form.Control.Feedback>
-                                                </InputGroup>
-                                            </div>
-                                            <button type="submit" className="btn" style={{
+                                            <button type="submit" className="btn mt-3" style={{
                                                 backgroundColor: "#5369f8",
                                                 borderColor: "#5369f8",
                                                 color: "#fff"

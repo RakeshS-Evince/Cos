@@ -54,6 +54,7 @@ db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
 db.orderItem.belongsTo(db.order, { foreingKey: ['id', "orderId"] })
 db.order.hasMany(db.orderItem, { foreingKey: ['id', "orderId"] })
 db.iceCream.hasMany(db.review, { foreingKey: ['id', "iceCreamId"] })
+db.review.belongsTo(db.iceCream, { foreingKey: ['id', "iceCreamId"] })
 db.customer.hasMany(db.review, { foreingKey: ['id', "customerId"] })
 db.review.belongsTo(db.customer, { foreingKey: ['id', "customerId"] })
 db.order.belongsToMany(db.iceCream, {

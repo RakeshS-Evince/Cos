@@ -3,14 +3,17 @@ import useAuth from '../axios/useApi';
 import { BASE_URL } from '../constants/constant';
 import { Link } from 'react-router-dom';
 
-function OrderDetailsModal({ id, setId }) {
+function OrderDetailsModal({ id }) {
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderAddress, setOrderAddress] = useState(null)
     const authApi = useAuth();
 
     useEffect(() => {
-        authApi.get('order-details/' + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
-    }, [id,authApi])
+        if (id) {
+            authApi.get('order-details/' + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
+        } else return
+
+    }, [id, authApi])
     return (
         <>
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

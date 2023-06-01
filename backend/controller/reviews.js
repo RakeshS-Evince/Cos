@@ -26,6 +26,9 @@ const getAllReviews = async (req, res, next) => {
                 include: [{
                     model: Customer,
                     attributes: ['fullname']
+                }, {
+                    model: IceCream,
+                    attributes: ['name']
                 }]
             }
         );
@@ -75,7 +78,7 @@ const getAllReviewsById = async (req, res, next) => {
             }], where: Sequelize.and({ iceCreamId: req.params.id }, { title: { [Op.not]: null } })
         });
         if (!data[0]) {
-            res.status(404).send({ message: 'No reviews yet' });
+            res.send({ message: 'No reviews yet' });
             return
         }
         let totalRating = data[0].dataValues?.rating;

@@ -15,7 +15,6 @@ const schema = yup.object({
     email: yup.string().email('Please enter a valid email').required("email is required"),
     contact: yup.string().matches(/^[6-9]\d{9}$/, { message: "Please enter valid number.", excludeEmptyString: false }).required("contact is required"),
     username: yup.string().optional(),
-    city: yup.string().optional(),
 }).required("Password is required");
 function Profile() {
     const authApi = useApi();
@@ -115,19 +114,6 @@ function Profile() {
                                                 <Form.Control type="text" isInvalid={errors?.contact?.message} id='contact' {...register('contact')} />
                                                 <Form.Control.Feedback type="invalid" >
                                                     {errors?.contact?.message}
-                                                </Form.Control.Feedback>
-                                            </InputGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <div className="col-sm-3">
-                                            <h6 className="mb-0">City</h6>
-                                        </div>
-                                        <div className="col-sm-9 text-secondary">
-                                            <InputGroup hasValidation>
-                                                <Form.Control type="text" isInvalid={errors?.city?.message} id='city' {...register('city')} />
-                                                <Form.Control.Feedback type="invalid" >
-                                                    {errors?.city?.message}
                                                 </Form.Control.Feedback>
                                             </InputGroup>
                                         </div>

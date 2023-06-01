@@ -8,20 +8,18 @@ const speakeasy = require('speakeasy');
 const { sendMail } = require('./emailTemplate');
 
 const register = async (req, res) => {
-    const { username, email, password, roleId, fullname, contact } = req.body
+    const { username, email, password, fullname, contact } = req.body
     const encrypted = await bcrypt.hash(password, 10);
     try {
-        let data = await Account.create({ username: username, password: encrypted, email: email, roleId: roleId, });
+        let data = await Account.create({ username: username, password: encrypted, email: email });
         if (!data) {
             res.send({ message: "Unable to create account" });
             return
         }
-        if (Number(roleId) === 1) {
-            let info = await Customer.create({ email: email, accountId: data.dataValues.id, fullname: fullname, contact: contact });
+        let info = await Customer.create({ email: email, accountId: data.dataValues.id, fullname: fullname, contact: contact, roleId: 1 });
+        if (info) {
             res.send({ message: 'Account created' });
-            return
         }
-
     } catch (e) {
         res.status(400).send({ message: "Username/email aleready in use." });
         return

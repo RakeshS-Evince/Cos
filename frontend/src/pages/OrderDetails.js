@@ -39,8 +39,8 @@ function OrderDetails() {
                     <hr />
                     {orderDetails?.iceCreams?.map((ele, i) => {
                         return (
-                            <>
-                                <div key={i} className="d-flex">
+                            <div key={ele.id + i} >
+                                <div className="d-flex">
                                     <div className="me-3 position-relative">
                                         <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
                                             {ele.order_item?.quantity}
@@ -55,7 +55,7 @@ function OrderDetails() {
                                     </div>
                                 </div>
                                 <Link to={`/review/cid=${orderDetails.customerId}&iid=${ele.id}`} className='mb-3' style={{ textDecoration: 'none' }}>Write a review</Link>
-                            </>
+                            </div>
                         )
                     })}
                     {!(orderDetails?.status === 'Canceled' || orderDetails?.status === 'Delivered') ? <button className='btn btn-danger col-auto' onClick={() => { requestCancel() }} >Request Cancel</button> : ""}

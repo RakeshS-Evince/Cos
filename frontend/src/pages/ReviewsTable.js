@@ -22,7 +22,8 @@ function ReviewsTable() {
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">FullName</th>
+                                <th scope="col">IceCream Name</th>
+                                <th scope="col">Reviewed By</th>
                                 <th scope="col">Rating</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Description</th>
@@ -33,6 +34,7 @@ function ReviewsTable() {
                             {reviews?.map((ele, i) => (
                                 <tr key={i}>
                                     <th>{i + 1}</th>
+                                    <td>{ele.iceCream?.name}</td>
                                     <td>{ele.customer?.fullname}</td>
                                     <td>{ele.rating}</td>
                                     <td>{ele.title}</td>

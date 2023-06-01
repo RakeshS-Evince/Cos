@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { RatingComponent } from './RatingComponent'
+import React, { useContext, useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
 import { BASE_URL, ICECREAM } from '../constants/constant';
 import { useParams } from 'react-router-dom';
@@ -35,8 +34,8 @@ function IceCreamDetails() {
     useEffect(() => {
         authApi.get(ICECREAM + '/' + id).then(res => setIcDetails(res.data)).catch(e => console.log(e));
         authApi.get('/user-reviews/' + id).then(res => {
-            setReviews(res.data?.data)
-            setAverageRating(res.data?.averageRating)
+            setReviews(res?.data?.data)
+            setAverageRating(res?.data?.averageRating)
 
         }).catch(e => console.log(e))
 
@@ -55,7 +54,7 @@ function IceCreamDetails() {
                             <div className='p-3'>
                                 <h3 >{icDetails?.name}</h3>
                                 <h4 className='pt-3'>Price: ₹{icDetails?.price}</h4>
-                                <h6 className={`pt-3`}>Stock: <span className={icDetails?.quantity > 1 ? 'text-success' : 'text-danger'}>{icDetails?.quantity > 1 ? 'Avaliable' : 'Out of stock'}</span></h6>
+                                <h6 className={`pt-3`}>Stock: <span className={icDetails?.quantity >= 1 ? 'text-success' : 'text-danger'}>{icDetails?.quantity >= 1 ? 'Avaliable' : 'Out of stock'}</span></h6>
                                 <p className='pt-3'>{icDetails?.description}</p>
                                 <div className='d-flex pt-3'>
                                     <input type='number' value={quantity} min={1} className='form-control me-3' onChange={quantityChangeHandler} style={{ width: '80px' }} />

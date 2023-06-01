@@ -1,14 +1,37 @@
 const express = require('express');
-const { register, login, forgotPassword, resetPassword } = require('./controller/auth');
-const { getAllIceCreams, getOneIceCream, addIceCream, updateIceCream, deleteIceCream, getIceCreamByBrand } = require('./controller/iceCream');
-const { placeOrder, findOrder, findOneOrder, findAllOrders, updateOrderStatus, findAllOrdersByCustomerId } = require('./controller/order');
-const { profile, updateProfile, getAllAddress, makeDefaultAddress, getDefaultAddress, editAddress, addAddress, getOneAddress, deleteOneAddress } = require('./controller/user');
+const { register,
+    login,
+    forgotPassword,
+    resetPassword } = require('./controller/auth');
+const { getAllIceCreams,
+    getOneIceCream,
+    addIceCream,
+    updateIceCream,
+    deleteIceCream,
+    getIceCreamByBrand } = require('./controller/iceCream');
+const { placeOrder,
+    findOrder,
+    findOneOrder,
+    findAllOrders,
+    updateOrderStatus,
+    findAllOrdersByCustomerId } = require('./controller/order');
+const { profile,
+    updateProfile,
+    getAllAddress,
+    makeDefaultAddress,
+    getDefaultAddress,
+    editAddress,
+    addAddress,
+    getOneAddress,
+    deleteOneAddress } = require('./controller/user');
 const { verifyAuth } = require('./middleware/auth');
 const { upload } = require('./middleware/multer');
 const { getAllBrands, addBrands, updateBrands, deleteBrands } = require('./controller/brands');
 const { dashboardDetails, getAllMessages, postMessages } = require('./controller/dashboard');
 const { getAllCustomers } = require('./controller/customers');
 const { getCustomerReview, addRating, getAllReviews, getAllReviewsById } = require('./controller/reviews');
+const { addStaff, findAllStaffs, updateStaff, deleteStaff, findOneStaff } = require('./controller/staff');
+const { authorizeUser } = require('./middleware/authorizeUser');
 const router = express.Router();
 router.get('/home', (req, res) => res.send('home page'))
 // Authentication
@@ -55,4 +78,10 @@ router.get('/dashboard', verifyAuth, dashboardDetails);
 router.get('/customers', verifyAuth, getAllCustomers);
 router.get('/reviews', verifyAuth, getAllReviews);
 router.get('/user-reviews/:id', getAllReviewsById)
+//admin-only routes
+router.post('/staff', verifyAuth, authorizeUser, addStaff)
+router.get('/staff', verifyAuth, authorizeUser, findAllStaffs)
+router.get('/staff/:id', verifyAuth, authorizeUser, findOneStaff)
+router.put('/staff/:id', verifyAuth, authorizeUser, updateStaff)
+router.delete('/staff/:id', verifyAuth, authorizeUser, deleteStaff)
 module.exports = router
