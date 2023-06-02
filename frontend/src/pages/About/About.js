@@ -10,10 +10,9 @@ function About() {
             className="pic" alt='...'
           />
           <div className="text">
-            <h2>About Us</h2>
+            <h2 style={{ color: '#4070f4' }}>About Us</h2>
             <h5>
-              We are <span style={{color:'#4070f4'}}>Full Stack Web Developer</span> who are making change in IT
-              World
+              We offer a variety of delicious ice cream flavors made from high-quality ingredients
             </h5>
             <p>
               Devoted to Gives the exceptionally best frozen ice cream, It was opened
