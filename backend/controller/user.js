@@ -8,7 +8,7 @@ const { sequelize } = require('../model')
 const profile = async (req, res, next) => {
 
     try {
-        const [results, metadata] = await sequelize.query("SELECT contact,fullname,contact,accounts.email ,username FROM cos.customers join cos.accounts on customers.accountId=accounts.id where customers.accountId=" + req.user.accountId);
+        const [results, metadata] = await sequelize.query(`SELECT contact,fullname,contact,accounts.email ,username FROM ${process.env.DB}.customers join ${process.env.DB}.accounts on customers.accountId=accounts.id where customers.accountId=` + req.user.accountId);
         res.send(results[0])
     } catch (e) {
         res.send({ message: e.message })

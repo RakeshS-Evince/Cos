@@ -6,7 +6,7 @@ const Order = db.order;
 const IceCream = db.iceCream;
 const getCustomerReview = async (req, res, next) => {
     try {
-        const [results] = await sequelize.query("SELECT fullname FROM cos.customers join cos.accounts on customers.accountId=accounts.id where customers.id=" + req.query.cid);
+        const [results] = await sequelize.query(`SELECT fullname FROM ${process.env.DB}.customers join ${process.env.DB}.accounts on customers.accountId=accounts.id where customers.id=` + req.query.cid);
         const revData = await Review.findAll({ where: Sequelize.and({ customerId: req.query.cid }, { iceCreamId: req.query.iid }) });
         if (!revData.length) {
             res.send({ fullname: results[0].fullname });

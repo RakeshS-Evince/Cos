@@ -1,4 +1,4 @@
-import React, { useEffect, useInsertionEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
 import { BASE_URL } from '../constants/constant';
 import { useLocation, useParams } from 'react-router-dom';
@@ -13,7 +13,7 @@ function CustomerOrders() {
             let reversed = data?.reverse();
             setOrders(reversed)
         }).catch(e => console.log(e.message))
-    }, [authApi]);
+    }, [authApi, cid]);
     return (
         <div>
             <h2>{state?.name + "'s"} Orders</h2>

@@ -23,7 +23,7 @@ const addStaff = async (req, res) => {
 }
 const findOneStaff = async (req, res) => {
     try {
-        const [results] = await Sequelize.query("SELECT staffs.id,contact,fullname,accounts.email ,username FROM cos.staffs join cos.accounts on staffs.accountId=accounts.id where staffs.id=" + req.params.id)
+        const [results] = await Sequelize.query(`SELECT staffs.id,contact,fullname,accounts.email ,username FROM ${process.env.DB}.staffs join ${process.env.DB}.accounts on staffs.accountId=accounts.id where staffs.id=` + req.params.id)
         res.send(results[0])
     } catch (e) {
         res.status(400).send({ message: "Username/email aleready in use." });
@@ -33,7 +33,7 @@ const findOneStaff = async (req, res) => {
 
 const findAllStaffs = async (req, res, next) => {
     try {
-        const [results] = await Sequelize.query("SELECT staffs.id,contact,fullname,accounts.email ,username FROM cos.staffs join cos.accounts on staffs.accountId=accounts.id;");
+        const [results] = await Sequelize.query(`SELECT staffs.id,contact,fullname,accounts.email ,username FROM ${process.env.DB}.staffs join ${process.env.DB}.accounts on staffs.accountId=accounts.id;`);
         if (!results) {
             res.send({ message: "Unable to find staff" });
         }
