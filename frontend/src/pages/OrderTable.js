@@ -54,36 +54,38 @@ function OrderTable() {
             </div>}
             <div className='card'>
                 <div className='card-body'>
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Order Id</th>
-                                <th scope="col">Placed By</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Order Date</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orders?.map((ele, i) => (
-                                <tr key={i}>
-                                    <th>{i + 1}</th>
-                                    <td>{ele.id}</td>
-                                    <td>{ele.customer.fullname || ele.username}</td>
-                                    <td>{ele.status}</td>
-                                    <td>{ele.date}</td>
-                                    <td>{ele.totalPrice}</td>
-                                    <td>
-                                        <button className='btn btn-info me-2' onClick={() => { setId(ele.id); }} data-bs-toggle="modal" data-bs-target="#exampleModal">View More</button>
-                                        <button className='btn btn-success' onClick={() => { setId(ele.id); setEnableInput(true) }}>Change Status</button>
-                                    </td>
+                    <div className='table-responsive'>
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Order Id</th>
+                                    <th scope="col">Placed By</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Order Date</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Action</th>
                                 </tr>
-                            ))}
+                            </thead>
+                            <tbody>
+                                {orders?.map((ele, i) => (
+                                    <tr key={i}>
+                                        <th>{i + 1}</th>
+                                        <td>{ele.id}</td>
+                                        <td>{ele.customer.fullname || ele.username}</td>
+                                        <td>{ele.status}</td>
+                                        <td>{ele.date}</td>
+                                        <td>{ele.totalPrice}</td>
+                                        <td>
+                                            <button className='btn btn-info me-2' onClick={() => { setId(ele.id); }} data-bs-toggle="modal" data-bs-target="#exampleModal">View More</button>
+                                            <button className='btn btn-success' onClick={() => { setId(ele.id); setEnableInput(true) }}>Change Status</button>
+                                        </td>
+                                    </tr>
+                                ))}
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

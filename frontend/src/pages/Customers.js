@@ -18,41 +18,43 @@ function Customers() {
             </h3>
             <div className='card'>
                 <div className='card-body'>
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">FullName</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Contact</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {customers?.map((ele, i) => (
-                                <tr key={i}>
-                                    <th>{i + 1}</th>
-                                    <td>{ele.fullname}</td>
-                                    <td>{ele.email}</td>
-                                    <td>{ele.contact}</td>
-                                    <td>{ele.username}</td>
-                                    <td>
-                                        <button className='btn btn-info me-2' onClick={() => {
-                                            setCustomerInfo({
-                                                id: ele.id,
-                                                fullname: ele.fullname,
-                                                email: ele.email,
-                                                contact: ele.contact,
-                                                username: ele.username
-                                            })
-                                        }} data-bs-toggle="modal" data-bs-target="#cModal">View More</button>
-                                    </td>
+                    <div className='table-responsive'>
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">FullName</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Contact</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Action</th>
                                 </tr>
-                            ))}
+                            </thead>
+                            <tbody>
+                                {customers?.map((ele, i) => (
+                                    <tr key={i}>
+                                        <th>{i + 1}</th>
+                                        <td>{ele.fullname}</td>
+                                        <td>{ele.email}</td>
+                                        <td>{ele.contact}</td>
+                                        <td>{ele.username}</td>
+                                        <td>
+                                            <button className='btn btn-info me-2' onClick={() => {
+                                                setCustomerInfo({
+                                                    id: ele.id,
+                                                    fullname: ele.fullname,
+                                                    email: ele.email,
+                                                    contact: ele.contact,
+                                                    username: ele.username
+                                                })
+                                            }} data-bs-toggle="modal" data-bs-target="#cModal">View More</button>
+                                        </td>
+                                    </tr>
+                                ))}
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div className="modal fade" id="cModal" tabIndex="-1" aria-labelledby="cModal" aria-hidden="true">

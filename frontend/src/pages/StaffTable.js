@@ -19,33 +19,34 @@ function StaffTable() {
 
             <div className='card'>
                 <div className='card-body'>
-                    <table className="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">FullName</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Contact</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {customers?.map((ele, i) => (
-                                <tr key={i}>
-                                    <th>{i + 1}</th>
-                                    <td>{ele.fullname}</td>
-                                    <td>{ele.email}</td>
-                                    <td>{ele.contact}</td>
-                                    <td>{ele.username}</td>
-                                    <td><Link to={'/staff/edit/' + ele.id} className='btn btn-primary'>Edit</Link></td>
+                    <div className='table-responsive'>
+                        <table className="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">FullName</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Contact</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Action</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {customers?.map((ele, i) => (
+                                    <tr key={i}>
+                                        <th>{i + 1}</th>
+                                        <td>{ele.fullname}</td>
+                                        <td>{ele.email}</td>
+                                        <td>{ele.contact}</td>
+                                        <td>{ele.username}</td>
+                                        <td><Link to={'/staff/edit/' + ele.id} className='btn btn-primary'>Edit</Link></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
         </div>
     )
 }
