@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:3000/"
+export const BASE_URL = process.env.REACT_APP_API_URL
 export const ICECREAM = "ice-creams"
 export const LOGIN = "auth/login"
 export const REGISTER = "auth/register"
