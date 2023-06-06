@@ -30,7 +30,7 @@ function Profile() {
                 title: res.data.message
             })
         } catch (e) {
-            Swal.fire({ title: e.response.data.message })
+            // Swal.fire({ title: e.response.data.message })
         }
     }
     const toggleDisplayAddress = () => {

@@ -5,7 +5,7 @@ import { REVIEWS } from '../constants/constant';
 
 function ReviewsTable() {
     const [reviews, setReviews] = useState([]);
-    const [review, setReview] = useState({ name: "", title: "", description: "" })
+    const [review, setReview] = useState({ name: "", summary: "", review: "" })
     const authApi = useAuth();
     useEffect(() => {
         authApi.get(REVIEWS).then(res => setReviews(res.data)).catch(e => console.log(e.response.data.message));
@@ -25,8 +25,8 @@ function ReviewsTable() {
                                 <th scope="col">IceCream Name</th>
                                 <th scope="col">Reviewed By</th>
                                 <th scope="col">Rating</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Description</th>
+                                <th scope="col">Summary</th>
+                                <th scope="col">Review</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -37,10 +37,10 @@ function ReviewsTable() {
                                     <td>{ele.iceCream?.name}</td>
                                     <td>{ele.customer?.fullname}</td>
                                     <td>{ele.rating}</td>
-                                    <td>{ele.title}</td>
-                                    <td>{ele.description ? ele.description?.slice(0, 50) + '...' : ''}</td>
+                                    <td>{ele.summary}</td>
+                                    <td>{ele.review ? ele.review?.slice(0, 50) + '...' : ''}</td>
                                     <td>
-                                        <button className='btn btn-info me-2' onClick={() => { setReview({ name: ele?.customer?.fullname, title: ele.title, description: ele.description }) }} data-bs-toggle="modal" data-bs-target="#reviewModal">View More</button>
+                                        <button className='btn btn-info me-2' onClick={() => { setReview({ name: ele?.customer?.fullname, review: ele.review, summary: ele.summary }) }} data-bs-toggle="modal" data-bs-target="#reviewModal">View More</button>
                                     </td>
                                 </tr>
                             ))}
@@ -55,8 +55,8 @@ function ReviewsTable() {
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div className="modal-body">
-                                    <h5>{review?.title}</h5>
-                                    <p>{review?.description}</p>
+                                    <h5>{review?.summary}</h5>
+                                    <p>{review?.review}</p>
                                 </div>
                             </div>
                         </div>

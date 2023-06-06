@@ -16,11 +16,10 @@ const intitalAddress = {
     house: "",
     zip: "",
     state: "",
-
 }
 function Checkout() {
     const items = useSelector(selectCart);
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
     const authApi = useAuth();
     const total = useSelector(state => state.cart.total);
     const [states, setStates] = useState({});
@@ -39,7 +38,7 @@ function Checkout() {
     useEffect(() => {
         authApi.get(ADDRESS_DEFAULT)
             .then(res => {
-                if (!res.data) {
+                if (!res?.data) {
                     setAddAddress(true);
                     setIsEditable(true);
                     return
@@ -82,20 +81,35 @@ function Checkout() {
 
     }
     const placeOrder = () => {
-        let orderDetails = {
-            orderAddress: JSON.stringify(address),
-            paymentMethod: Object.keys(payment).filter(x => payment[x])[0],
-            status: 'Placed',
-            shippingCharge: shippingCost,
-            couponDiscount: discount,
-            totalPrice: total,
-            date: new Date().toLocaleDateString().replace(/[/]/g, '-'),
-            orderItems: items.map(({ id, quantity }) => ({ id, quantity }))
+        if (address === intitalAddress) {
+            alert("Please add address");
+            return
         }
-        authApi.post(PLACE_ORDER, orderDetails).then(({ data }) => {
-            Swal.fire(data.message, `Order id: ${data.orderId}`, "success");
-            dispatch(clearCart());
+        Swal.fire({
+            title: 'Are you sure to place this order?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let orderDetails = {
+                    orderAddress: JSON.stringify(address),
+                    paymentMethod: Object.keys(payment).filter(x => payment[x])[0],
+                    status: 'Placed',
+                    shippingCharge: shippingCost,
+                    couponDiscount: discount,
+                    totalPrice: total,
+                    date: new Date().toLocaleDateString().replace(/[/]/g, '-'),
+                    orderItems: items.map(({ id, quantity }) => ({ id, quantity }))
+                }
+                authApi.post(PLACE_ORDER, orderDetails).then(({ data }) => {
+                    Swal.fire(data.message, `Order id: ${data.orderId}`, "success");
+                    dispatch(clearCart());
+                })
+            }
         })
+
     }
 
     return (
@@ -297,7 +311,7 @@ function Checkout() {
                     {items.length > 4 && `And ${items.length - 4} more ${items.length - 4 === 1 ? "item" : "items"} in the cart`}
                 </div>
             </div>
-        </div > : <><h3>No items added in the cart.</h3><Link className='btn btn-primary' to="/">Goto Shop</Link></>
+        </div> : <><h3>No items added in the cart.</h3><Link className='btn btn-primary' to="/">Goto Shop</Link></>
 
 
     )

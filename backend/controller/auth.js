@@ -11,12 +11,12 @@ const register = async (req, res) => {
     const { username, email, password, fullname, contact } = req.body
     const encrypted = await bcrypt.hash(password, 10);
     try {
-        let data = await Account.create({ username: username, password: encrypted, email: email });
+        let data = await Account.create({ username: username, password: encrypted, email: email, roleId: 1 });
         if (!data) {
             res.send({ message: "Unable to create account" });
             return
         }
-        let info = await Customer.create({ email: email, accountId: data.dataValues.id, fullname: fullname, contact: contact, roleId: 1 });
+        let info = await Customer.create({ email: email, accountId: data.dataValues.id, fullname: fullname, contact: contact });
         if (info) {
             res.send({ message: 'Account created' });
         }

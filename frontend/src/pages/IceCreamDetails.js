@@ -34,8 +34,11 @@ function IceCreamDetails() {
     useEffect(() => {
         authApi.get(ICECREAM + '/' + id).then(res => setIcDetails(res.data)).catch(e => console.log(e));
         authApi.get('/user-reviews/' + id).then(res => {
-            setReviews(res?.data?.data)
-            setAverageRating(res?.data?.averageRating)
+            if (res.data) {
+                setReviews(res?.data?.data.reverse())
+                setAverageRating(res?.data?.averageRating)
+            }
+
 
         }).catch(e => console.log(e))
 
@@ -84,16 +87,26 @@ function IceCreamDetails() {
                     {reviews?.length ?
                         reviews?.map((rev, i) => {
                             return (
-                                <div key={'rev' + i + 1}>
-                                    <h5>{rev?.customer?.fullname}</h5>
-                                    {/* <h5>{rev?.title}</h5> */}
-                                    <p>{rev?.description}</p>
-                                    <div className='d-flex'>
-                                        <p className='pt-3'>Rating: </p>
-                                        <RatingStars value={rev.rating} />
-                                        <span className='pt-3 ms-2'>{rev.rating}</span>
+                                <div key={i}>
+                                    <div className='row g-3'>
+                                        <div className='col-md-2'>
+                                            <img src="https://icons.veryicon.com/png/o/internet--web/prejudice/user-128.png" alt="user" className="rounded-circle" width="110" height={90} />
+                                            <p className=''>{rev?.customer?.fullname}</p>
+                                        </div>
+                                        <div className='col-md-10'>
+                                            <h5>{rev?.summary}</h5>
+                                            <p>{rev?.review}</p>
+                                            <div className='row justify-content-between'>
+                                                <div className='d-flex col-auto'>
+                                                    <p className='pt-3'>Rating: </p>
+                                                    <RatingStars value={rev.rating} />
+                                                    <span className='pt-3 ms-2'>{rev.rating}</span>
+                                                </div>
+                                                <div className='text-muted col-auto pt-sm-3'>{new Date(rev.createdAt).toDateString()}</div>
+                                            </div>
+                                        </div>
                                     </div>
-
+                                    <hr />
                                 </div>
                             )
                         })

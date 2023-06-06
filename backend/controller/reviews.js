@@ -75,7 +75,7 @@ const getAllReviewsById = async (req, res, next) => {
             include: [{
                 model: Customer,
                 attributes: ['fullname']
-            }], where: Sequelize.and({ iceCreamId: req.params.id }, { title: { [Op.not]: null } })
+            }], where: Sequelize.and({ iceCreamId: req.params.id }, { summary: { [Op.not]: null } })
         });
         if (!data[0]) {
             res.send({ message: 'No reviews yet' });

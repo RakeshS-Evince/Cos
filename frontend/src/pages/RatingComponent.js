@@ -12,7 +12,7 @@ const Star = ({ marked, starId }) => {
     );
 };
 
-export const RatingComponent = ({ value, info }) => {
+export const RatingComponent = ({ value, info, reviewData, setReviewData }) => {
     const [rating, setRating] = useState(0);
     const [selection, setSelection] = useState(0);
     const authApi = useAuth();
@@ -24,7 +24,8 @@ export const RatingComponent = ({ value, info }) => {
         setSelection(val);
     };
     const saveRating = (e) => {
-        authApi.put('/user/reviews/?' + info, { rating: e.target.getAttribute('data-star-id') }).then(res => alert('Thanks for the rating')).catch(e => console.log(e.response.data.message))
+        setReviewData({ ...reviewData, rating: e.target.getAttribute('data-star-id') });
+        // authApi.put('/user/reviews/?' + info, { rating: e.target.getAttribute('data-star-id') }).then(res => { }).catch(e => console.log(e.response.data.message))
         setRating(e.target.getAttribute('data-star-id') || rating);
     }
     return (
