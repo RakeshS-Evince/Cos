@@ -30,6 +30,7 @@ db.order = require("./order")(sequelize, DataTypes);
 db.orderItem = require("./orderItem")(sequelize, DataTypes);
 db.role = require('./role')(sequelize, DataTypes)
 db.review = require('./reviews')(sequelize, DataTypes)
+db.payment = require('./payment')(sequelize, DataTypes)
 db.accounts.belongsTo(db.role, {
     foreingKey: ["roleId"],
     onUpdate: "CASCADE",
@@ -86,6 +87,14 @@ db.iceCream.belongsTo(db.brands, {
 });
 db.address.belongsTo(db.customer, {
     foreingKey: ["id", 'customerId'], onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+})
+db.payment.hasMany(db.order, {
+    foreingKey: ["id", 'orderId'], onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+})
+db.order.belongsTo(db.payment, {
+    foreingKey: ["id", 'orderId'], onUpdate: "CASCADE",
     onDelete: "CASCADE"
 })
 // sequelize

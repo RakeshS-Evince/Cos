@@ -1,10 +1,8 @@
 const { db } = require('../model/index');
 const Account = db.accounts;
 const Customer = db.customer;
-const Staff = db.staff;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const speakeasy = require('speakeasy');
 const { sendMail } = require('./emailTemplate');
 
 const register = async (req, res) => {

@@ -1,17 +1,56 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import './orderDetails.scss'
 import { BASE_URL } from '../constants/constant';
 import Swal from 'sweetalert2';
+import { loadScript } from './razor';
 function OrderDetails() {
     const [orderDetails, setOrderDetails] = useState(null);
-    const [orderAddress, setOrderAddress] = useState(null)
+    const [orderAddress, setOrderAddress] = useState(null);
+    const navigate = useNavigate()
     const authApi = useAuth();
     const { id } = useParams()
     useEffect(() => {
         authApi.get('order-details/' + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
-    }, [id, authApi])
+    }, [id, authApi]);
+
+    async function displayRazorpay() {
+        const res = await loadScript(
+            "https://checkout.razorpay.com/v1/checkout.js"
+        );
+
+        if (!res) {
+            alert("Razorpay SDK failed to load. Are you online?");
+            return;
+        }
+        var options = {
+            currency: "INR",
+            name: "Acme Corp",
+            description: "Test Transaction",
+            // image: "https://example.com/your_logo",
+            order_id: orderDetails?.payment?.id,
+            callback_url: process.env.REACT_APP_API_URL + "api/razorpay/retry-callback/?oid=" + orderDetails?.id + "&pid=" + orderDetails?.payment?.id,
+            prefill: {
+                name: "Rakesh Senapati",
+                email: "Rakesh@example.com",
+                contact: "9000090000"
+            },
+            notes: {
+                "address": "Ahmedabad"
+            },
+            modal: {
+                onDismiss: () => {
+                    navigate('/payment-failure/' + orderDetails?.id)
+                }
+            },
+            theme: {
+                color: "#3399cc"
+            }
+        };
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+    }
     const requestCancel = () => {
         Swal.fire({
             title: 'Are you sure to cancel this order?',
@@ -58,6 +97,10 @@ function OrderDetails() {
                             </div>
                         )
                     })}
+                    {(orderDetails?.payment?.status === 'pending' || orderDetails?.payment?.status === 'failed') && <>
+                        <p>Your payment is failed due to some reason</p>
+                        <button className='btn btn-warning me-2 col-auto' onClick={() => displayRazorpay()}>Retry Payment</button>
+                    </>}
                     {!(orderDetails?.status === 'Canceled' || orderDetails?.status === 'Delivered') ? <button className='btn btn-danger col-auto' onClick={() => { requestCancel() }} >Request Cancel</button> : ""}
                     <h5 className='mt-5'>Shipping details</h5>
                     <hr />

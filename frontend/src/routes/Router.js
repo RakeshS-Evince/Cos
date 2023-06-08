@@ -5,7 +5,6 @@ import Checkout from '../pages/Checkout'
 import Menu from '../pages/Menu'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
-// import Profile from '../pages/Profile'
 import Orders from '../pages/Orders'
 import OrderDetails from '../pages/OrderDetails'
 import ProtectedRoutes from '../components/ProtectedRoutes'
@@ -33,6 +32,8 @@ import CustomerOrders from '../pages/CustomerOrders'
 import StaffForm from '../pages/StaffForm'
 import StaffTable from '../pages/StaffTable'
 import StaffEditForm from '../pages/StaffEditForm'
+import PaymentFailure from '../pages/PaymentFailure'
+import PaymentSuccess from '../pages/PaymentSuccess'
 const Profile = React.lazy(() => import('../pages/Profile'))
 function Router() {
     const { isAdmin, isStaff } = useRoleCheck();
@@ -59,6 +60,8 @@ function Router() {
                         <Route path="/profile" exact element={<Profile />} />
                         <Route path="/address/add" exact element={<AddressForm />} />
                         <Route path="/address/edit/:id" exact element={<AddressForm />} />
+                        <Route path="/payment-failure/:id" exact element={<PaymentFailure />} />
+                        <Route path="/payment-success/:id" exact element={<PaymentSuccess />} />
                         <Route path="/checkout" exact element={<Checkout />} />
                         <Route path="/my-orders" exact element={<Orders />} />
                         <Route path="/my-orders/:id" exact element={<OrderDetails />} />

@@ -1,4 +1,6 @@
 const express = require('express');
+require('dotenv').config()
+var crypto = require("crypto");
 const { register,
     login,
     forgotPassword,
@@ -14,7 +16,9 @@ const { placeOrder,
     findOneOrder,
     findAllOrders,
     updateOrderStatus,
-    findAllOrdersByCustomerId } = require('./controller/order');
+    findAllOrdersByCustomerId,
+    orderCallback,
+    retryPayment } = require('./controller/order');
 const { profile,
     updateProfile,
     getAllAddress,
@@ -84,4 +88,8 @@ router.get('/staff', verifyAuth, authorizeUser, findAllStaffs)
 router.get('/staff/:id', verifyAuth, authorizeUser, findOneStaff)
 router.put('/staff/:id', verifyAuth, authorizeUser, updateStaff)
 router.delete('/staff/:id', verifyAuth, authorizeUser, deleteStaff)
+
+// router.post('/api/razorpay/create-order', initiatePayment)
+router.post('/api/razorpay/callback/:orderId', orderCallback)
+router.post('/api/razorpay/retry-callback/', retryPayment)
 module.exports = router
