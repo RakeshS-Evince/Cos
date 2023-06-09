@@ -1,17 +1,13 @@
 const jwt = require("jsonwebtoken");
-
+const ApiError = require('../utils/apiError');
 const verifyAuth = (req, res, next) => {
-    try {
-        const token = req.headers.authorization.split(' ')[1];
-        let user;
-        jwt.verify(token, 'secretKey', (err, decoded) => {
-            user = decoded
-        })
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return next(new ApiError(403, "No auth token"))
+    jwt.verify(token, process.env.AUTH_SECRET, (error, user) => {
+        if (error) return next(error)
         req.user = user;
-        next();
-    } catch (e) {
-        res.status(401).send({ message: e.message })
-    }
+    })
+    return next();
 }
 
 module.exports = { verifyAuth }

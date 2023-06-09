@@ -1,85 +1,28 @@
-const { db } = require('../model/index');
-const Account = db.accounts;
-const Customer = db.customer;
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { sendMail } = require('./emailTemplate');
+const authService = require('../services/authService')
 
-const register = async (req, res) => {
-    const { username, email, password, fullname, contact } = req.body
-    const encrypted = await bcrypt.hash(password, 10);
+const register = async (req, res, next) => {
     try {
-        let data = await Account.create({ username: username, password: encrypted, email: email, roleId: 1 });
-        if (!data) {
-            res.send({ message: "Unable to create account" });
-            return
-        }
-        let info = await Customer.create({ email: email, accountId: data.dataValues.id, fullname: fullname, contact: contact });
-        if (info) {
-            res.send({ message: 'Account created' });
-        }
-    } catch (e) {
-        res.status(400).send({ message: "Username/email aleready in use." });
-        return
-    }
-
+        const data = await authService.createAccount(req.body)
+        res.send(data)
+    } catch (e) { next(e) }
 }
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try {
-        const { username, password } = req.body;
-        const data = await Account.findOne({ where: { username: username } });
-        if (!data) return res.status(404).send({ message: 'User not found' });
-        const isMatched = await bcrypt.compare(password, data.dataValues.password);
-        if (!isMatched) return res.status(400).send({ message: 'Incorrect password' });
-        if (data.dataValues.roleId === 1) {
-            let cdata = await Customer.findOne({ where: { accountId: data.dataValues.id }, attributes: ['id'] },)
-            let token = jwt.sign({ accountId: data.dataValues.id, roleId: data.dataValues.roleId, customerId: cdata.dataValues.id }, "secretKey", {
-                expiresIn: "24h",
-            })
-            res.send({ message: 'Login successful', username: data.dataValues.username, token: token, id: cdata.dataValues.id });
-            return
-        }
-        let token = jwt.sign({ accountId: data.dataValues.id, roleId: data.dataValues.roleId }, "secretKey", {
-            expiresIn: "24h",
-        })
-        res.send({ message: 'Login successful', username: data.dataValues.username, token: token });
-    } catch (e) {
-        res.status(400).send({ message: e.message })
-    }
-
-
+        const data = await authService.login(req.body);
+        res.send(data);
+    } catch (e) { next(e) }
 }
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
     try {
-        const data = await Account.findOne({ where: { email: req.body.email } });
-        if (!data) {
-            res.send({ message: 'No user is registered with this email' });
-            return
-        }
-        const token = jwt.sign({ id: data.dataValues.id }, 'ResetSecret', { expiresIn: "5m" });
-        sendMail(token, data.dataValues.email);
-        res.send({ message: 'An email sent to reset your password, please check your email' })
-    } catch (e) {
-        res.status(400).send({ message: e.message })
-    }
+        const data = await authService.forgotPassword(req.body);
+        res.send(data);
+    } catch (e) { next(e) }
 }
-const resetPassword = async (req, res) => {
+const resetPassword = async (req, res, next) => {
     try {
-        let user;
-        const token = req.headers.authorization.split(' ')[1];
-        jwt.verify(token, 'ResetSecret', (err, decoded) => {
-            user = decoded
-        });
-        const encrypted = await bcrypt.hash(req.body.newPassword, 10);
-        const data = await Account.update({ password: encrypted }, { where: { id: user.id } });
-        if (!data) {
-            res.send({ message: "Unable to reset password at this moment" });
-            return
-        }
-        res.send({ message: "Password reset successful" });
-    } catch (e) {
-        res.status(400).send({ message: 'Link is expired' })
-    }
+        const data = await authService.resetPassword(req.body, req.user.id);
+        res.send(data);
+    } catch (e) { next(e) }
 }
 
 module.exports = { login, register, forgotPassword, resetPassword }
