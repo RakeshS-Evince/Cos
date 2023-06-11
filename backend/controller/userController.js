@@ -1,7 +1,3 @@
-const { db } = require("../model")
-const jwt = require('jsonwebtoken')
-const Customer = db.customer;
-const Address = db.address;
 const userService = require("../services/userService");
 
 const profile = async (req, res, next) => {
@@ -79,13 +75,52 @@ const updateProfile = async (req, res, next) => {
 }
 const getCustomerReview = async (req, res, next) => {
     try {
-        const data = await userService.getOwnReview(req.user.customerId, req.query.iid);
+        const data = await userService.getOwnReview(req.user.customerId, req.params.iid);
         res.send(data);
     } catch (e) {
         next(e)
     }
 }
-
+const postReview = async (req, res, next) => {
+    try {
+        const data = await userService.addRating(req.user.customerId, req.params.iid, req.body);
+        res.send(data);
+    } catch (e) {
+        next(e)
+    }
+}
+const placeOrder = async (req, res, next) => {
+    try {
+        const data = await userService.placeOrder(req.body, req.user.customerId);
+        res.send(data)
+    } catch (e) {
+        next(e);
+    }
+}
+const findMyOrders = async (req, res, next) => {
+    try {
+        const orderData = await userService.findUserOrders(req.user.customerId);
+        res.send(orderData);
+    } catch (e) { next(e) }
+}
+const findOneOrder = async (req, res, next) => {
+    try {
+        const orderData = await userService.findOneOrder(req.params.id);
+        res.send(orderData);
+    } catch (e) { next(e) }
+}
+const verifyPayment = async (req, res, next) => {
+    try {
+        const url = await userService.verifyPayment(req.body, req.params.orderId);
+        res.redirect(url);
+    } catch (e) { next(e) }
+}
+const retryPayment = async (req, res, next) => {
+    try {
+        const url = await userService.retryPayment(req.body, req.params.orderId);
+        res.redirect(url);
+    } catch (e) { next(e) }
+}
 
 
 
@@ -99,5 +134,11 @@ module.exports = {
     addAddress,
     getOneAddress,
     deleteOneAddress,
-    getCustomerReview
+    getCustomerReview,
+    postReview,
+    placeOrder,
+    findMyOrders,
+    findOneOrder,
+    verifyPayment,
+    retryPayment
 }

@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useForm } from "react-hook-form";
 import { authApi } from "../axios/axios";
-import { BASE_URL } from "../constants/constant";
+import { BASE_URL, RESET_PASSWORD } from "../constants/constant";
 import Swal from "sweetalert2";
 const schema = yup.object({
     newPassword: yup.string().required("Password is required")
@@ -23,7 +23,7 @@ const ResetPassword = () => {
     })
     const navigate = useNavigate();
     const onSubmit = (data) => {
-        authApi.put(BASE_URL + 'auth/reset-password', { newPassword: data?.newPassword }, { headers: { Authorization: "Bearer " + token } }).then((res) => {
+        authApi.put(BASE_URL + RESET_PASSWORD, { newPassword: data?.newPassword }, { headers: { Authorization: "Bearer " + token } }).then((res) => {
             Swal.fire(res.data.message);
             navigate('/login', { replace: true });
         }).catch(e => {

@@ -27,7 +27,7 @@ const { profile,
     editAddress,
     addAddress,
     getOneAddress,
-    deleteOneAddress } = require('./controller/user');
+    deleteOneAddress } = require('./controller/userController');
 const { verifyAuth } = require('./middleware/auth');
 const { upload } = require('./middleware/multer');
 const { getAllBrands, addBrands, updateBrands, deleteBrands } = require('./controller/brands');

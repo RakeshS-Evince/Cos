@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL } from '../constants/constant';
+import { BASE_URL, MY_ORDER_DETAILS } from '../constants/constant';
 import { Link } from 'react-router-dom';
 
 function OrderDetailsModal({ id }) {
@@ -10,7 +10,7 @@ function OrderDetailsModal({ id }) {
 
     useEffect(() => {
         if (id) {
-            authApi.get('order-details/' + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
+            authApi.get(MY_ORDER_DETAILS + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
         } else return
 
     }, [id, authApi])

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL } from '../constants/constant';
+import { CONTACT_MESSAGES } from '../constants/constant';
 function MessagesTable() {
     const [messages, setMessages] = useState([]);
     const authApi = useAuth();
     useEffect(() => {
-        authApi.get(BASE_URL + 'messages').then((res) => {
+        authApi.get(CONTACT_MESSAGES).then((res) => {
             let reversed = res.data?.reverse();
             setMessages(reversed)
         }).catch(e => e.response.data.message);

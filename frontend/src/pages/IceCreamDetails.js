@@ -42,7 +42,8 @@ function IceCreamDetails() {
 
         }).catch(e => console.log(e))
 
-    }, [authApi, id])
+    }, [authApi, id]);
+    // console.log(reviews)
     return (
         <div>
             <div className='container mt-3'>

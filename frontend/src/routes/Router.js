@@ -65,7 +65,7 @@ function Router() {
                         <Route path="/checkout" exact element={<Checkout />} />
                         <Route path="/my-orders" exact element={<Orders />} />
                         <Route path="/my-orders/:id" exact element={<OrderDetails />} />
-                        <Route path="/review/:info" element={<ReviewForm />} />
+                        <Route path="/review" element={<ReviewForm />} />
                     </Route>
                     <Route element={(isAdmin || isStaff) ? <Outlet /> : <Navigate to='/unauthorized' />}>
                         <Route path="/orders-table" exact element={<OrderTable />} />

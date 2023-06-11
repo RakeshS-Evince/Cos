@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import './orderDetails.scss'
-import { BASE_URL } from '../constants/constant';
+import { BASE_URL, MY_ORDER_DETAILS, RETRY_PAYMENT } from '../constants/constant';
 import Swal from 'sweetalert2';
 import { loadScript } from './razor';
 function OrderDetails() {
@@ -12,7 +12,7 @@ function OrderDetails() {
     const authApi = useAuth();
     const { id } = useParams()
     useEffect(() => {
-        authApi.get('order-details/' + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
+        authApi.get(MY_ORDER_DETAILS + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
     }, [id, authApi]);
 
     async function displayRazorpay() {
@@ -30,7 +30,7 @@ function OrderDetails() {
             description: "Test Transaction",
             // image: "https://example.com/your_logo",
             order_id: orderDetails?.payment?.id,
-            callback_url: process.env.REACT_APP_API_URL + "api/razorpay/retry-callback/?oid=" + orderDetails?.id + "&pid=" + orderDetails?.payment?.id,
+            callback_url: BASE_URL + RETRY_PAYMENT + "?oid=" + orderDetails?.id + "&pid=" + orderDetails?.payment?.id,
             prefill: {
                 name: "Rakesh Senapati",
                 email: "Rakesh@example.com",
@@ -93,7 +93,7 @@ function OrderDetails() {
                                         <div className="price text-muted">Price: ₹ {parseFloat(ele.order_item?.quantity * ele.price).toFixed(2)}</div>
                                     </div>
                                 </div>
-                                <Link to={`/review/cid=${orderDetails.customerId}&iid=${ele.id}`} className='mb-3' style={{ textDecoration: 'none' }}>Write a review</Link>
+                                <Link to={`/review/`} className='mb-3' state={{ iceCreamId: ele.id }} style={{ textDecoration: 'none' }}>Write a review</Link>
                             </div>
                         )
                     })}

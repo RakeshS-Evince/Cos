@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { clearCart, selectCart } from '../feature/cartSlice'
 import useAuth from '../axios/useApi';
-import { ADDRESS, ADDRESS_DEFAULT, BASE_URL, PLACE_ORDER } from '../constants/constant';
+import { ADDRESS, ADDRESS_DEFAULT, BASE_URL, PAYMENT_VERIFY, PLACE_ORDER } from '../constants/constant';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { loadScript } from './razor';
@@ -74,7 +74,7 @@ function Checkout() {
             description: "Test Transaction",
             // image: "https://example.com/your_logo",
             order_id: id,
-            callback_url: process.env.REACT_APP_API_URL + "api/razorpay/callback/" + orderId,
+            callback_url: BASE_URL + PAYMENT_VERIFY + orderId,
             prefill: {
                 name: "Rakesh Senapati",
                 email: "Rakesh@example.com",

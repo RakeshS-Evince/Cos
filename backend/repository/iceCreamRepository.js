@@ -18,6 +18,9 @@ const deleteIceCream = async (id) => {
 const updateIceCream = async (obj, whereObj) => {
     return IceCream.update(obj, { where: whereObj })
 }
+const getIceCreamCount=async()=>{
+    return IceCream.count()
+}
 
 module.exports = {
     getAllIceCream,
@@ -26,4 +29,5 @@ module.exports = {
     createIceCream,
     deleteIceCream,
     updateIceCream,
+    getIceCreamCount
 }

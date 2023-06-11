@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
 import useApi from '../axios/useApi'
-import { BASE_URL } from '../constants/constant';
+import { BASE_URL, CONTACT_MESSAGES, DASHBOARD } from '../constants/constant';
 import { Link } from 'react-router-dom';
 
 
@@ -38,8 +38,8 @@ function AdminDashboard() {
 
     }
     useEffect(() => {
-        authApi.get(BASE_URL + "dashboard").then(res => setCounts(res.data)).catch(e => console.log(e.response.data.message));
-        authApi.get(BASE_URL + 'messages').then(res => {
+        authApi.get(DASHBOARD).then(res => setCounts(res.data)).catch(e => console.log(e.response.data.message));
+        authApi.get(CONTACT_MESSAGES).then(res => {
             let reversed = res.data?.reverse();
             setMessages(reversed)
         }).catch(e => e.response.data.message);

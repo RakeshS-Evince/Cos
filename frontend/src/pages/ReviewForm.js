@@ -6,9 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { RatingComponent } from './RatingComponent';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate} from 'react-router-dom';
 import useAuth from '../axios/useApi';
-import { BASE_URL } from '../constants/constant';
+import { BASE_URL, REVIEW } from '../constants/constant';
 import { RatingStars } from './RatingStars';
 import Swal from 'sweetalert2';
 import thumbs_smiley from '../assets/images/thumbs_smiley.png'
@@ -25,10 +25,12 @@ function ReviewForm() {
     const { handleSubmit, register, formState: { errors }, setValue } = useForm({
         resolver: yupResolver(schema)
     })
-    const { info } = useParams();
+    const navigate = useNavigate()
+    const { state } = useLocation()
     useEffect(() => {
-        authApi.get("/ice-creams/" + info.split('=')[2]).then(res => { setIceCreamData(res.data) }).catch(e => console.log(e))
-        authApi.get("/user/reviews/?" + info).then(res => {
+        if (!state) return navigate("/")
+        authApi.get("/ice-creams/" + state?.iceCreamId).then(res => { setIceCreamData(res.data) }).catch(e => console.log(e))
+        authApi.get(REVIEW + state?.iceCreamId).then(res => {
             setReviewData(res.data);
             if (!res.data.summary && !res.data.review && !res.data.rating) {
                 setAllow(true)
@@ -37,9 +39,9 @@ function ReviewForm() {
             setValue('summary', res.data?.summary);
             setValue('review', res.data?.review);
         }).catch(e => console.log(e))
-    }, [authApi, info, setValue, allow])
+    }, [authApi, setValue, allow,navigate,state])
     const onSubmit = (data) => {
-        authApi.put(`/user/reviews/?${info}`, { ...data, rating: reviewData.rating }).then(res => {
+        authApi.post(REVIEW + state?.iceCreamId, { ...data, rating: reviewData.rating }).then(res => {
             if (!reviewData?.rating) {
                 alert("Please rate this item between 1 to 5 stars");
                 return
@@ -63,7 +65,7 @@ function ReviewForm() {
                     <div className='row g-2 justify-content-center'>
                         <div className='col-md-5 p-3 p-lg-5'>
                             <img src={BASE_URL + 'images/' + iceCreamData?.image} className='img-fluid' height='350px' width='350px' alt="rev" />
-                            <Link to={'/icecream-details/' + info.split('=')[2]} style={{ textDecoration: 'none' }}><h5>{iceCreamData?.name}</h5></Link>
+                            <Link to={'/icecream-details/' + state?.iceCreamId} style={{ textDecoration: 'none' }}><h5>{iceCreamData?.name}</h5></Link>
                             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam, quisquam. Eos quasi mollitia, ipsa illo fugit</p>
                             <h5>Price: ₹{iceCreamData?.price}</h5>
                         </div>
@@ -101,7 +103,7 @@ function ReviewForm() {
                                 </div>
                                 <div>
                                     <lable>Rate the Icecream</lable>
-                                    {allow ? <RatingComponent value={reviewData?.rating} info={info} reviewData={reviewData} setReviewData={setReviewData} /> : <RatingStars value={reviewData?.rating} />}
+                                    {allow ? <RatingComponent value={reviewData?.rating} reviewData={reviewData} setReviewData={setReviewData} /> : <RatingStars value={reviewData?.rating} />}
                                 </div>
                                 {!allow ? <p className='text-danger mt-3'>Thanks for the review</p> : <button type="submit" disabled={!allow} className=" mt-2 btn btn-primary">Submit</button>}
                             </Form>

@@ -1,16 +1,16 @@
+const { sendMail } = require('./emailService');
+const { StatusCodes } = require('http-status-codes');
+const ApiError = require("../utils/apiError");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const ApiError = require("../utils/apiError");
 const accountRepo = require("../repository/accountRepository");
 const customerRepo = require("../repository/customerRepository");
-const { StatusCodes } = require('http-status-codes');
-const { sendMail } = require('./emailService');
 
 const createAccount = async ({ email, password, contact, fullname, username }) => {
     const encrypted = await bcrypt.hash(password, 10);
     const accountInfo = await accountRepo.createAccount({ email, password: encrypted, username, roleId: 1 });
     if (!accountInfo) {
-        throw new ApiError(400, "Unable to craete account");
+        throw new ApiError(400, "Unable to create account");
     }
     const customerInfo = await customerRepo.createCustomer({ fullname, contact, email, accountId: accountInfo.dataValues.id });
     if (!customerInfo) {
@@ -18,7 +18,6 @@ const createAccount = async ({ email, password, contact, fullname, username }) =
     }
     return { message: "Account created successfully" }
 }
-
 const login = async ({ username, password }) => {
     const accountData = await accountRepo.findAccountByUsername(username);
     if (!accountData) throw new ApiError(StatusCodes.NOT_FOUND, "User is not registered");
@@ -30,7 +29,8 @@ const login = async ({ username, password }) => {
         let token = jwt.sign({
             accountId: accountData.dataValues.id,
             roleId: accountData.dataValues.roleId,
-            customerId: customerData.dataValues.id
+            customerId: customerData.dataValues.id,
+            customerName: customerData.dataValues.fullname
         }, process.env.AUTH_SECRET, { expiresIn: "24h" })
 
         return { message: 'Login successful', username: accountData.dataValues.username, token: token, id: customerData.dataValues.id };
@@ -55,9 +55,4 @@ const resetPassword = async ({ newPassword }, id) => {
     return { message: "Password updated successfully" };
 }
 
-module.exports = {
-    createAccount,
-    login,
-    forgotPassword,
-    resetPassword
-}
+module.exports = { createAccount, login, forgotPassword, resetPassword }

@@ -2,9 +2,7 @@ const express = require('express');
 const { registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } = require('../middleware/authSchema');
 const { register, login, forgotPassword, resetPassword } = require('../controller/auth');
 const { verifyAuth } = require('../middleware/auth');
-const { getAllIceCreams, getOneIceCream, getIceCreamByBrand } = require('../controller/iceCream');
-const { getAllBrands } = require('../controller/brands');
-const { postMessages } = require('../controller/dashboard');
+const { getAllIceCreams, getOneIceCream, getIceCreamByBrand, getAllBrands, postMessages, getAllReviews } = require('../controller/publicController');
 const publicRouter = express.Router();
 
 // <---------------------------------------------public apis-------------------------------------->
@@ -22,5 +20,7 @@ publicRouter.get('/ice-creams-by-brand/:name', getIceCreamByBrand);
 publicRouter.get('/brands', getAllBrands);
 // <-----------Contact us message------------>
 publicRouter.post('/messages', postMessages)
+// <-----------reviews------------>
+publicRouter.get("/user-reviews/:id", getAllReviews)
 
 module.exports = publicRouter

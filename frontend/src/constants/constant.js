@@ -11,11 +11,14 @@ export const MESSAGES = "messages"
 
 //user api constants
 export const MY_ORDERS = "user/my-orders"
+export const MY_ORDER_DETAILS = "user/my-order-details/"
 export const PLACE_ORDER = "user/order/place"
 export const ADDRESS_DEFAULT = "user/address-default/"
 export const PROFILE = "user/profile"
 export const ADDRESS = "user/address"
-export const REVIEW = "user/reviews"
+export const REVIEW = "user/reviews/"
+export const PAYMENT_VERIFY = "user/verify-payment/"
+export const RETRY_PAYMENT = "user/retry-payment/"
 
 //ADMIN API
 export const ADMIN = "admin/"
@@ -26,3 +29,4 @@ export const USER_REVIEWS = "admin/user-reviews"
 export const ORDERS = "admin/orders"
 export const ORDER_STATUS_UPDATE = "admin/order-status-update"
 export const DASHBOARD = "admin/dashboard"
+export const CONTACT_MESSAGES = "admin/messages"
