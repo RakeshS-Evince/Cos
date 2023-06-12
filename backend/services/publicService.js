@@ -32,7 +32,7 @@ const postMessage = async (data) => {
 }
 const getAllReviewsByIid = async (id) => {
     const data = await reviewRepository.findAllReviewsByIceCreamId(id);
-    if (!data) throw new ApiError(StatusCodes.NOT_FOUND, "No reviews found");
+    if (!data.length) return { averageRating: 0, data: [] }
     let totalRating = data[0].dataValues?.rating;
     for (let i = 1; i < data.length; i++) {
         totalRating += data[i].dataValues.rating

@@ -77,11 +77,73 @@ const getAllReviews = async (req, res, next) => {
         res.send(data);
     } catch (e) { next(e) }
 }
-const getAllReviewsById= async (req, res, next) => {
+const getAllReviewsById = async (req, res, next) => {
     try {
         const data = await adminService.findReviewById(req.params.id);
         res.send(data);
     } catch (e) { next(e) }
+}
+const findAllCustomers = async (req, res, next) => {
+    try {
+        const data = await adminService.findAllCustomers();
+        res.send(data);
+    } catch (e) {
+        next(e);
+    }
+}
+const findOneCustomer = async (req, res, next) => {
+    try {
+        const data = await adminService.findOneCustomer(req.params.id);
+        res.send(data);
+    } catch (e) {
+        next(e);
+    }
+}
+
+const addStaff = async (req, res, next) => {
+    try {
+        const data = await adminService.createStaff(req.body);
+        res.send(data);
+    }
+    catch (e) {
+        next(e);
+    }
+}
+const updateStaff = async (req, res, next) => {
+    try {
+        const data = await adminService.updateStaff(req.body, req.params.id);
+        res.send(data);
+    }
+    catch (e) {
+        next(e);
+    }
+}
+const findAllStaffs = async (req, res, next) => {
+    try {
+        const data = await adminService.findAllStaffs();
+        res.send(data);
+    }
+    catch (e) {
+        next(e);
+    }
+}
+const findOneStaff = async (req, res, next) => {
+    try {
+        const data = await adminService.findOneStaff(req.params.id);
+        res.send(data);
+    }
+    catch (e) {
+        next(e);
+    }
+}
+const deleteStaff = async (req, res, next) => {
+    try {
+        const data = await adminService.deleteStaff(req.params.id);
+        res.send(data);
+    }
+    catch (e) {
+        next(e);
+    }
 }
 
 module.exports = {
@@ -97,5 +159,12 @@ module.exports = {
     updateOrderStatus,
     findAllOrdersByCustomerId,
     getAllReviews,
-    getAllReviewsById
+    getAllReviewsById,
+    findAllCustomers,
+    findOneCustomer,
+    addStaff,
+    updateStaff,
+    findAllStaffs,
+    findOneStaff,
+    deleteStaff,
 }

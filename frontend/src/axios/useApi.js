@@ -12,8 +12,9 @@ function useAuth() {
         let resInterceptor = authApi.interceptors.response.use(function (response) {
             return response;
         }, function (error) {
-            // Swal.fire(error.response.data.message, "", "error")
-            console.log(error.response.data.message)
+            Swal.fire(error.response?.data.message, "", "error")
+            return Promise.reject();
+            // console.log(error.response.data.message)
         }
         );
         return () => {

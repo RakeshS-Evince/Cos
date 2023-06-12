@@ -11,9 +11,9 @@ import useRoleCheck from '../hooks/useRoleCheck';
 import Swal from 'sweetalert2';
 
 export default function Header() {
-    const toggleCart = () => {
-        document.getElementById('cartSidebar').classList.toggle('cart_wrapper_show');
-    }
+    // const toggleCart = () => {
+    //     document.getElementById('cartSidebar').classList.toggle('cart_wrapper_show');
+    // }
     const navigate = useNavigate()
     const items = useSelector(selectCart);
     const { user, logout } = useContext(UserContext);
@@ -56,7 +56,7 @@ export default function Header() {
                             </NavDropdown>}
                     </Nav>
                     <Nav>
-                        {!(isAdmin || isStaff) && <Nav.Link onClick={() => toggleCart()}>
+                        {!(isAdmin || isStaff) && <Nav.Link onClick={() => navigate("/cart")}>
                             <div className='d-flex'>
                                 <i className="fa-sharp fa-solid fa-cart-shopping fa-lg mt-3" style={{ color: "grey" }}></i>
                                 <span className="badge rounded-pill badge-notification bg-danger sm">{items.length}</span>

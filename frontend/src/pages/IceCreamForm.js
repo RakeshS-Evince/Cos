@@ -5,7 +5,7 @@ import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import useAuth from '../axios/useApi';
-import { BASE_URL, BRANDS, ICECREAM } from '../constants/constant';
+import { ADMIN, BRANDS, ICECREAM } from '../constants/constant';
 import Swal from 'sweetalert2';
 const iceCreamSchema = yup.object({
     name: yup.string().required("Ice Cream name is required"),
@@ -20,9 +20,9 @@ function IceCreamForm({ id, setShowIcecreamForm, setId, refetch }) {
     const [brands, setBrands] = useState([]);
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(iceCreamSchema),
-        defaultValues: id ? () => authApi.get(BASE_URL + ICECREAM + '/' + id).then(({ data }) => data).catch(e => console.log(e.response.messsage)) : {}
+        defaultValues: id ? () => authApi.get(ICECREAM + id).then(({ data }) => data).catch(e => console.log(e.response.messsage)) : {}
     })
-    useEffect(() => { authApi.get(BASE_URL + BRANDS).then((res) => setBrands(res.data)) }, [authApi])
+    useEffect(() => { authApi.get(BRANDS).then((res) => setBrands(res.data)) }, [authApi])
     const onSubmit = (data) => {
         if (!data.image[0]) alert('Please select an image');
         const formData = new FormData();
@@ -34,7 +34,7 @@ function IceCreamForm({ id, setShowIcecreamForm, setId, refetch }) {
         formData.append('image', data.image[0]);
 
         if (id) {
-            authApi.put(BASE_URL + ICECREAM + '/' + id, formData).then(res => {
+            authApi.put(ADMIN + ICECREAM + id, formData).then(res => {
                 res && Swal.fire(res.data.message);
                 setId('');
                 refetch();
@@ -42,7 +42,7 @@ function IceCreamForm({ id, setShowIcecreamForm, setId, refetch }) {
             }).catch(e => console.log(e.response.data.message))
             return
         }
-        authApi.post(BASE_URL + ICECREAM, formData).then(res => {
+        authApi.post(ADMIN + ICECREAM, formData).then(res => {
             res && Swal.fire(res.data.message);
             setId('');
             refetch();

@@ -2,7 +2,7 @@ const userService = require("../services/userService");
 
 const profile = async (req, res, next) => {
     try {
-        const data = await userService.getProfile(req.user.customerId);
+        const data = await userService.getProfile(req.user.accountId);
         res.send(data);
     } catch (e) {
         next(e)
@@ -92,7 +92,15 @@ const postReview = async (req, res, next) => {
 const placeOrder = async (req, res, next) => {
     try {
         const data = await userService.placeOrder(req.body, req.user.customerId);
-        res.send(data)
+        res.send(data);
+    } catch (e) {
+        next(e);
+    }
+}
+const cancelOrder = async (req, res, next) => {
+    try {
+        const data = await userService.cancelOrder(req.params.id);
+        res.send(data);
     } catch (e) {
         next(e);
     }
@@ -140,5 +148,6 @@ module.exports = {
     findMyOrders,
     findOneOrder,
     verifyPayment,
-    retryPayment
+    retryPayment,
+    cancelOrder
 }

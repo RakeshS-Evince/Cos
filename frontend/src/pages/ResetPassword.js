@@ -23,7 +23,7 @@ const ResetPassword = () => {
     })
     const navigate = useNavigate();
     const onSubmit = (data) => {
-        authApi.put(BASE_URL + RESET_PASSWORD, { newPassword: data?.newPassword }, { headers: { Authorization: "Bearer " + token } }).then((res) => {
+        authApi.put(BASE_URL + RESET_PASSWORD, data, { headers: { Authorization: "Bearer " + token } }).then((res) => {
             Swal.fire(res.data.message);
             navigate('/login', { replace: true });
         }).catch(e => {

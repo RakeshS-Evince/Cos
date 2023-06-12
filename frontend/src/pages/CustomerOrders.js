@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL } from '../constants/constant';
+import { IMAGE_URL, ORDERS } from '../constants/constant';
 import { useLocation, useParams } from 'react-router-dom';
 
 function CustomerOrders() {
@@ -9,7 +9,7 @@ function CustomerOrders() {
     const { cid } = useParams();
     const { state } = useLocation();
     useEffect(() => {
-        authApi.get('/orders/' + cid).then(({ data }) => {
+        authApi.get(ORDERS + cid).then(({ data }) => {
             let reversed = data?.reverse();
             setOrders(reversed)
         }).catch(e => console.log(e.message))
@@ -25,18 +25,23 @@ function CustomerOrders() {
                         </div>
                         <hr />
                         <div>
-                            <div className='d-flex'>
-                                <div className="me-3 position-relative">
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
-                                        {ele.iceCreams[0]?.order_item?.quantity}
-                                    </span>
-                                    <img alt="ice cream" src={BASE_URL + 'images/' + ele.iceCreams[0]?.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
-                                </div>
-                                <div className="">
-                                    {ele.iceCreams[0]?.name}
-                                </div>
-                            </div> <br />
-                            {ele.iceCreams?.length > 1 && `and ${ele.iceCreams?.length - 1} items more.`}
+                            <div className='row'>
+                                {ele?.iceCreams?.map((ele, i) => {
+                                    return <>
+                                        <div className='d-flex col-sm-3 col-md-2'>
+                                            <div className="mx-3 position-relative">
+                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
+                                                    {ele?.order_item?.quantity}
+                                                </span>
+                                                <img alt="ice cream" src={IMAGE_URL + ele?.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                            </div>
+                                            <div className="">
+                                                {ele?.name}
+                                            </div>
+                                        </div>
+                                    </>
+                                })}
+                            </div>
                         </div>
 
                         <div className='mt-3 d-flex justify-content-between'>

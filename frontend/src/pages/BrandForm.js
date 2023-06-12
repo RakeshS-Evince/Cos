@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { authApi } from '../axios/axios';
-import { BASE_URL, BRANDS } from '../constants/constant';
+import { ADMIN, BRANDS } from '../constants/constant';
 import Swal from 'sweetalert2';
 
 function BrandForm({ setShowBrandForm, prevBrandName, refetch, ...rest }) {
@@ -16,7 +16,7 @@ function BrandForm({ setShowBrandForm, prevBrandName, refetch, ...rest }) {
         formData.append('name', brandName);
         formData.append('image', brandImage);
         if (prevBrandName) {
-            authApi.put(BASE_URL + BRANDS + "/" + prevBrandName, formData).then(({ data }) => {
+            authApi.put(ADMIN + BRANDS + prevBrandName, formData).then(({ data }) => {
                 Swal.fire(data.message);
                 rest.setBrandName();
                 setShowBrandForm(false);
@@ -26,7 +26,7 @@ function BrandForm({ setShowBrandForm, prevBrandName, refetch, ...rest }) {
             })
             return
         }
-        authApi.post(BASE_URL + BRANDS, formData).then((res) => {
+        authApi.post(ADMIN + BRANDS, formData).then((res) => {
             res && Swal.fire(res.data.message);
             setShowBrandForm(false);
             rest.setBrandName();

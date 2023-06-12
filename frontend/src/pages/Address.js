@@ -9,7 +9,7 @@ function Address() {
     const authApi = useAuth();
     const [addressUpdated, setAddressUpdated] = useState(false)
     useEffect(() => {
-        authApi.get(ADDRESS).then(({ data }) => setAddress(data)).catch(e => console.log(e));
+        authApi.get(ADDRESS).then(({ data }) => setAddress(data));
     }, [addressUpdated, authApi]);
     const setDefault = (id) => {
         authApi.put(ADDRESS_DEFAULT + id).then((res) => { setAddressUpdated(!addressUpdated) });
@@ -23,7 +23,7 @@ function Address() {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                authApi.delete(ADDRESS + '/' + id).then(res => {
+                authApi.delete(ADDRESS + id).then(res => {
                     Swal.fire(res.data.message);
                     setAddressUpdated(!addressUpdated)
                 }).catch(e => console.log(e.response.data.message));

@@ -11,7 +11,7 @@ const updateBrand = async (data, name) => {
     return Brands.update(data, { where: { name: name } });
 }
 const deleteBrand = async (name) => {
-    return Brands.delete({ where: { name: name } });
+    return Brands.destroy({ where: { name: name } });
 }
 const getBrandsCount = async () => {
     return Brands.count();

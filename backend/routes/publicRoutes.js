@@ -1,8 +1,14 @@
 const express = require('express');
-const { registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } = require('../middleware/authSchema');
-const { register, login, forgotPassword, resetPassword } = require('../controller/auth');
+const { registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } = require('../middleware/validationSchema');
+const { register, login, forgotPassword, resetPassword } = require('../controller/authController');
 const { verifyAuth } = require('../middleware/auth');
-const { getAllIceCreams, getOneIceCream, getIceCreamByBrand, getAllBrands, postMessages, getAllReviews } = require('../controller/publicController');
+const { getAllIceCreams,
+    getOneIceCream,
+    getIceCreamByBrand,
+    getAllBrands,
+    postMessages,
+    getAllReviews } = require('../controller/publicController');
+const { verifyPayment, retryPayment } = require('../controller/userController');
 const publicRouter = express.Router();
 
 // <---------------------------------------------public apis-------------------------------------->
@@ -21,6 +27,9 @@ publicRouter.get('/brands', getAllBrands);
 // <-----------Contact us message------------>
 publicRouter.post('/messages', postMessages)
 // <-----------reviews------------>
-publicRouter.get("/user-reviews/:id", getAllReviews)
+publicRouter.get("/user-reviews/:id", getAllReviews);
+
+publicRouter.post('/verify-payment/:orderId', verifyPayment)
+publicRouter.post('/retry-payment/:orderId', retryPayment);
 
 module.exports = publicRouter

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL, ICECREAM } from '../constants/constant';
+import { ICECREAM, IMAGE_URL, PUBLIC_REVIEWS } from '../constants/constant';
 import { useParams } from 'react-router-dom';
 import { RatingStars } from './RatingStars';
 import { useDispatch } from 'react-redux';
@@ -32,56 +32,51 @@ function IceCreamDetails() {
         setQuantity(e.target.value)
     }
     useEffect(() => {
-        authApi.get(ICECREAM + '/' + id).then(res => setIcDetails(res.data)).catch(e => console.log(e));
-        authApi.get('/user-reviews/' + id).then(res => {
+        authApi.get(PUBLIC_REVIEWS + id).then(res => {
             if (res.data) {
                 setReviews(res?.data?.data.reverse())
                 setAverageRating(res?.data?.averageRating)
             }
-
-
-        }).catch(e => console.log(e))
-
+        })
+        authApi.get(ICECREAM + id).then(res => setIcDetails(res?.data));
     }, [authApi, id]);
     // console.log(reviews)
     return (
         <div>
-            <div className='container mt-3'>
-                {icDetails &&
-                    <div className='row'>
-                        <div className='col-md-5'>
-                            <div className='p-3'>
-                                <img src={BASE_URL + 'images/' + icDetails?.image} alt='details' className='img-fluid' height={'400px'} width={'400px'} />
-                            </div>
+            {icDetails && <div className='container mt-3'>
+                <div className='row'>
+                    <div className='col-md-5'>
+                        <div className='p-3'>
+                            <img src={IMAGE_URL + icDetails?.image} alt='details' className='img-fluid' height={'400px'} width={'400px'} />
                         </div>
-                        <div className='col-md-6'>
-                            <div className='p-3'>
-                                <h3 >{icDetails?.name}</h3>
-                                <h4 className='pt-3'>Price: ₹{icDetails?.price}</h4>
-                                <h6 className={`pt-3`}>Stock: <span className={icDetails?.quantity >= 1 ? 'text-success' : 'text-danger'}>{icDetails?.quantity >= 1 ? 'Avaliable' : 'Out of stock'}</span></h6>
-                                <p className='pt-3'>{icDetails?.description}</p>
-                                <div className='d-flex pt-3'>
-                                    <input type='number' value={quantity} min={1} className='form-control me-3' onChange={quantityChangeHandler} style={{ width: '80px' }} />
-                                    <button className='btn btn-danger' disabled={quantity > icDetails?.quantity || quantity < 1} onClick={() => cartClickHandler({
-                                        name: icDetails?.name,
-                                        description: icDetails?.description,
-                                        id: icDetails?.id,
-                                        image: icDetails?.image,
-                                        price: icDetails?.price,
-                                        available: icDetails?.quantity,
-                                        quantity: parseInt(quantity),
-                                    })} >Add to cart</button>
+                    </div>
+                    <div className='col-md-6'>
+                        <div className='p-3'>
+                            <h3 >{icDetails?.name}</h3>
+                            <h4 className='pt-3'>Price: ₹{icDetails?.price}</h4>
+                            <h6 className={`pt-3`}>Stock: <span className={icDetails?.quantity >= 1 ? 'text-success' : 'text-danger'}>{icDetails?.quantity >= 1 ? 'Avaliable' : 'Out of stock'}</span></h6>
+                            <p className='pt-3'>{icDetails?.description}</p>
+                            <div className='d-flex pt-3'>
+                                <input type='number' value={quantity} min={1} className='form-control me-3' onChange={quantityChangeHandler} style={{ width: '80px' }} />
+                                <button className='btn btn-danger' disabled={quantity > icDetails?.quantity || quantity < 1} onClick={() => cartClickHandler({
+                                    name: icDetails?.name,
+                                    description: icDetails?.description,
+                                    id: icDetails?.id,
+                                    image: icDetails?.image,
+                                    price: icDetails?.price,
+                                    available: icDetails?.quantity,
+                                    quantity: parseInt(quantity),
+                                })} >Add to cart</button>
 
-                                </div>
-                                <p className='text-danger mt-2'>{quantity > icDetails?.quantity && 'The quantity is not available'}</p>
-                                <p className='text-danger mt-2'>{quantity < 1 && 'Invalid quantity'}</p>
-                                <div className='d-flex pt-5'>
-                                    <h5 className='pt-3 me-2'>Average Rating: </h5> <RatingStars value={averageRating} /> <span className='pt-3 ms-2'>{averageRating}</span>
-                                </div>
+                            </div>
+                            <p className='text-danger mt-2'>{quantity > icDetails?.quantity && 'The quantity is not available'}</p>
+                            <p className='text-danger mt-2'>{quantity < 1 && 'Invalid quantity'}</p>
+                            <div className='d-flex pt-5'>
+                                <h5 className='pt-3 me-2'>Average Rating: </h5> <RatingStars value={averageRating} /> <span className='pt-3 ms-2'>{averageRating}</span>
                             </div>
                         </div>
                     </div>
-                }
+                </div>
                 <hr />
                 <h3 className='p-3'>Reviews</h3>
                 <div className='p-3'>
@@ -114,7 +109,7 @@ function IceCreamDetails() {
                         : <h4>No reviews</h4>}
 
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }

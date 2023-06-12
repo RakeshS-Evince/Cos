@@ -5,7 +5,7 @@ import { decreaseQuantity, increaseQuantity, selectCart, removeFromCart } from '
 import Button from 'react-bootstrap/esm/Button';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
-import { BASE_URL } from '../constants/constant';
+import { IMAGE_URL } from '../constants/constant';
 function CartSidebar() {
     const items = useSelector(selectCart);
     const total = useSelector((state) => state.cart.total);
@@ -48,7 +48,7 @@ function CartSidebar() {
                                     <div style={{ cursor: "pointer", width: "15px" }} onClick={() => { deleteHandler(ele) }}>&times;</div>
                                     <div className="row justify-content-between mx-2 py-2 border border-grey">
                                         <div className='col-auto d-flex'>
-                                            <img src={BASE_URL + 'images/' + ele.image} height="50px" width='50px' alt='iceCream' className='border border-grey rounded' />
+                                            <img src={IMAGE_URL + ele.image} height="50px" width='50px' alt='iceCream' className='border border-grey rounded' />
                                             <div className='mx-3'>
                                                 <h6>{ele.name}</h6>
                                                 <span>₹ {parseFloat(ele.price * ele.quantity).toFixed(2)}</span>

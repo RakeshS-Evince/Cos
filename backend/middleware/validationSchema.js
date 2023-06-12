@@ -15,6 +15,7 @@ const registerSchema = (req, res, next) => {
                 )
             )
             .required(),
+        confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
     });
     const { error } = schema.validate(req.body, {
         abortEarly: false,
@@ -61,7 +62,8 @@ const resetPasswordSchema = (req, res, next) => {
                     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
                 )
             )
-            .required()
+            .required(),
+        confirmPassword: Joi.string().valid(Joi.ref("newPassword")).required(),
     });
     const { error } = schema.validate(req.body, {
         abortEarly: false,
@@ -72,10 +74,49 @@ const resetPasswordSchema = (req, res, next) => {
     }
     next();
 };
+const staffUpadateSchema = async (req, res, next) => {
+    const schema = Joi.object({
+        fullname: Joi.string().min(5).max(30).allow(null, ""),
+        username: Joi.string().min(5).max(30).allow(null, ""),
+        email: Joi.string().email().allow(null, ""),
+        contact: Joi.string().min(10).max(13).pattern(new RegExp("^\\d{3}[ -]?\\d{3}[ -]?\\d{4}$")).allow(null, ""),
+    });
+    const { error } = schema.validate(req.body, {
+        abortEarly: false,
+    });
+    if (error) {
+        next(error);
+        return
+    }
+    next()
+}
+
+const addressSchema = async (req, res, next) => {
+    const schema = Joi.object({
+        firstname: Joi.string().min(5).max(30).required(),
+        lastname: Joi.string().min(5).max(30).required(),
+        email: Joi.string().email().required(),
+        phone: Joi.string().min(10).max(13).pattern(new RegExp("^\\d{3}[ -]?\\d{3}[ -]?\\d{4}$")).required(),
+        address: Joi.string().min(5).max(30).required(),
+        state: Joi.string().min(5).max(30).required(),
+        city: Joi.string().min(5).max(30).required(),
+        zip: Joi.string().pattern(new RegExp("^\\d{3}[ -]?\\d{3}[ -]?\\d{4}$")).required().required(),
+    });
+    const { error } = schema.validate(req.body, {
+        abortEarly: false,
+    });
+    if (error) {
+        next(error);
+        return
+    }
+    next()
+}
 
 module.exports = {
     registerSchema,
     loginSchema,
     forgotPasswordSchema,
-    resetPasswordSchema
+    resetPasswordSchema,
+    staffUpadateSchema,
+    addressSchema
 }

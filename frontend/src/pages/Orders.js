@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL, MY_ORDERS } from '../constants/constant';
+import pin from "../assets/images/pin.png"
+import { IMAGE_URL, MY_ORDERS } from '../constants/constant';
 import { Link } from 'react-router-dom';
 
 function Orders() {
@@ -18,7 +19,13 @@ function Orders() {
             {orders?.map((ele, i) => (
                 <div className='card my-3' key={i}>
                     <div className='card-body p-3 row g-2'>
-                        <div className='d-flex justify-content-between'><h5> Order Id: {ele.id}</h5>
+                        <div className='d-flex justify-content-between'>
+                            <div className='d-flex '>
+                                <h5> Order Id: {ele.id}</h5>
+                                <div className='ps-3'>
+                                    <img src={pin} height="20px" width="20px" alt="track logo" /><Link style={{ textDecoration: "none", marginLeft: "5px" }} to={"/my-orders/" + ele.id}>Track</Link>
+                                </div>
+                            </div>
                             <span>Date: {new Date(ele.createdAt).toDateString()}</span>
                         </div>
                         <hr />
@@ -28,7 +35,7 @@ function Orders() {
                                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
                                         {ele.iceCreams[0]?.order_item?.quantity}
                                     </span>
-                                    <img alt="ice cream" src={BASE_URL + 'images/' + ele.iceCreams[0]?.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                    <img alt="ice cream" src={IMAGE_URL + ele.iceCreams[0]?.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                 </div>
                                 <div className="">
                                     {ele.iceCreams[0]?.name}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL, MY_ORDER_DETAILS } from '../constants/constant';
+import { IMAGE_URL, MY_ORDER_DETAILS } from '../constants/constant';
 import { Link } from 'react-router-dom';
 
 function OrderDetailsModal({ id }) {
@@ -34,7 +34,7 @@ function OrderDetailsModal({ id }) {
                                             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
                                                 {ele.order_item?.quantity}
                                             </span>
-                                            <img alt="ice cream" src={BASE_URL + 'images/' + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                            <img alt="ice cream" src={IMAGE_URL + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                         </div>
                                         <div className="">
                                             <Link to="#" className="nav-link">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL, BRANDS } from '../constants/constant';
+import { ADMIN, BRANDS, IMAGE_URL } from '../constants/constant';
 import Swal from 'sweetalert2';
 import BrandForm from './BrandForm';
 
@@ -11,7 +11,7 @@ function BrandTable() {
     const [brandName, setBrandName] = useState('');
     const [refetchData, setRefetchData] = useState(false)
     useEffect(() => {
-        authApi.get(BASE_URL + "brands").then(({ data }) => setData(data)).catch(e => console.log(e.message))
+        authApi.get(BRANDS).then(({ data }) => setData(data)).catch(e => console.log(e.message))
     }, [refetchData, authApi])
     const deleteHandler = (name) => {
         Swal.fire({
@@ -21,7 +21,7 @@ function BrandTable() {
         }).then((result) => {
 
             if (result.isConfirmed) {
-                authApi.delete(BASE_URL + BRANDS + "/" + name).then((res) => {
+                authApi.delete(ADMIN + BRANDS + name).then((res) => {
                     Swal.fire(res?.data.message, "", 'success');
                     toggleRefetchData();
                 }).catch(e => {
@@ -59,7 +59,7 @@ function BrandTable() {
                                         <tr key={i}>
                                             <th scope="row">{i + 1}</th>
                                             <td>{ele.name}</td>
-                                            <td><img src={BASE_URL + 'images/' + ele.image} height={'40px'} width={'40px'} alt='brand' /></td>
+                                            <td><img src={IMAGE_URL + ele.image} height={'40px'} width={'40px'} alt='brand' /></td>
                                             <td>
                                                 <button className='btn btn-info me-2' onClick={() => { setShowBrandForm(true); setBrandName(ele.name) }}>Edit</button>
                                                 <button className='btn btn-danger' onClick={() => deleteHandler(ele.name)}>Delete</button>

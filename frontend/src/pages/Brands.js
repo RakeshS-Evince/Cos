@@ -3,13 +3,12 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import axios from "axios";
-
-import { BASE_URL } from "../constants/constant"
+import { BASE_URL, BRANDS, IMAGE_URL } from "../constants/constant"
 import { Link } from 'react-router-dom';
 function Brands() {
     const [data, setData] = useState([]);
     useEffect(() => {
-        axios.get(BASE_URL + "brands").then((res) => setData(res?.data)).catch(e => console.log(e))
+        axios.get(BASE_URL + BRANDS).then((res) => setData(res?.data))
     }, [])
     return (
         <>
@@ -18,7 +17,7 @@ function Brands() {
                 {data.length ? data.map((ele, i) => (
                     <Col key={i} lg={3} sm={4}>
                         <Card>
-                            <Card.Img variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
+                            <Card.Img variant="top" src={IMAGE_URL + ele.image} height={"250px"} />
                             <Card.Body>
                                 <Card.Title><Link to={"/brands/" + ele.name} style={{ textDecoration: "none" }}>{ele.name}</Link> </Card.Title>
                             </Card.Body>

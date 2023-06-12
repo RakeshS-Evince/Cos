@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL } from '../constants/constant';
-import { ICECREAM } from '../constants/constant';
+import { ADMIN, IMAGE_URL, ICECREAM } from '../constants/constant';
 import Swal from 'sweetalert2';
 import IceCreamForm from './IceCreamForm';
 
@@ -12,8 +11,8 @@ function IceCreamTable() {
     const [iceCreamId, setIceCreamId] = useState('');
     const [refetchData, setRefetchData] = useState(false)
     useEffect(() => {
-        authApi.get(BASE_URL + ICECREAM).then(({ data }) => setData(data)).catch(e => console.log(e.message))
-    }, [refetchData,authApi])
+        authApi.get(ICECREAM).then(({ data }) => setData(data)).catch(e => console.log(e.message))
+    }, [refetchData, authApi])
     const deleteHandler = (id) => {
         Swal.fire({
             title: 'Do you want to delete this Icecream?',
@@ -22,7 +21,7 @@ function IceCreamTable() {
         }).then((result) => {
 
             if (result.isConfirmed) {
-                authApi.delete(BASE_URL + ICECREAM + '/' + id).then((res) => {
+                authApi.delete(ADMIN + ICECREAM + id).then((res) => {
                     res && Swal.fire(res?.data.message, "", 'success');
                     toggleRefetchData();
                 }).catch(e => {
@@ -62,7 +61,7 @@ function IceCreamTable() {
                                             <tr key={i}>
                                                 <td>{i + 1}</td>
                                                 <td>{ele.name}</td>
-                                                <td><img src={BASE_URL + 'images/' + ele.image} height={'40px'} width={'40px'} alt='ice-creams' /></td>
+                                                <td><img src={IMAGE_URL + ele.image} height={'40px'} width={'40px'} alt='ice-creams' /></td>
                                                 <td>{ele.price}</td>
                                                 <td>{ele.quantity}</td>
                                                 <td>

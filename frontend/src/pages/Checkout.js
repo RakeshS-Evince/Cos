@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { clearCart, selectCart } from '../feature/cartSlice'
 import useAuth from '../axios/useApi';
-import { ADDRESS, ADDRESS_DEFAULT, BASE_URL, PAYMENT_VERIFY, PLACE_ORDER } from '../constants/constant';
+import { ADDRESS, ADDRESS_DEFAULT, BASE_URL, IMAGE_URL, PAYMENT_VERIFY, PLACE_ORDER } from '../constants/constant';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { loadScript } from './razor';
@@ -47,7 +47,7 @@ function Checkout() {
                 setAddress(res.data);
                 setAddressId(res.data.id);
             })
-            .catch(e => console.log(e));
+            ;
         axios.get(BASE_URL + 'states').then(({ data }) => setStates(data));
     }, [authApi, refetch]);
 
@@ -70,7 +70,7 @@ function Checkout() {
         const { id, orderId } = result.data;
         var options = {
             currency: "INR",
-            name: "Acme Corp",
+            name: "IceCream shop",
             description: "Test Transaction",
             // image: "https://example.com/your_logo",
             order_id: id,
@@ -115,7 +115,7 @@ function Checkout() {
             setIsEditable(true)
             return
         }
-        authApi.put(ADDRESS + "/" + addressId, address)
+        authApi.put(ADDRESS + addressId, address)
             .then(res => {
                 setIsEditable(!isEditable);
                 Swal.fire(res.data.message);
@@ -160,180 +160,181 @@ function Checkout() {
         })
     }
     return (
-        // items.length ? 
-        <div className="row">
-            <div className="col-xl-8 col-lg-8 mb-4">
-                <div className="card shadow-0 border">
-                    <div className="p-4">
-                        <h5 className="card-title mb-3">Checkout</h5>
-                        {!isEditable && <p>This address is selected as default address in your account.</p>}
-                        <form onSubmit={handleSubmit} className="needs-validation" noValidate>
-                            <div className="row">
-                                <div className="col-6 mb-3">
-                                    <p className="mb-0">First name</p>
-                                    <div className="form-outline">
-                                        <input type="text" id="typeText" placeholder="Type here" className="form-control" value={address?.firstname} onChange={e => setAddress({ ...address, firstname: e.target.value })} disabled={!isEditable} required />
+        <>
+            {items.length ?
+                <div className="row">
+                    <div className="col-xl-8 col-lg-8 mb-4">
+                        <div className="card shadow-0 border">
+                            <div className="p-4">
+                                <h5 className="card-title mb-3">Checkout</h5>
+                                {!isEditable && <p>This address is selected as default address in your account.</p>}
+                                <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+                                    <div className="row">
+                                        <div className="col-6 mb-3">
+                                            <p className="mb-0">First name</p>
+                                            <div className="form-outline">
+                                                <input type="text" id="typeText" placeholder="Type here" className="form-control" value={address?.firstname} onChange={e => setAddress({ ...address, firstname: e.target.value })} disabled={!isEditable} required />
+                                            </div>
+                                        </div>
+                                        <div className="col-6">
+                                            <p className="mb-0">Last name</p>
+                                            <div className="form-outline">
+                                                <input type="text" id="typeText" placeholder="Type here" value={address?.lastname} className="form-control" onChange={e => setAddress({ ...address, lastname: e.target.value })} disabled={!isEditable} required />
+                                            </div>
+                                        </div>
+
+                                        <div className="col-6 mb-3">
+                                            <p className="mb-0">Phone</p>
+                                            <div className="form-outline">
+                                                <input type="tel" id="typePhone" value={address?.phone} className="form-control" onChange={e => setAddress({ ...address, phone: e.target.value })} disabled={!isEditable} required />
+                                            </div>
+                                        </div>
+
+                                        <div className="col-6 mb-3">
+                                            <p className="mb-0">Email</p>
+                                            <div className="form-outline">
+                                                <input type="email" id="typeEmail" placeholder="example@gmail.com" value={address?.email} className="form-control" onChange={e => setAddress({ ...address, email: e.target.value })} disabled={!isEditable} required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr className="my-4" />
+
+                                    <h5 className="card-title mb-3">Shipping info</h5>
+                                    <div className="row">
+                                        <div className="col-sm-8 mb-3">
+                                            <p className="mb-0">Address</p>
+                                            <div className="form-outline">
+                                                <input type="text" id="typeText" placeholder="Type here" value={address?.address} className="form-control" onChange={e => setAddress({ ...address, address: e.target.value })} disabled={!isEditable} required />
+                                            </div>
+                                        </div>
+
+                                        <div className="col-sm-4 mb-3">
+                                            <p className="mb-0">States</p>
+                                            <select className="form-select" disabled={!isEditable} value={address.state} onChange={(e) => setAddress({ ...address, state: e.target.value })} required>
+                                                <option></option>
+                                                {Object.keys(states)?.map((ele, i) => (
+                                                    <option key={i}>{ele}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-4 mb-3">
+                                            <p className="mb-0">City</p>
+                                            <select className="form-select" disabled={!isEditable} value={address.city} onChange={e => setAddress({ ...address, city: e.target.value })} required>
+                                                <option ></option>
+                                                {states[address?.state]?.map((ele, i) => (
+                                                    <option key={i}>{ele}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="col-sm-4 mb-3">
+                                            <p className="mb-0">House</p>
+                                            <div className="form-outline">
+                                                <input type="text" id="typeText" value={address?.house} placeholder="Type here" className="form-control" onChange={e => setAddress({ ...address, house: e.target.value })} disabled={!isEditable} required />
+                                            </div>
+                                        </div>
+
+
+                                        <div className="col-sm-4 col-6 mb-3">
+                                            <p className="mb-0">Zip</p>
+                                            <div className="form-outline">
+                                                <input type="text" id="typeText" value={address?.zip} className="form-control" onChange={e => setAddress({ ...address, zip: e.target.value })} disabled={!isEditable} required />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    {!addAddress &&
+                                        <span className='btn btn-sm btn-primary' onClick={() => {
+                                            setIsEditable(true);
+                                            setAddress(intitalAddress);
+                                            setAddAddress(true);
+                                        }}>Deliver to new address</span>}
+                                    {!addAddress &&
+                                        <span className='btn btn-sm btn-primary mx-2' onClick={() => setIsEditable(true)}>Edit this address</span>}
+                                    {isEditable &&
+                                        <><button className='btn btn-sm btn-primary' type='submit' >Save</button>
+                                            <button className='btn btn-sm btn-primary mx-2' type='submit' onClick={() => {
+                                                setIsEditable(false);
+                                                setAddAddress(false);
+                                                setRefetch(!refetch)
+                                            }}>Cancel
+                                            </button>
+                                        </>}
+                                </form>
+                                <h4 className="mb-3">Payment</h4>
+                                <div className="d-block my-3">
+                                    <div className="custom-control custom-radio">
+                                        <input id="prepaid" name="paymentMethod" checked={payment.prepaid} onChange={() => setPayment({ prepaid: true, cod: false })} type="radio" className="custom-control-input" required={true} />
+                                        <label className="custom-control-label" htmlFor="prepaid">Prepaid</label>
+                                    </div>
+                                    <div className="custom-control custom-radio">
+                                        <input id="COD" name="paymentMethod" checked={payment.cod} onChange={() => setPayment({ prepaid: false, cod: true })} type="radio" className="custom-control-input" required={true} />
+                                        <label className="custom-control-label" htmlFor="COD">COD</label>
                                     </div>
                                 </div>
-                                <div className="col-6">
-                                    <p className="mb-0">Last name</p>
-                                    <div className="form-outline">
-                                        <input type="text" id="typeText" placeholder="Type here" value={address?.lastname} className="form-control" onChange={e => setAddress({ ...address, lastname: e.target.value })} disabled={!isEditable} required />
-                                    </div>
+
+                                <div className="float-end">
+                                    <Link className="btn btn-secondary mx-2" to='/'>Cancel</Link>
+                                    <button className="btn btn-success" disabled={isEditable} onClick={() => placeOrder()}>Continue</button>
                                 </div>
-
-                                <div className="col-6 mb-3">
-                                    <p className="mb-0">Phone</p>
-                                    <div className="form-outline">
-                                        <input type="tel" id="typePhone" value={address?.phone} className="form-control" onChange={e => setAddress({ ...address, phone: e.target.value })} disabled={!isEditable} required />
-                                    </div>
-                                </div>
-
-                                <div className="col-6 mb-3">
-                                    <p className="mb-0">Email</p>
-                                    <div className="form-outline">
-                                        <input type="email" id="typeEmail" placeholder="example@gmail.com" value={address?.email} className="form-control" onChange={e => setAddress({ ...address, email: e.target.value })} disabled={!isEditable} required />
-                                    </div>
-                                </div>
-                            </div>
-                            <hr className="my-4" />
-
-                            <h5 className="card-title mb-3">Shipping info</h5>
-                            <div className="row">
-                                <div className="col-sm-8 mb-3">
-                                    <p className="mb-0">Address</p>
-                                    <div className="form-outline">
-                                        <input type="text" id="typeText" placeholder="Type here" value={address?.address} className="form-control" onChange={e => setAddress({ ...address, address: e.target.value })} disabled={!isEditable} required />
-                                    </div>
-                                </div>
-
-                                <div className="col-sm-4 mb-3">
-                                    <p className="mb-0">States</p>
-                                    <select className="form-select" disabled={!isEditable} value={address.state} onChange={(e) => setAddress({ ...address, state: e.target.value })} required>
-                                        <option></option>
-                                        {Object.keys(states)?.map((ele, i) => (
-                                            <option key={i}>{ele}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="col-sm-4 mb-3">
-                                    <p className="mb-0">City</p>
-                                    <select className="form-select" disabled={!isEditable} value={address.city} onChange={e => setAddress({ ...address, city: e.target.value })} required>
-                                        <option ></option>
-                                        {states[address?.state]?.map((ele, i) => (
-                                            <option key={i}>{ele}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div className="col-sm-4 mb-3">
-                                    <p className="mb-0">House</p>
-                                    <div className="form-outline">
-                                        <input type="text" id="typeText" value={address?.house} placeholder="Type here" className="form-control" onChange={e => setAddress({ ...address, house: e.target.value })} disabled={!isEditable} required />
-                                    </div>
-                                </div>
-
-
-                                <div className="col-sm-4 col-6 mb-3">
-                                    <p className="mb-0">Zip</p>
-                                    <div className="form-outline">
-                                        <input type="text" id="typeText" value={address?.zip} className="form-control" onChange={e => setAddress({ ...address, zip: e.target.value })} disabled={!isEditable} required />
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            {!addAddress &&
-                                <span className='btn btn-sm btn-primary' onClick={() => {
-                                    setIsEditable(true);
-                                    setAddress(intitalAddress);
-                                    setAddAddress(true);
-                                }}>Deliver to new address</span>}
-                            {!addAddress &&
-                                <span className='btn btn-sm btn-primary mx-2' onClick={() => setIsEditable(true)}>Edit this address</span>}
-                            {isEditable &&
-                                <><button className='btn btn-sm btn-primary' type='submit' >Save</button>
-                                    <button className='btn btn-sm btn-primary mx-2' type='submit' onClick={() => {
-                                        setIsEditable(false);
-                                        setAddAddress(false);
-                                        setRefetch(!refetch)
-                                    }}>Cancel
-                                    </button>
-                                </>}
-                        </form>
-                        <h4 className="mb-3">Payment</h4>
-                        <div className="d-block my-3">
-                            <div className="custom-control custom-radio">
-                                <input id="prepaid" name="paymentMethod" checked={payment.prepaid} onChange={() => setPayment({ prepaid: true, cod: false })} type="radio" className="custom-control-input" required={true} />
-                                <label className="custom-control-label" htmlFor="prepaid">Prepaid</label>
-                            </div>
-                            <div className="custom-control custom-radio">
-                                <input id="COD" name="paymentMethod" checked={payment.cod} onChange={() => setPayment({ prepaid: false, cod: true })} type="radio" className="custom-control-input" required={true} />
-                                <label className="custom-control-label" htmlFor="COD">COD</label>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-xl-4 col-lg-4 d-flex justify-content-lg-end" >
+                        <div className="ms-lg-4 mt-4 mt-lg-0" >
+                            <h6 className="mb-3">Summary</h6>
+                            <div className="d-flex justify-content-between">
+                                <p className="mb-2">Total price:</p>
+                                <p className="mb-2">₹{parseFloat(total).toFixed(2)}</p>
+                            </div>
+                            <div className="d-flex justify-content-between">
+                                <p className="mb-2">Discount:</p>
+                                <p className="mb-2 text-danger">- ₹{parseFloat(discount).toFixed(2)}</p>
+                            </div>
+                            <div className="d-flex justify-content-between">
+                                <p className="mb-2">Shipping cost:</p>
+                                <p className="mb-2">+ ₹{parseFloat(shippingCost).toFixed(2)}</p>
+                            </div>
+                            <hr />
+                            <div className="d-flex justify-content-between">
+                                <p className="mb-2">Total Amount:</p>
+                                <p className="mb-2 fw-bold">₹{parseFloat(total - discount + shippingCost).toFixed(2)}</p>
+                            </div>
 
-                        <div className="float-end">
-                            <Link className="btn btn-secondary mx-2" to='/'>Cancel</Link>
-                            <button className="btn btn-success" disabled={isEditable} onClick={() => placeOrder()}>Continue</button>
+                            <div className="input-group mt-3 mb-4">
+                                <input type="text" className="form-control border" name="" placeholder="Promo code" />
+                                <button className="btn btn-light text-primary border">Apply</button>
+                            </div>
+
+                            <hr />
+                            <h6 className="text-dark my-4">Items in cart</h6>
+                            {items.slice(0, 4).map((ele, i) => {
+                                return (
+                                    <div key={i} className="d-flex mb-4">
+                                        <div className="me-3 position-relative">
+                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
+                                                {ele.quantity}
+                                            </span>
+                                            <img alt="ice cream" src={IMAGE_URL + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
+                                        </div>
+                                        <div className="">
+                                            <Link to="#" className="nav-link">
+                                                {ele.name} <br />
+                                                {ele.desc || ""}
+                                            </Link>
+                                            <div className="price text-muted">Total: ₹{parseFloat(ele.price * ele.quantity).toFixed(2)}</div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                            {items.length > 4 && `And ${items.length - 4} more ${items.length - 4 === 1 ? "item" : "items"} in the cart`}
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="col-xl-4 col-lg-4 d-flex justify-content-lg-end" >
-                <div className="ms-lg-4 mt-4 mt-lg-0" >
-                    <h6 className="mb-3">Summary</h6>
-                    <div className="d-flex justify-content-between">
-                        <p className="mb-2">Total price:</p>
-                        <p className="mb-2">₹{parseFloat(total).toFixed(2)}</p>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                        <p className="mb-2">Discount:</p>
-                        <p className="mb-2 text-danger">- ₹{parseFloat(discount).toFixed(2)}</p>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                        <p className="mb-2">Shipping cost:</p>
-                        <p className="mb-2">+ ₹{parseFloat(shippingCost).toFixed(2)}</p>
-                    </div>
-                    <hr />
-                    <div className="d-flex justify-content-between">
-                        <p className="mb-2">Total Amount:</p>
-                        <p className="mb-2 fw-bold">₹{parseFloat(total - discount + shippingCost).toFixed(2)}</p>
-                    </div>
+                : <><h3>No items added in the cart.</h3><Link className='btn btn-primary' to="/">Goto Shop</Link></>}
 
-                    <div className="input-group mt-3 mb-4">
-                        <input type="text" className="form-control border" name="" placeholder="Promo code" />
-                        <button className="btn btn-light text-primary border">Apply</button>
-                    </div>
-
-                    <hr />
-                    <h6 className="text-dark my-4">Items in cart</h6>
-                    {items.slice(0, 4).map((ele, i) => {
-                        return (
-                            <div key={i} className="d-flex mb-4">
-                                <div className="me-3 position-relative">
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
-                                        {ele.quantity}
-                                    </span>
-                                    <img alt="ice cream" src={BASE_URL + 'images/' + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
-                                </div>
-                                <div className="">
-                                    <Link to="#" className="nav-link">
-                                        {ele.name} <br />
-                                        {ele.desc || ""}
-                                    </Link>
-                                    <div className="price text-muted">Total: ₹{parseFloat(ele.price * ele.quantity).toFixed(2)}</div>
-                                </div>
-                            </div>
-                        )
-                    })}
-                    {items.length > 4 && `And ${items.length - 4} more ${items.length - 4 === 1 ? "item" : "items"} in the cart`}
-                </div>
-            </div>
-        </div>
-        // : <><h3>No items added in the cart.</h3><Link className='btn btn-primary' to="/">Goto Shop</Link></>
-
-
+        </>
     )
 }
 

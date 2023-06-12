@@ -8,6 +8,7 @@ const paymentRepository = require("../repository/paymentRepository");
 const ApiError = require("../utils/apiError");
 const Razorpay = require("razorpay");
 const crypto = require('crypto');
+require('dotenv').config();
 
 const getProfile = async (id) => {
     const profileInfo = await customerRepository.findCustomer(id);
@@ -58,7 +59,7 @@ const makeDefaultAddress = async (cid, id) => {
 }
 const getDefaultAddress = async (cid) => {
     const addressData = await addressRepository.getDefaultAddress(cid);
-    if (!addressData) throw new ApiError(StatusCodes.NOT_FOUND, "This address do not exists")
+    if (!addressData) return null
     return addressData
 }
 const getOwnReview = async (cid, iid) => {
@@ -91,37 +92,39 @@ const addRating = async (cid, iid, data) => {
     return { message: "Thanks for the review" }
 }
 const placeOrder = async (orderData, customerId) => {
-    const info = (({ orderItems, ...rest }) => rest)(orderData)
+    const info = (({ orderItems, ...rest }) => rest)(orderData);
+    let error;
     if (info.paymentMethod == 'prepaid') {
         var instance = new Razorpay({
             key_id: process.env.KEY_ID,
             key_secret: process.env.KEY_SECRET
         })
         var options = {
-            amount: info.totalPrice * 100,
+            amount: (info.totalPrice + info.shippingCharge - info.couponDiscount) * 100,
             receipt: "gurkaran_order_54654",
             currency: "INR",
             payment_capture: '0'
         }
-        instance.orders.create(options, async function (err, order) {
-            if (err) throw new ApiError(StatusCodes.BAD_REQUEST, "Payment failed")
-            const paymentData = await paymentRepository.createPendingPayment(order.id);
-            const data = await orderRepository.createAnOrder({
-                ...info,
-                customerId: customerId,
-                id: "OD" + new Date().getTime().toString(),
-                paymentId: paymentData.dataValues.id
-            });
-            let items = [];
-            for (let i = 0; i < orderData.orderItems.length; i++) {
-                items.push({ orderId: data.dataValues.id, iceCreamId: orderData.orderItems[i].id, quantity: orderData.orderItems[i].quantity })
-            }
-            const orderItemData = await orderRepository.saveOrderItems(items);
-            if (!orderItemData) {
-                throw new ApiError(400, "Unable to save place your order due to some invalid items request")
-            }
-            return { ...order, orderId: data.dataValues.id };
-        })
+        const order = await instance.orders.create(options);
+        if (!order) throw new ApiError(StatusCodes.BAD_REQUEST);
+        const paymentData = await paymentRepository.createPendingPayment(order.id);
+        const data = await orderRepository.createAnOrder({
+            ...info,
+            customerId: customerId,
+            id: "OD" + new Date().getTime().toString(),
+            paymentId: paymentData.dataValues.id
+        });
+        let items = [];
+        for (let i = 0; i < orderData.orderItems.length; i++) {
+            items.push({ orderId: data.dataValues.id, iceCreamId: orderData.orderItems[i].id, quantity: orderData.orderItems[i].quantity })
+        }
+        const orderItemData = await orderRepository.saveOrderItems(items);
+        if (!orderItemData) {
+            throw new ApiError(400, "Unable to save place your order due to some invalid items request")
+        }
+        if (error) throw error
+        return { ...order, orderId: data.dataValues.id };
+
     } else {
         const data = await orderRepository.createAnOrder({
             ...info,
@@ -182,6 +185,11 @@ const retryPayment = async (paymentInfo, id) => {
         return process.env.URL + "/#/payment-failure" + id;
     }
 }
+const cancelOrder = async (id) => {
+    const orderData = await orderRepository.updateOrderStatus("Canceled", id);
+    if (!orderData[0]) throw new ApiError(StatusCodes.BAD_REQUEST, "Unable to cancel your order");
+    return { message: "Your order canceled" };
+}
 
 
 module.exports = {
@@ -200,5 +208,6 @@ module.exports = {
     findUserOrders,
     findOneOrder,
     verifyPayment,
-    retryPayment
+    retryPayment,
+    cancelOrder
 }

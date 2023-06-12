@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
 import useApi from '../axios/useApi'
-import { BASE_URL, CONTACT_MESSAGES, DASHBOARD } from '../constants/constant';
+import { CONTACT_MESSAGES, DASHBOARD } from '../constants/constant';
 import { Link } from 'react-router-dom';
 
 

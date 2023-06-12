@@ -1,20 +1,38 @@
 const express = require('express');
-const { addStaff, findAllStaffs, findOneStaff, updateStaff, deleteStaff } = require('../controller/staff');
-const { getAllCustomers } = require('../controller/customers');
 const { verifyAuth } = require('../middleware/auth');
 const { isAdminOrStaff } = require('../middleware/authorizeUser');
 const { upload } = require("../middleware/multer");
-const { findAllMessages, addIceCream, updateIceCream, deleteIceCream, addBrands, updateBrands, deleteBrands, updateOrderStatus, findAllOrdersByCustomerId, dashboardDetails, findAllOrders, getAllReviews, getAllReviewsById } = require('../controller/adminController');
+const { findAllMessages,
+    addIceCream,
+    updateIceCream,
+    deleteIceCream,
+    addBrands,
+    updateBrands,
+    deleteBrands,
+    updateOrderStatus,
+    findAllOrdersByCustomerId,
+    dashboardDetails,
+    findAllOrders,
+    getAllReviews,
+    getAllReviewsById,
+    findAllCustomers,
+    addStaff,
+    findAllStaffs,
+    findOneStaff,
+    updateStaff,
+    deleteStaff } = require('../controller/adminController');
 const adminRouter = express.Router();
 adminRouter.use(verifyAuth);
-adminRouter.use(isAdminOrStaff)
-adminRouter.post('/staff', addStaff)
-adminRouter.get('/staff', findAllStaffs)
-adminRouter.get('/staff/:id', findOneStaff)
-adminRouter.put('/staff/:id', updateStaff)
-adminRouter.delete('/staff/:id', deleteStaff)
+adminRouter.use(isAdminOrStaff);
+
+//---------------staff crud-------------------->
+adminRouter.post('/staff', addStaff);
+adminRouter.get('/staff', findAllStaffs);
+adminRouter.get('/staff/:id', findOneStaff);
+adminRouter.put('/staff/:id', updateStaff);
+adminRouter.delete('/staff/:id', deleteStaff);
 // --------------- customers------------------->
-adminRouter.get('/customers', getAllCustomers);
+adminRouter.get('/customers', findAllCustomers);
 // --------------- reviews--------------------->
 adminRouter.get('/reviews', getAllReviews);
 adminRouter.get('/user-reviews/:id', getAllReviewsById);

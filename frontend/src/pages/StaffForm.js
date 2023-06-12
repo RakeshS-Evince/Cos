@@ -8,6 +8,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Swal from 'sweetalert2';
 import useAuth from '../axios/useApi';
 import { useNavigate } from 'react-router-dom';
+import { STAFF } from '../constants/constant';
 const schema = yup.object({
     fullname: yup.string().required("fullname is required"),
     email: yup.string().email('Please enter a valid email').required("email is required"),
@@ -31,7 +32,7 @@ function StaffForm() {
 
     const onSubmit = async (data) => {
         try {
-            const res = await authApi.post('/staff', data);
+            const res = await authApi.post(STAFF, data);
             Swal.fire({
                 title: res.data.message
             }).then(navigate('/staff'))

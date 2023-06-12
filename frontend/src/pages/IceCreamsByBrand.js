@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import axios from "axios";
-import { BASE_URL } from "../constants/constant"
+import { BASE_URL, ICECREAM_BY_BRAND, IMAGE_URL } from "../constants/constant"
 import { addToCart } from '../feature/cartSlice'
 import { useDispatch } from 'react-redux'
 import { UserContext } from '../context/UserContextProvider';
@@ -19,7 +19,7 @@ function IceCreamByBrand() {
     const { name } = useParams()
     const dispatch = useDispatch();
     useEffect(() => {
-        axios.get(BASE_URL + 'ice-creams-by-brand/' + name).then((res) => setData(res?.data)).catch(e => console.log(e))
+        axios.get(BASE_URL + ICECREAM_BY_BRAND + name).then((res) => setData(res?.data))
     }, [name])
     const cartClickHandler = (data) => {
         if (!user?.isLoggedIn) {
@@ -48,7 +48,7 @@ function IceCreamByBrand() {
                 {data.length ? data.map((ele, i) => (
                     <Col key={i} lg={3} sm={4}>
                         <Card className='menu-card'>
-                            <Card.Img className='menu-image' onClick={() => navigate('/icecream-details/' + ele.id)} variant="top" src={BASE_URL + 'images/' + ele.image} height={"250px"} />
+                            <Card.Img className='menu-image' onClick={() => navigate('/icecream-details/' + ele.id)} variant="top" src={IMAGE_URL + ele.image} height={"250px"} />
                             <Card.Body>
                                 <Card.Title className='menu-title' onClick={() => navigate('/icecream-details/' + ele.id)}>{ele.name}</Card.Title>
                                 <Card.Text>

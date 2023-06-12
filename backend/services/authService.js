@@ -22,10 +22,10 @@ const login = async ({ username, password }) => {
     const accountData = await accountRepo.findAccountByUsername(username);
     if (!accountData) throw new ApiError(StatusCodes.NOT_FOUND, "User is not registered");
     const isMatched = await bcrypt.compare(password, accountData.dataValues.password);
-    if (!isMatched) throw new ApiError(StatusCodes.NOT_FOUND, "Incorrect password");
+    if (!isMatched) throw new ApiError(StatusCodes.BAD_REQUEST, "Incorrect password");
     if (accountData.dataValues.roleId === 1) {
         const customerData = await customerRepo.findCustomerId(accountData.dataValues.id);
-        if (!customerData) throw new ApiError(StatusCodes.NOT_FOUND, "Unable to fetch your data");
+        if (!customerData) throw new ApiError(StatusCodes.BAD_REQUEST, "Unable to fetch your data");
         let token = jwt.sign({
             accountId: accountData.dataValues.id,
             roleId: accountData.dataValues.roleId,

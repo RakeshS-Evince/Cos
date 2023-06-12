@@ -8,6 +8,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Swal from 'sweetalert2';
 import useAuth from '../axios/useApi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { STAFF } from '../constants/constant';
 const schema = yup.object({
     fullname: yup.string().optional(),
     email: yup.string().email('Please enter a valid email').optional(),
@@ -23,16 +24,16 @@ function StaffEditForm() {
     const navigate = useNavigate();
     const { id } = useParams();
     useEffect(() => {
-        authApi.get('/staff/' + id).then(res => {
+        authApi.get(STAFF + id).then(res => {
             setValue('fullname', res?.data?.fullname)
             setValue('username', res?.data?.username)
             setValue('email', res?.data?.email)
             setValue('contact', res?.data?.contact)
-        }).catch(e => console.log(e))
+        })
     }, [id, authApi, setValue])
     const onSubmit = async (data) => {
         try {
-            const res = await authApi.put('/staff/' + id, data);
+            const res = await authApi.put(STAFF + id, data);
             Swal.fire({
                 title: res.data.message
             }).then(navigate('/staff'))

@@ -4,19 +4,19 @@ import { ADDRESS, BASE_URL } from '../constants/constant';
 import Swal from 'sweetalert2';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import useAuth from '../axios/useApi';
-const intitalAddress={ firstname: "", lastname: "", phone: "", email: "", address: "", state: "", city: "", zip: "" }
+const intitalAddress = { firstname: "", lastname: "", phone: "", email: "", address: "", state: "", city: "", zip: "" }
 function AddressForm() {
     const authApi = useAuth();
     const [address, setAddress] = useState(intitalAddress);
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [states, setStates] = useState([]);
     const { id } = useParams()
     useEffect(() => {
         if (id) {
-            authApi.get(ADDRESS+'/'+id).then(({ data }) => setAddress(data));
+            authApi.get(ADDRESS + id).then(({ data }) => setAddress(data));
         }
         axios.get(BASE_URL + 'states').then(({ data }) => setStates(data));
-    }, [id,authApi]);
+    }, [id, authApi]);
     const handleSubmit = (e) => {
         const form = e.currentTarget;
         e.preventDefault();
@@ -34,10 +34,10 @@ function AddressForm() {
                     navigate('/profile')
                 })
                 .catch(e => console.log(e.respones.data.message));
-                
+
             return
         }
-        authApi.put(ADDRESS + "/" + id, address)
+        authApi.put(ADDRESS + id, address)
             .then(res => {
                 Swal.fire(res.data.message);
                 setAddress(intitalAddress);

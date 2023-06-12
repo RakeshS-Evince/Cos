@@ -34,6 +34,7 @@ import StaffTable from '../pages/StaffTable'
 import StaffEditForm from '../pages/StaffEditForm'
 import PaymentFailure from '../pages/PaymentFailure'
 import PaymentSuccess from '../pages/PaymentSuccess'
+import Cart from '../pages/Cart'
 const Profile = React.lazy(() => import('../pages/Profile'))
 function Router() {
     const { isAdmin, isStaff } = useRoleCheck();
@@ -66,6 +67,7 @@ function Router() {
                         <Route path="/my-orders" exact element={<Orders />} />
                         <Route path="/my-orders/:id" exact element={<OrderDetails />} />
                         <Route path="/review" element={<ReviewForm />} />
+                        <Route path="/cart" element={<Cart />} />
                     </Route>
                     <Route element={(isAdmin || isStaff) ? <Outlet /> : <Navigate to='/unauthorized' />}>
                         <Route path="/orders-table" exact element={<OrderTable />} />

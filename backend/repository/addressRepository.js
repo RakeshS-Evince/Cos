@@ -12,7 +12,7 @@ const deleteAddress = async (id) => {
 }
 const addAddress = async (cid, data) => {
     const updateData = await Address.update({ default: false }, { where: { customerId: cid, default: true } });
-    const addressData = await Address.create({ data, customerId: cid });
+    const addressData = await Address.create({ ...data, customerId: cid });
     return addressData;
 }
 const updateAddress = async (cid, id, data) => {

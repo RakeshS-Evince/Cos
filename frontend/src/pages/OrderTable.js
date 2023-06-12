@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
-import { BASE_URL, ORDERS, ORDER_STATUS_UPDATE } from '../constants/constant';
+import { ORDERS, ORDER_STATUS_UPDATE } from '../constants/constant';
 import Swal from 'sweetalert2';
 import OrderDetailsModal from './OrderDetailsModal';
 
@@ -12,14 +12,14 @@ function OrderTable() {
     const [enableInput, setEnableInput] = useState(false);
     const [refetch, setRefetch] = useState(false)
     useEffect(() => {
-        authApi.get(BASE_URL + ORDERS).then(res => setOrders(res.data)).catch(e => console.log(e.response.data.message));
+        authApi.get(ORDERS).then(res => setOrders(res.data)).catch(e => console.log(e.response.data.message));
     }, [refetch, authApi]);
     const toggleRefetch = () => { setRefetch(!refetch) }
     const changeStatus = () => {
         if (status === 'Select status' || !status) {
             alert("Please select one status")
         } else {
-            authApi.put(BASE_URL + ORDER_STATUS_UPDATE + "/" + id, { status: status }).then(res => {
+            authApi.put(ORDER_STATUS_UPDATE + id, { status: status }).then(res => {
                 Swal.fire(res.data.message);
                 setStatus('');
                 setId('');
