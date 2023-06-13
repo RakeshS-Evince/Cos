@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import axios from "axios";
 import { BASE_URL, ICECREAM_BY_BRAND, IMAGE_URL } from "../constants/constant"
-import { addToCart } from '../feature/cartSlice'
+import { addToCart, addToWishlist } from '../feature/cartSlice'
 import { useDispatch } from 'react-redux'
 import { UserContext } from '../context/UserContextProvider';
 import Swal from 'sweetalert2';
@@ -57,6 +57,16 @@ function IceCreamByBrand() {
                                 </Card.Text>
                                 <span className='mt-2'>Price: ₹{parseFloat(ele.price).toFixed(2)}</span>
                                 <div className='d-flex justify-content-end'>
+                                    <i className='bi bi-heart btn btn-danger me-2' onClick={() => {
+                                        dispatch(addToWishlist({
+                                            name: ele.name,
+                                            id: ele.id,
+                                            image: ele.image,
+                                            price: ele.price,
+                                            available: ele.quantity,
+                                            quantity: 1,
+                                        })); Swal.fire("Item added to your wishlist!", "", "success")
+                                    }}></i>
                                     <i className='bi bi-cart-plus btn btn-primary' onClick={() => {
                                         cartClickHandler({
                                             name: ele.name,

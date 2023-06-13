@@ -7,7 +7,7 @@ const CheckErrorType = (err, req, res, next) => {
     let error = err;
     if (err instanceof JsonWebTokenError) {
         if (err.message === "invalid signature") return next(new ApiError(403, "Invalid Authorization"));
-        return next(new ApiError(StatusCodes.BAD_REQUEST, "Link expired, Please regenerate link to reset password"));
+        return next(new ApiError(StatusCodes.BAD_REQUEST, "Session Expired"));
     }
     if (err.name == "ValidationError") {
         if (err.details[0].type == "string.pattern.base") {

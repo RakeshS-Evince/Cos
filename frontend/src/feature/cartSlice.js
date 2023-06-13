@@ -1,14 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     items: [],
-    total: 0
+    total: 0,
+    wishlist: []
+
 }
 export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
+        addToWishlist: (state, action) => {
+            console.log(action.payload);
+            let find = state.wishlist.findIndex(item => action.payload.id === item.id);
+            if (find >= 0) {
+                return
+            }
+            state.wishlist.push(action.payload);
+        },
         addToCart: (state, action) => {
             let find = state.items.findIndex(item => action.payload.id === item.id);
+            let findWishlist = state.wishlist.findIndex(item => action.payload.id === item.id);
+            if (findWishlist >= 0) {
+                state.wishlist = state.wishlist.filter(item => item.id !== action.payload.id);
+            }
             if (find >= 0) {
                 if (state.items[find].quantity === state.items[find].available) {
                     state.items[find].disable = true
@@ -65,6 +79,6 @@ export const cartSlice = createSlice({
     },
 })
 
-export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity, makeTotal, clearCart, addToCartWithMoreQuantity } = cartSlice.actions
-export const selectCart = (state) => state.cart.items
+export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity, makeTotal, clearCart, addToCartWithMoreQuantity, addToWishlist } = cartSlice.actions
+export const selectCart = (state) => state.cart.items;
 export default cartSlice.reducer

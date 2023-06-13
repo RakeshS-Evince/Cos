@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContextProvider';
 import useRoleCheck from '../hooks/useRoleCheck';
 import Swal from 'sweetalert2';
+import wishlist from "../assets/images/wishlist.png";
 
 export default function Header() {
     // const toggleCart = () => {
@@ -16,6 +17,7 @@ export default function Header() {
     // }
     const navigate = useNavigate()
     const items = useSelector(selectCart);
+    const wishlistItems = useSelector(state => state.cart.wishlist)
     const { user, logout } = useContext(UserContext);
     const { isAdmin, isStaff } = useRoleCheck();
     const logoutHandler = () => {
@@ -56,10 +58,16 @@ export default function Header() {
                             </NavDropdown>}
                     </Nav>
                     <Nav>
-                        {!(isAdmin || isStaff) && <Nav.Link onClick={() => navigate("/cart")}>
-                            <div className='d-flex'>
-                                <i className="fa-sharp fa-solid fa-cart-shopping fa-lg mt-3" style={{ color: "grey" }}></i>
-                                <span className="badge rounded-pill badge-notification bg-danger sm">{items.length}</span>
+                        {!(isAdmin || isStaff) && <Nav.Link >
+                            <div className='d-flex justify-content-center'>
+                                <div className='me-2' onClick={() => navigate("/wishlist")}>
+                                    <img src={wishlist} alt="wishlist" height={"27px"} width={"27px"} />
+                                    <span style={{ right: "12px", top: "5px", color: "white", fontSize: "12px" }}>{wishlistItems.length}</span>
+                                </div>
+                                <div onClick={() => navigate("/cart")}> <i className="fa-sharp fa-solid fa-cart-shopping fa-lg mt-3" style={{ color: "grey" }} ></i>
+                                    <span style={{ right: "5px", bottom: "12px" }} className="badge rounded-pill badge-notification bg-danger sm">{items.length}</span>
+                                </div>
+
                             </div>
                         </Nav.Link>}
                     </Nav>

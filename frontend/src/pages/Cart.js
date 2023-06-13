@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { decreaseQuantity, increaseQuantity, selectCart, removeFromCart } from '../feature/cartSlice'
+import { decreaseQuantity, increaseQuantity, selectCart, removeFromCart, addToWishlist } from '../feature/cartSlice'
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import { IMAGE_URL } from '../constants/constant';
@@ -78,6 +78,14 @@ function Cart() {
                                                         type="button"
                                                         className="btn btn-danger btn-sm mb-2"
                                                         data-mdb-toggle="tooltip"
+                                                        onClick={() => dispatch(addToWishlist({
+                                                            name: ele.name,
+                                                            id: ele.id,
+                                                            image: ele.image,
+                                                            price: ele.price,
+                                                            available: ele.quantity,
+                                                            quantity: 1,
+                                                        }))}
                                                         title="Move to the wish list"
                                                     >
                                                         <i className="fas fa-heart" />

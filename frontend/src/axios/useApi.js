@@ -13,7 +13,9 @@ function useAuth() {
             return response;
         }, function (error) {
             Swal.fire(error.response?.data.message, "", "error")
-            return Promise.reject();
+            if (error.response.status === "403") {
+                logout()
+            }
             // console.log(error.response.data.message)
         }
         );
