@@ -36,6 +36,7 @@ import PaymentFailure from '../pages/PaymentFailure'
 import PaymentSuccess from '../pages/PaymentSuccess'
 import Cart from '../pages/Cart'
 import Wishlist from '../pages/Wishlist'
+import LoginSuccessPage from '../pages/LoginSuccessPage'
 const Profile = React.lazy(() => import('../pages/Profile'))
 function Router() {
     const { isAdmin, isStaff } = useRoleCheck();
@@ -56,6 +57,7 @@ function Router() {
                     <Route path="/icecream-details/:id" element={<IceCreamDetails />} />
                     <Route path="/brands" exact element={<Brands />} />
                     <Route path="/brands/:name" exact element={<IceCreamByBrand />} />
+                    <Route path="/login-success" exact element={<LoginSuccessPage />} />
                 </Route>
                 <Route element={<ProtectedRoutes />}>
                     <Route element={!(isAdmin || isStaff) ? <Outlet /> : <Navigate to='/unauthorized' />}>

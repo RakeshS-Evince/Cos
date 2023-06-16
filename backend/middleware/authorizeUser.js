@@ -19,8 +19,12 @@ const isAdminOrStaff = async (req, res, next) => {
         res.status(403).send({ message: "You don't have authorization" })
     }
 }
+const isAuthenticated = (req, res, next) => {
+    if (req.user) return next()
+    res.status(401).send({ message: "Unauthorized" })
+}
 
 
 
 
-module.exports = { isAdminOrStaff }
+module.exports = { isAdminOrStaff, isAuthenticated }

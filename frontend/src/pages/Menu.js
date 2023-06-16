@@ -36,13 +36,13 @@ function Menu() {
             <div className='d-flex justify-content-between mb-3'>
                 <h3>All Icecreams</h3>
                 <div className='d-flex align-items-center'>
-                    {/* <label>Filter: </label>
+                    <label>Filter: </label>
                     <select className='form-control ms-2' >
                         <option >Newer first</option>
                         <option>Older first</option>
                         <option>Price Low to High</option>
                         <option>Price High to Low</option>
-                    </select> */}
+                    </select>
                 </div>
             </div>
             <Row className='g-3'>

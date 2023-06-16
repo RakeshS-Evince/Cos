@@ -27,11 +27,15 @@ function Login() {
             Swal.fire({
                 title: res.data.message
             })
-            saveUser({ isLoggedIn: true, token: res.data.token, userId: res.data.id,username:res.data.username });
+            saveUser({ isLoggedIn: true, token: res.data.token, userId: res.data.id, username: res.data.username });
             navigate('/')
         } catch (e) {
-            Swal.fire({ title: e.response.data.message })
+
         }
+    }
+
+    const googleLogin = async () => {
+        window.open("http://localhost:3000/auth/login/google", "_self");
     }
     return (
         <div id="main-wrapper" className="container">
@@ -65,14 +69,14 @@ function Login() {
                                                         {errors?.password?.message}
                                                     </Form.Control.Feedback>
                                                     <span style={{
-                                                        position:"absolute",
-                                                        right:0,
-                                                        top:0,
-                                                        padding:"8px",
-                                                        cursor:"pointer"
-                                                    }} onClick={()=>setChecked(!checked)}><i title={!checked?'show':'hide'} className={`bi bi-eye${!checked?'':'-slash'}`}></i></span>
+                                                        position: "absolute",
+                                                        right: 0,
+                                                        top: 0,
+                                                        padding: "8px",
+                                                        cursor: "pointer"
+                                                    }} onClick={() => setChecked(!checked)}><i title={!checked ? 'show' : 'hide'} className={`bi bi-eye${!checked ? '' : '-slash'}`}></i></span>
                                                 </InputGroup>
-                                                
+
                                             </div>
                                             <div className='d-flex justify-content-between'>
                                                 <button type="submit" className="btn" style={{
@@ -82,6 +86,16 @@ function Login() {
                                                 }}>Login</button>
                                                 <Link to="/forgot-password" className="text-right text-primary mt-2" style={{ textDecoration: "none" }}>Forgot password?</Link></div>
                                         </form>
+                                        <hr />
+                                        <div className="text-center">
+                                            <p>or sign up with:</p>
+                                            <button type="button" className="btn btn-link btn-floating mx-1">
+                                                <i className="fab fa-facebook-f"></i>
+                                            </button>
+                                            <button type="button" onClick={() => googleLogin()} className="btn btn-link btn-floating mx-1">
+                                                <i className="fab fa-google"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 

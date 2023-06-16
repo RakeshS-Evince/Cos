@@ -20,7 +20,7 @@ function Profile() {
     const authApi = useApi();
     const [displayAddreses, setDisplayAddress] = useState(false);
     const { register, handleSubmit, formState: { errors }, getValues } = useForm({
-        resolver: yupResolver(schema), defaultValues: () => authApi.get(PROFILE).then(({ data }) => data)
+        resolver: yupResolver(schema), defaultValues: () => authApi.get(PROFILE).then(({ data: { id, ...rest } }) => rest)
     })
 
     const onSubmit = async (data) => {
@@ -30,7 +30,6 @@ function Profile() {
                 title: res.data.message
             })
         } catch (e) {
-            // Swal.fire({ title: e.response.data.message })
         }
     }
     const toggleDisplayAddress = () => {

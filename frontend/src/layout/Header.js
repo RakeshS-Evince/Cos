@@ -10,6 +10,7 @@ import { UserContext } from '../context/UserContextProvider';
 import useRoleCheck from '../hooks/useRoleCheck';
 import Swal from 'sweetalert2';
 import wishlist from "../assets/images/wishlist.png";
+import { api } from '../axios/axios';
 
 export default function Header() {
     // const toggleCart = () => {
@@ -28,6 +29,7 @@ export default function Header() {
             denyButtonText: `No`,
         }).then((result) => {
             if (result.isConfirmed) {
+                api.get("auth/logout").then(res => console.log(res.data)).catch(e => console.log(e))
                 logout()
             }
         })

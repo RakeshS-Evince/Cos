@@ -54,5 +54,34 @@ const resetPassword = async ({ newPassword }, id) => {
     if (!accountData[0]) throw new ApiError(400, "Unable to update your password");
     return { message: "Password updated successfully" };
 }
+const createAccountFromGoogle = async ({ email, fullname, name }) => {
+    const accountExists = await accountRepo.findAccountByEmail(email);
+    if (accountExists) {
+        const customer = await customerRepo.findCustomer(accountExists.dataValues.id);
+        let token = jwt.sign({
+            accountId: accountExists?.dataValues.id,
+            roleId: accountExists?.dataValues.roleId,
+            customerId: customer?.id,
+            customerName: customer?.fullname
+        }, process.env.AUTH_SECRET, { expiresIn: "24h" })
+        return { message: 'Login successful', username: accountExists.dataValues.username, token: token, id: customer.id }
+    }
+    const encrypted = await bcrypt.hash(name + "@123", 10);
+    const accountInfo = await accountRepo.createAccount({ email, username: "user_" + name, password: encrypted, roleId: 1 });
+    if (!accountInfo) {
+        throw new ApiError(400, "Unable to create account");
+    }
+    const customerInfo = await customerRepo.createCustomer({ fullname, email, accountId: accountInfo.dataValues.id });
+    if (!customerInfo) {
+        throw new ApiError(400, "Unable to create account");
+    }
+    let token = jwt.sign({
+        accountId: accountInfo?.dataValues.id,
+        roleId: accountInfo?.dataValues.roleId,
+        customerId: customerInfo?.dataValues.id,
+        customerName: customerInfo?.dataValues.fullname
+    }, process.env.AUTH_SECRET, { expiresIn: "24h" })
+    return { message: 'Login successful', username: accountInfo.dataValues.username, token: token, id: customerInfo.dataValues.id }
+}
 
-module.exports = { createAccount, login, forgotPassword, resetPassword }
+module.exports = { createAccount, login, forgotPassword, resetPassword, createAccountFromGoogle }

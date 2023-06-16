@@ -10,9 +10,9 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addToWishlist: (state, action) => {
-            console.log(action.payload);
             let find = state.wishlist.findIndex(item => action.payload.id === item.id);
             if (find >= 0) {
+                state.wishlist = state.wishlist.filter(item => item.id !== action.payload.id);
                 return
             }
             state.wishlist.push(action.payload);
