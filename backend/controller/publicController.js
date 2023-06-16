@@ -47,6 +47,14 @@ const getAllReviews = async (req, res, next) => {
         next(e)
     }
 }
+const getFilterOptions = async (req, res, next) => {
+    try {
+        const data = await publicService.getFilterOptions()
+        res.send(data);
+    } catch (e) {
+        next(e)
+    }
+}
 
 module.exports = {
     getAllIceCreams,
@@ -54,5 +62,6 @@ module.exports = {
     getIceCreamByBrand,
     getAllBrands,
     postMessages,
-    getAllReviews
+    getAllReviews,
+    getFilterOptions
 }

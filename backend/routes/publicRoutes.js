@@ -7,7 +7,8 @@ const { getAllIceCreams,
     getIceCreamByBrand,
     getAllBrands,
     postMessages,
-    getAllReviews } = require('../controller/publicController');
+    getAllReviews,
+    getFilterOptions } = require('../controller/publicController');
 const { verifyPayment, retryPayment } = require('../controller/userController');
 const publicRouter = express.Router();
 const passport = require("passport");
@@ -44,6 +45,7 @@ publicRouter.get('/brands', getAllBrands);
 publicRouter.post('/messages', postMessages)
 // <-----------reviews------------>
 publicRouter.get("/user-reviews/:id", getAllReviews);
+publicRouter.get("/filter-options", getFilterOptions);
 
 publicRouter.post('/verify-payment/:orderId', verifyPayment)
 publicRouter.post('/retry-payment/:orderId', retryPayment);

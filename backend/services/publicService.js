@@ -1,6 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
 const iceCreamRepository = require("../repository/iceCreamRepository");
 const brandRepository = require("../repository/brandsRepository");
+const categoryRepository = require("../repository/categoryRepository");
+const sizeRepository = require("../repository/sizeRepository");
 const messageRepository = require("../repository/messageRepository");
 const reviewRepository = require("../repository/reviewRepository");
 const ApiError = require("../utils/apiError");
@@ -39,6 +41,12 @@ const getAllReviewsByIid = async (id) => {
     }
     return { averageRating: totalRating / data.length, data: data }
 }
+const getFilterOptions = async () => {
+    const categories = await categoryRepository.findAllCategory();
+    const brands = await brandRepository.getAllBrands();
+    const sizes = await sizeRepository.findAllSizes();
+    return { sizes, brands, categories }
+}
 
 
 module.exports = {
@@ -47,5 +55,6 @@ module.exports = {
     findIceCreamsById,
     findAllBrands,
     postMessage,
-    getAllReviewsByIid
+    getAllReviewsByIid,
+    getFilterOptions
 }

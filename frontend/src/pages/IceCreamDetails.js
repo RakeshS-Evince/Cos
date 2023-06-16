@@ -11,7 +11,17 @@ import Swal from 'sweetalert2';
 function IceCreamDetails() {
     const [icDetails, setIcDetails] = useState();
     const [reviews, setReviews] = useState();
+    const [defaultActive, setDefaultActive] = useState(true);
+    const [price, setPrice] = useState(false);
+
     const [quantity, setQuantity] = useState(1);
+    const [sizes, setSizes] = useState([
+        { size: "50ml", selected: false, active: false },
+        { size: "100ml", selected: false, active: false },
+        { size: "200ml", selected: false, active: false },
+        { size: "500ml", selected: false, active: false },
+        { size: "1l", selected: false, active: false },
+    ])
     const [averageRating, setAverageRating] = useState(0)
     const authApi = useAuth();
     const { user } = useContext(UserContext)
@@ -38,9 +48,29 @@ function IceCreamDetails() {
                 setAverageRating(res?.data?.averageRating)
             }
         })
-        authApi.get(ICECREAM + id).then(res => setIcDetails(res?.data));
+        let newArr = sizes;
+        authApi.get(ICECREAM + id).then(res => {
+            setIcDetails(res?.data);
+            for (let i = 0; i < newArr.length; i++) {
+                for (let j = 0; j < res?.data?.sizes?.length; j++) {
+                    if (newArr[i].size === res?.data?.sizes[j]?.size) {
+                        newArr[i]["active"] = true;
+                        newArr[i]["id"] = res?.data?.sizes[j].id;
+                        newArr[i]["priceBySize"] = res?.data?.sizes[j].priceBySize;
+                    }
+                }
+            }
+            setSizes(newArr);
+        });
+
     }, [authApi, id]);
-    // console.log(reviews)
+
+    const changeSizeHandler = (element) => {
+        setDefaultActive(false);
+        let newArr = sizes.map(ele => ele.id === element.id ? { ...ele, selected: true } : { ...ele, selected: false });
+        setSizes(newArr);
+        setPrice(element.priceBySize.price)
+    }
     return (
         <div>
             {icDetails && <div className='container mt-3'>
@@ -53,9 +83,21 @@ function IceCreamDetails() {
                     <div className='col-md-6'>
                         <div className='p-3'>
                             <h3 >{icDetails?.name}</h3>
-                            <h4 className='pt-3'>Price: ₹{icDetails?.price}</h4>
+                            <h4 className='pt-3'>Price: ₹{price || icDetails.price}</h4>
                             <h6 className={`pt-3`}>Stock: <span className={icDetails?.quantity >= 1 ? 'text-success' : 'text-danger'}>{icDetails?.quantity >= 1 ? 'Avaliable' : 'Out of stock'}</span></h6>
                             <p className='pt-3'>{icDetails?.description}</p>
+                            <div className='d-flex'>
+                                <div className='me-2'>
+                                    <input type='radio' id={"default"} checked={defaultActive} className="btn-check" autocomplete="off" />
+                                    <label className="btn btn-outline-primary" htmlFor={"default"}>{"35ml"}</label><br></br>
+                                </div>
+                                {sizes?.length && sizes.map((ele, i) => {
+                                    return <div key={i} className='me-2'>
+                                        <input disabled={!ele.active} type='radio' id={ele.id + ele.size} checked={ele.selected} onChange={() => changeSizeHandler(ele)} className="btn-check" autocomplete="off" />
+                                        <label className="btn btn-outline-primary" htmlFor={ele.id + ele.size}>{ele.size}</label><br></br>
+                                    </div>
+                                })}
+                            </div>
                             <div className='d-flex pt-3'>
                                 <input type='number' value={quantity} min={1} className='form-control me-3' onChange={quantityChangeHandler} style={{ width: '80px' }} />
                                 <button className='btn btn-danger' disabled={quantity > icDetails?.quantity || quantity < 1} onClick={() => cartClickHandler({

@@ -37,7 +37,7 @@ const CheckErrorType = (err, req, res, next) => {
                 next(new ApiError(StatusCodes.BAD_REQUEST, "Username is already in use"));
                 return
             }
-        }
+        } else { next(error); }
     }
     else {
         next(error);

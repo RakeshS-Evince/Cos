@@ -25,6 +25,9 @@ db.address = require("./address")(sequelize, DataTypes);
 db.staff = require("./staff")(sequelize, DataTypes);
 db.iceCream = require("./iceCream")(sequelize, DataTypes);
 db.brands = require("./brands")(sequelize, DataTypes);
+db.categories = require("./categories")(sequelize, DataTypes);
+db.size = require("./size")(sequelize, DataTypes);
+db.priceBySize = require("./priceBySize")(sequelize, DataTypes);
 db.cart = require("./cart")(sequelize, DataTypes);
 db.order = require("./order")(sequelize, DataTypes);
 db.orderItem = require("./orderItem")(sequelize, DataTypes);
@@ -85,6 +88,10 @@ db.iceCream.belongsTo(db.brands, {
     foreingKey: ['name', 'brandName'], onUpdate: "CASCADE",
     onDelete: "SET NULL"
 });
+db.iceCream.belongsTo(db.categories, {
+    foreingKey: ['name', 'categoryName'], onUpdate: "CASCADE",
+    onDelete: "SET NULL"
+});
 db.address.belongsTo(db.customer, {
     foreingKey: ["id", 'customerId'], onUpdate: "CASCADE",
     onDelete: "CASCADE"
@@ -95,6 +102,23 @@ db.payment.hasMany(db.order, {
 })
 db.order.belongsTo(db.payment, {
     foreingKey: ["id", 'orderId'], onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+})
+db.iceCream.belongsToMany(db.size, {
+    through: db.priceBySize,
+    foreingKey: ["iceCreamId"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+})
+db.size.belongsToMany(db.iceCream, {
+    through: db.priceBySize,
+    foreingKey: ["iceCreamId"],
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE"
+});
+db.orderItem.belongsTo(db.size, {
+    foreingKey: ["id", "sizeId"],
+    onUpdate: "CASCADE",
     onDelete: "CASCADE"
 })
 // sequelize
