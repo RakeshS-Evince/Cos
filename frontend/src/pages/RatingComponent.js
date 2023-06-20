@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
 const Star = ({ marked, starId }) => {
     return (
         <span data-star-id={starId} style={{
@@ -15,7 +14,6 @@ const Star = ({ marked, starId }) => {
 export const RatingComponent = ({ value, info, reviewData, setReviewData }) => {
     const [rating, setRating] = useState(0);
     const [selection, setSelection] = useState(0);
-    const authApi = useAuth();
     useEffect(() => { setRating(value) }, [value])
     const hoverOver = event => {
         let val = 0;

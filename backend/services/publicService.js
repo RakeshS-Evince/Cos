@@ -9,9 +9,21 @@ const ApiError = require("../utils/apiError");
 
 const findAllIcecream = async () => {
     const iceCreamData = await iceCreamRepository.getAllIceCream();
+    const minMax = await iceCreamRepository.findMinMax();
+    let tempData = iceCreamData.map(ele => {
+        if (ele.dataValues.sizes.length) {
+            let sizeArr = [];
+            ele.dataValues.sizes.forEach(element => {
+                sizeArr.push(element.size)
+            });
+            ele.dataValues.sizes = sizeArr;
+        };
+        return ele.dataValues;
+    })
     if (!iceCreamData) throw new ApiError(StatusCodes.NOT_FOUND, "No Ice-creams found");
-    return iceCreamData;
-}
+    return { data: tempData, max: minMax[0].dataValues.maxPrice, min: minMax[0].dataValues.minPrice }
+};
+
 const findIceCreamsByBrands = async (brandName) => {
     const iceCreamData = await iceCreamRepository.getAllIceCreamByBrand(brandName);
     if (!iceCreamData) throw new ApiError(StatusCodes.NOT_FOUND, "No Ice-creams found");

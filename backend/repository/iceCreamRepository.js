@@ -1,8 +1,16 @@
-const { db } = require('../model/index');
+const { db, sequelize } = require('../model/index');
 const IceCream = db.iceCream;
 const Size = db.size;
 const getAllIceCream = async () => {
-    return IceCream.findAll();
+    return IceCream.findAll({
+        include: {
+            model: Size,
+            attributes: ["size"]
+        },
+    });
+}
+const findMinMax = async () => {
+    return IceCream.findAll({ attributes: [[sequelize.fn('min', sequelize.col('price')), 'minPrice'], [sequelize.fn('max', sequelize.col('price')), 'maxPrice']] })
 }
 const getAllIceCreamByBrand = async (brand) => {
     return IceCream.findAll({ where: { brandName: brand } });
@@ -35,5 +43,6 @@ module.exports = {
     createIceCream,
     deleteIceCream,
     updateIceCream,
-    getIceCreamCount
+    getIceCreamCount,
+    findMinMax
 }

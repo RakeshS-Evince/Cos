@@ -11,7 +11,7 @@ function IceCreamTable() {
     const [iceCreamId, setIceCreamId] = useState('');
     const [refetchData, setRefetchData] = useState(false)
     useEffect(() => {
-        authApi.get(ICECREAM).then(({ data }) => setData(data)).catch(e => console.log(e.message))
+        authApi.get(ICECREAM).then(({ data }) => setData(data?.data)).catch(e => console.log(e.message))
     }, [refetchData, authApi])
     const deleteHandler = (id) => {
         Swal.fire({

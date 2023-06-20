@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 
 function Wishlist() {
     const wishlistItems = useSelector((state) => state.cart.wishlist);
-    console.log(wishlistItems);
     const dispatch = useDispatch();
     const addToCartHandler = (item) => {
         dispatch(addToCart(item));

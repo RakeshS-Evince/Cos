@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Store } from 'react-notifications-component';
 const initialState = {
     items: [],
     total: 0,
@@ -13,9 +14,34 @@ export const cartSlice = createSlice({
             let find = state.wishlist.findIndex(item => action.payload.id === item.id);
             if (find >= 0) {
                 state.wishlist = state.wishlist.filter(item => item.id !== action.payload.id);
+                Store.addNotification({
+                    message: "Item removed from your wishlist",
+                    type: "danger",
+                    insert: "bottom",
+                    container: "bottom-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 1000,
+                        onScreen: true
+                    }
+                })
                 return
             }
             state.wishlist.push(action.payload);
+            Store.addNotification({
+                message: "Item added to wishlist!",
+                type: "success",
+                insert: "bottom",
+                container: "bottom-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: 1000,
+                    onScreen: true
+                }
+            })
+
         },
         addToCart: (state, action) => {
             let find = state.items.findIndex(item => action.payload.id === item.id);
@@ -39,7 +65,6 @@ export const cartSlice = createSlice({
             let find = state.items.findIndex(item => action.payload.id === item.id);
             if (find >= 0) {
                 if ((state.items[find].quantity > state.items[find].available) || (parseInt(state.items[find].quantity) + parseInt(action.payload.quantity) > state.items[find].available)) {
-                    // state.items[find].disable = true
                     alert('You have already added the item quantity available in our stock to the cart')
                     return
                 }

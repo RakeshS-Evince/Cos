@@ -12,15 +12,14 @@ function IceCreamDetails() {
     const [icDetails, setIcDetails] = useState();
     const [reviews, setReviews] = useState();
     const [defaultActive, setDefaultActive] = useState(true);
-    const [price, setPrice] = useState(false);
-
+    const [price, setPrice] = useState(icDetails?.price);
     const [quantity, setQuantity] = useState(1);
     const [sizes, setSizes] = useState([
-        { size: "50ml", selected: false, active: false },
-        { size: "100ml", selected: false, active: false },
-        { size: "200ml", selected: false, active: false },
-        { size: "500ml", selected: false, active: false },
-        { size: "1l", selected: false, active: false },
+        { id: 1, size: "50ml", selected: false, active: false },
+        { id: 2, size: "100ml", selected: false, active: false },
+        { id: 3, size: "200ml", selected: false, active: false },
+        { id: 4, size: "500ml", selected: false, active: false },
+        { id: 5, size: "1l", selected: false, active: false },
     ])
     const [averageRating, setAverageRating] = useState(0)
     const authApi = useAuth();
@@ -51,6 +50,7 @@ function IceCreamDetails() {
         let newArr = sizes;
         authApi.get(ICECREAM + id).then(res => {
             setIcDetails(res?.data);
+            setPrice(res?.data?.price)
             for (let i = 0; i < newArr.length; i++) {
                 for (let j = 0; j < res?.data?.sizes?.length; j++) {
                     if (newArr[i].size === res?.data?.sizes[j]?.size) {
@@ -71,6 +71,12 @@ function IceCreamDetails() {
         setSizes(newArr);
         setPrice(element.priceBySize.price)
     }
+    const changeDefaultActive = () => {
+        setDefaultActive(true);
+        let newArr = sizes.map(ele => ({ ...ele, selected: false }));
+        setSizes(newArr);
+        setPrice(icDetails?.price);
+    }
     return (
         <div>
             {icDetails && <div className='container mt-3'>
@@ -88,15 +94,15 @@ function IceCreamDetails() {
                             <p className='pt-3'>{icDetails?.description}</p>
                             <div className='d-flex'>
                                 <div className='me-2'>
-                                    <input type='radio' id={"default"} checked={defaultActive} className="btn-check" autocomplete="off" />
+                                    <input type='radio' id={"default"} checked={defaultActive} className="btn-check" autoComplete="off" onChange={(e) => changeDefaultActive()} />
                                     <label className="btn btn-outline-primary" htmlFor={"default"}>{"35ml"}</label><br></br>
                                 </div>
-                                {sizes?.length && sizes.map((ele, i) => {
+                                {/* {sizes?.length && sizes.map((ele, i) => {
                                     return <div key={i} className='me-2'>
-                                        <input disabled={!ele.active} type='radio' id={ele.id + ele.size} checked={ele.selected} onChange={() => changeSizeHandler(ele)} className="btn-check" autocomplete="off" />
+                                        <input disabled={!ele.active} type='radio' id={ele.id + ele.size} checked={ele.selected} onChange={() => changeSizeHandler(ele)} className="btn-check" autoComplete="off" />
                                         <label className="btn btn-outline-primary" htmlFor={ele.id + ele.size}>{ele.size}</label><br></br>
                                     </div>
-                                })}
+                                })} */}
                             </div>
                             <div className='d-flex pt-3'>
                                 <input type='number' value={quantity} min={1} className='form-control me-3' onChange={quantityChangeHandler} style={{ width: '80px' }} />
@@ -105,9 +111,10 @@ function IceCreamDetails() {
                                     description: icDetails?.description,
                                     id: icDetails?.id,
                                     image: icDetails?.image,
-                                    price: icDetails?.price,
+                                    price: price,
                                     available: icDetails?.quantity,
                                     quantity: parseInt(quantity),
+                                    size: sizes.find(ele => ele.selected) ? sizes.find(ele => ele.selected).id : null
                                 })} >Add to cart</button>
 
                             </div>

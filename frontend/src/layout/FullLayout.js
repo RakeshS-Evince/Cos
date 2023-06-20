@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container'
-import { Link, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import CartSidebar from './CartSidebar'
 import Headers from './Header'
 import Sidebar from './Sidebar'
 import useRoleCheck from '../hooks/useRoleCheck'
 import AdminHeader from './AdminHeader'
+import ScrollToTop from '../components/ScrollToTop'
 
 function FullLayout() {
     const { isAdmin, isStaff } = useRoleCheck();
@@ -18,16 +19,11 @@ function FullLayout() {
             window.removeEventListener('resize', () => { })
         }
     })
-    useMemo(() => {
-        try {
-            if (windowWidth <= 590) {
-                document.getElementById('sidebar').classList.remove('sidebar_wrapper_show')
-            } else {
-                document.getElementById('sidebar').classList.add('sidebar_wrapper_show')
-            }
-        } catch (e) { }
-
-    })
+    if (windowWidth <= 590) {
+        document.getElementById('sidebar')?.classList.remove('sidebar_wrapper_show')
+    } else {
+        document.getElementById('sidebar')?.classList.add('sidebar_wrapper_show')
+    }
     return (
         <>
             <header>
@@ -43,6 +39,7 @@ function FullLayout() {
                 {(isAdmin || isStaff) && <Sidebar />}
                 <CartSidebar />
             </main>
+            <ScrollToTop />
             {/* {!(isAdmin || isStaff) && <footer className="bg-dark text-center text-white">
                 <div className="container">
                     <div className="text-center p-3" >
