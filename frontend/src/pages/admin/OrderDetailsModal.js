@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { IMAGE_URL, MY_ORDER_DETAILS } from '../constants/constant';
+import useAuth from '../../axios/useApi';
+import { IMAGE_URL, MY_ORDER_DETAILS } from '../../constants/constant';
 import { Link } from 'react-router-dom';
 
 function OrderDetailsModal({ id }) {
@@ -16,8 +16,8 @@ function OrderDetailsModal({ id }) {
     }, [id, authApi])
     return (
         <>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+            <div className="modal fade bd-example-modal-lg" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
@@ -40,7 +40,17 @@ function OrderDetailsModal({ id }) {
                                             <Link to="#" className="nav-link">
                                                 {ele.name} <br />
                                             </Link>
-                                            <div className="price text-muted">Price: ₹ {parseFloat(ele.order_item?.quantity * ele.price).toFixed(2)}</div>
+                                            <div>
+                                                Price:
+                                                {JSON.parse(ele?.order_item?.additionalInfo)?.map((info, i) => (
+                                                    <div key={i}>
+                                                        <span>₹ {parseFloat(info.price * info.quantity)}</span>
+                                                        <span title='size x quantity' className='text-muted' style={{ fontSize: "12px" }}>
+                                                            {` [${!info.size ? "Regular" : info.size}  x ${info.quantity}]`}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 )

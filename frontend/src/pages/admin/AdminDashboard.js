@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Chart from "react-apexcharts";
-import useApi from '../axios/useApi'
-import { CONTACT_MESSAGES, DASHBOARD } from '../constants/constant';
+import { CONTACT_MESSAGES, DASHBOARD } from '../../constants/constant';
 import { Link } from 'react-router-dom';
-
-
+import Chart from "react-apexcharts";
+import useApi from '../../axios/useApi'
 function AdminDashboard() {
     const [state] = useState({
         options: {
@@ -22,9 +20,9 @@ function AdminDashboard() {
             }
         ]
     })
-    const authApi = useApi()
     const [counts, setCounts] = useState(null);
     const [messages, setMessages] = useState([]);
+    const authApi = useApi();
     const timeConverter = (time) => {
         let timeInMinute = Math.floor((new Date() - new Date(time)) / 60000);
         if (timeInMinute > 60 && timeInMinute < 1440) {

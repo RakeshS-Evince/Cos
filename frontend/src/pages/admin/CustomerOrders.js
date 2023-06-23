@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { IMAGE_URL, ORDERS } from '../constants/constant';
+import useAuth from '../../axios/useApi';
+import { IMAGE_URL, ORDERS } from '../../constants/constant';
 import { useLocation, useParams } from 'react-router-dom';
 
 function CustomerOrders() {
     const [orders, setOrders] = useState([]);
-    const authApi = useAuth();
     const { cid } = useParams();
     const { state } = useLocation();
+    const authApi = useAuth();
     useEffect(() => {
         authApi.get(ORDERS + cid).then(({ data }) => {
             let reversed = data?.reverse();
@@ -29,10 +29,8 @@ function CustomerOrders() {
                                 {ele?.iceCreams?.map((ele, i) => {
                                     return <>
                                         <div className='d-flex col-sm-3 col-md-2'>
-                                            <div className="mx-3 position-relative">
-                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
-                                                    {ele?.order_item?.quantity}
-                                                </span>
+                                            <div className="mx-3">
+
                                                 <img alt="ice cream" src={IMAGE_URL + ele?.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                             </div>
                                             <div className="">

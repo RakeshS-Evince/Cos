@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { CONTACT_MESSAGES } from '../constants/constant';
+import { CONTACT_MESSAGES } from '../../constants/constant';
+import useAuth from '../../axios/useApi';
 function MessagesTable() {
     const [messages, setMessages] = useState([]);
     const authApi = useAuth();

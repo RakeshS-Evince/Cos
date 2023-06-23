@@ -1,43 +1,40 @@
-import React, { useEffect } from 'react'
-import './signIn.scss'
+import React from 'react'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigate } from 'react-router-dom';
+import { STAFF } from '../../constants/constant';
 import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Swal from 'sweetalert2';
-import useAuth from '../axios/useApi';
-import { useNavigate, useParams } from 'react-router-dom';
-import { STAFF } from '../constants/constant';
+import useAuth from '../../axios/useApi';
 const schema = yup.object({
-    fullname: yup.string().optional(),
-    email: yup.string().email('Please enter a valid email').optional(),
-    contact: yup.string().optional(),
-    username: yup.string().optional(),
+    fullname: yup.string().required("fullname is required"),
+    email: yup.string().email('Please enter a valid email').required("email is required"),
+    contact: yup.string().matches(/^[6-9]\d{9}$/, { message: "Please enter valid number.", excludeEmptyString: false }).required("contact is required"),
+    username: yup.string().required('Username is required'),
+    password: yup.string().required("Password is required")
+        .min(8, 'Password must be 8 characters long')
+        .matches(/[0-9]/, 'Password requires a number')
+        .matches(/[a-z]/, 'Password requires a lowercase letter')
+        .matches(/[A-Z]/, 'Password requires an uppercase letter')
+        .matches(/[^\w]/, 'Password requires a symbol'),
+    confirmPassword: yup.string().required("Confirm password is required").oneOf([yup.ref('password'), null], 'Confirm password do not match')
 }).required();
 
-function StaffEditForm() {
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+function StaffForm() {
+    const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
-    const authApi = useAuth();
-    const navigate = useNavigate();
-    const { id } = useParams();
-    useEffect(() => {
-        authApi.get(STAFF + id).then(res => {
-            setValue('fullname', res?.data?.fullname)
-            setValue('username', res?.data?.username)
-            setValue('email', res?.data?.email)
-            setValue('contact', res?.data?.contact)
-        })
-    }, [id, authApi, setValue])
+    const navigate = useNavigate()
+    const authApi = useAuth()
+
     const onSubmit = async (data) => {
         try {
-            const res = await authApi.put(STAFF + id, data);
+            const res = await authApi.post(STAFF, data);
             Swal.fire({
                 title: res.data.message
             }).then(navigate('/staff'))
-
         } catch (e) {
             Swal.fire({ title: e.response.data.message })
         }
@@ -47,7 +44,7 @@ function StaffEditForm() {
         <div id="main-wrapper" className="container">
             <div className="row justify-content-center align-items-center pb-3">
                 <div className="mb-2">
-                    <h3 className=" my-3 font-weight-bold text-theme">Staff account update</h3>
+                    <h3 className=" my-3 font-weight-bold text-theme">Staff account create</h3>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
@@ -86,11 +83,29 @@ function StaffEditForm() {
                             </Form.Control.Feedback>
                         </InputGroup>
                     </div>
+                    <div className="form-group mb-2">
+                        <label htmlFor="password">Password</label>
+                        <InputGroup hasValidation>
+                            <Form.Control type="password" isInvalid={errors?.password?.message} id='password' {...register('password')} />
+                            <Form.Control.Feedback type="invalid" >
+                                {errors?.password?.message}
+                            </Form.Control.Feedback>
+                        </InputGroup>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="role">Confirm Password</label>
+                        <InputGroup hasValidation>
+                            <Form.Control type="password" isInvalid={errors?.confirmPassword?.message} id='confirmPassword' {...register('confirmPassword')} />
+                            <Form.Control.Feedback type="invalid" >
+                                {errors?.confirmPassword?.message}
+                            </Form.Control.Feedback>
+                        </InputGroup>
+                    </div>
                     <button type="submit" className="btn mt-3" style={{
                         backgroundColor: "#5369f8",
                         borderColor: "#5369f8",
                         color: "#fff"
-                    }}>Save</button>
+                    }}>Create Account</button>
                 </form>
             </div>
         </div>
@@ -98,4 +113,4 @@ function StaffEditForm() {
     )
 }
 
-export default StaffEditForm
+export default StaffForm

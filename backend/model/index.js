@@ -116,11 +116,16 @@ db.size.belongsToMany(db.iceCream, {
     onUpdate: "CASCADE",
     onDelete: "CASCADE"
 });
-db.orderItem.belongsTo(db.size, {
-    foreingKey: ["id", "sizeId"],
-    onUpdate: "CASCADE",
-    onDelete: "CASCADE"
-})
+
+db.iceCream.hasMany(db.review, {
+    foreingKey: ["id", "iceCreamId"]
+});
+db.review.belongsTo(db.iceCream, {
+    foreingKey: ["id", "iceCreamId"]
+});
+// db.review.sync();
+// db.iceCream.sync();
+
 // sequelize
 //     .sync({ alter: true })
 //     .then(() => {

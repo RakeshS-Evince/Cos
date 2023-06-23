@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { REVIEWS } from '../constants/constant';
-
+import { REVIEWS } from '../../constants/constant';
+import useAuth from '../../axios/useApi';
 
 function ReviewsTable() {
     const [reviews, setReviews] = useState([]);

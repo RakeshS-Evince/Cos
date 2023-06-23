@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import Container from 'react-bootstrap/esm/Container'
 import * as yup from 'yup';
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { IMAGE_URL, REVIEW } from '../constants/constant';
+import { RatingComponent } from '../components/RatingComponent';
+import { RatingStars } from '../components/RatingStars';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from "react-hook-form";
+import Container from 'react-bootstrap/esm/Container'
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { RatingComponent } from './RatingComponent';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import useAuth from '../axios/useApi';
-import { IMAGE_URL, REVIEW } from '../constants/constant';
-import { RatingStars } from './RatingStars';
 import Swal from 'sweetalert2';
 import thumbs_smiley from '../assets/images/thumbs_smiley.png'
+import useAuth from '../axios/useApi';
 const schema = yup.object({
     fullname: yup.string().required("Fullname is required"),
     summary: yup.string().required("Summary is required"),
@@ -25,8 +25,8 @@ function ReviewForm() {
     const { handleSubmit, register, formState: { errors }, setValue } = useForm({
         resolver: yupResolver(schema)
     })
-    const navigate = useNavigate()
     const { state } = useLocation()
+    const navigate = useNavigate()
     useEffect(() => {
         if (!state) return navigate("/")
         authApi.get("/ice-creams/" + state?.iceCreamId).then(res => { setIceCreamData(res.data) })

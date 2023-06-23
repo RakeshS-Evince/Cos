@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
         quantity: {
             type: DataTypes.INTEGER
         },
+        additionalInfo: {
+            type: DataTypes.TEXT('long')
+        }
     },
         {
             timestamps: false

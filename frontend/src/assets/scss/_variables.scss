@@ -3,7 +3,7 @@ $font-family-sans-serif: "Nunito", sans-serif;
 
 $primary: #0062ff;
 $info: #3699ff;
-$danger: #f64e60;
+$danger: #ff6b6b;
 $success: #26ca62;
 $warning: #ee9d01;
 $dark: #343a40;
@@ -38,18 +38,16 @@ $gray-800: #343a40 !default;
 $gray-900: #1e2a35 !default;
 $black: #000 !default;
 
-$input-border-radius: 0;
+// $input-border-radius: 0;
 $form-feedback-valid-color: #ced4da;
-
+$form-control-border: solid 1px #ff6b6b;
 $form-feedback-icon-valid-color: #ced4da;
 $form-feedback-icon-valid: "";
 $form-feedback-icon-invalid-color: $danger;
 $form-feedback-icon-invalid: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='#{$form-feedback-icon-invalid-color}'><circle cx='6' cy='6' r='4.5'/><path stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/><circle cx='6' cy='8.2' r='.6' fill='#{$form-feedback-icon-invalid-color}' stroke='none'/></svg>");
 
 $min-contrast-ratio: 2;
-
-
-$body-bg: $gray-200 !default;
+$body-bg: #f9fafb !default;
 $body-color: $gray-900 !default;
 
 
@@ -60,10 +58,12 @@ $headings-font-weight: 400 !default;
 $card-border-width: 0 !default;
 $card-box-shadow: $box-shadow !default;
 $grid-gutter-width: 1.85rem !default;
-
-$input-bg: $white !default;
+$input-focus-border-color: #ff6b6b !default;
+$input-btn-focus-width: 1.5px !default;
+$input-btn-focus-color: #ff6b6b !default;
+$input-btn-focus-box-shadow: 0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
+$form-check-input-checked-bg-color: #ff6b6b !default;
 
 $btn-focus-width: 0px;
-
 $sidebarWidth: 260px;
 $sidebarColor: $white;

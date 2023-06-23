@@ -92,6 +92,26 @@ const addRating = async (cid, iid, data) => {
     return { message: "Thanks for the review" }
 }
 const placeOrder = async (orderData, customerId) => {
+    let newItems = [];
+    orderData?.orderItems?.forEach(element => {
+        let find = newItems.findIndex(ele => ele.id === element.id);
+        if (find >= 0) {
+            let tempObj = { id: element.size?.id, size: element.size?.size, quantity: element?.quantity, price: element.price };
+            newItems[find].priceBySizes.push(tempObj)
+        } else {
+            let tempArr = [];
+            let tempObj = { id: element.size?.id, size: element.size?.size, quantity: element?.quantity, price: element.price };
+            tempArr.push(tempObj)
+            newItems.push(
+                {
+                    name: element.name,
+                    description: element.description,
+                    id: element.id,
+                    image: element.image,
+                    priceBySizes: tempArr
+                })
+        }
+    })
     const info = (({ orderItems, ...rest }) => rest)(orderData);
     let error;
     if (info.paymentMethod == 'prepaid') {
@@ -115,8 +135,8 @@ const placeOrder = async (orderData, customerId) => {
             paymentId: paymentData.dataValues.id
         });
         let items = [];
-        for (let i = 0; i < orderData.orderItems.length; i++) {
-            items.push({ orderId: data.dataValues.id, iceCreamId: orderData.orderItems[i].id, quantity: orderData.orderItems[i].quantity })
+        for (let i = 0; i < newItems.length; i++) {
+            items.push({ orderId: data.dataValues.id, iceCreamId: newItems[i].id, quantity: newItems[i].quantity, additionalInfo: JSON.stringify(newItems[i]?.priceBySizes) })
         }
         const orderItemData = await orderRepository.saveOrderItems(items);
         if (!orderItemData) {
@@ -135,8 +155,8 @@ const placeOrder = async (orderData, customerId) => {
             throw new ApiError(StatusCodes.BAD_REQUEST, { message: "Unable to place the order" })
         }
         let items = [];
-        for (let i = 0; i < orderData.orderItems.length; i++) {
-            items.push({ orderId: data.dataValues.id, iceCreamId: orderData.orderItems[i].id, quantity: orderData.orderItems[i].quantity })
+        for (let i = 0; i < newItems.length; i++) {
+            items.push({ orderId: data.dataValues.id, iceCreamId: newItems[i].id, quantity: newItems[i].quantity, additionalInfo: JSON.stringify(newItems[i]?.priceBySizes) })
         }
         const orderItemData = await orderRepository.saveOrderItems(items);
         if (!orderItemData) {

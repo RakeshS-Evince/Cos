@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import axios from "axios";
-import { BASE_URL, ICECREAM } from "../constants/constant"
+import { BASE_URL } from "../constants/constant"
+import { UserContext } from '../context/UserContextProvider';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useFilterHook from '../hooks/useFilterHook';
-import ProductCard from '../components/ProductCard';
 import FilterOptionCard from '../components/FilterOptionCard';
-import { useLocation } from 'react-router-dom';
+import ProductCard from '../components/ProductCard';
 const filterRecordsArr = data => {
     let arr = [];
     data?.forEach(element => {
@@ -16,7 +17,7 @@ const filterRecordsArr = data => {
     });
     return arr
 }
-function Menu() {
+function SearchResult() {
     const [selectedFilterOpt, setSelectedFilterOpt] = useState({
         brand: [],
         category: [],
@@ -26,22 +27,35 @@ function Menu() {
     const [data, setData] = useState([]);
     const [range, setRange] = useState();
     const [filterOptions, setFilterOptions] = useState();
-    const filterData = useFilterHook(data, selectedFilterOpt);
+    const { products } = useContext(UserContext);
     const { state } = useLocation();
+    const filterData = useFilterHook(data, selectedFilterOpt);
+    const navigate = useNavigate();
+
     useEffect(() => {
-        axios.get(BASE_URL + ICECREAM).then((res) => {
-            setData(res?.data?.data);
-            setRange({ min: res?.data?.min, max: res?.data?.max })
-            setSelectedFilterOpt(prev => ({ ...prev, price: { from: res?.data?.min, to: res?.data?.max } }))
+        if (!state?.searchValue) {
+            navigate("/");
+            return
+        }
+        let tempData = products?.filter(element => element.name.toLowerCase().includes(state?.searchValue.trim().toLowerCase()));
+        setData(tempData);
+        let minVal = tempData[0]?.price, maxVal = tempData[0]?.price;
+        tempData.forEach(element => {
+            if (element.price < minVal) { minVal = element.price };
+            if (element.price > maxVal) { maxVal = element.price };
         });
+        setRange({ min: minVal, max: maxVal });
+        setSelectedFilterOpt(prev => ({ ...prev, price: { from: minVal, to: maxVal } }))
+    }, [navigate, products, state?.searchValue]);
+    useEffect(() => {
         axios.get(BASE_URL + "filter-options").then(res => {
             setFilterOptions({
                 sizes: res?.data?.sizes?.map(ele => ({ ...ele, checked: false })),
                 brands: res?.data?.brands?.map(ele => ({ ...ele, checked: false })),
-                categories: res?.data?.categories?.map(ele => (ele.name === state?.category ? { ...ele, checked: true } : { ...ele, checked: false })),
+                categories: res?.data?.categories?.map(ele => ({ ...ele, checked: false })),
             })
         }).catch(e => console.log(e));
-    }, [state?.category]);
+    }, [])
     useEffect(() => {
         setSelectedFilterOpt(prev => ({
             brand: filterRecordsArr(filterOptions?.brands),
@@ -51,15 +65,6 @@ function Menu() {
             viewBy: prev.viewBy
         }))
     }, [filterOptions]);
-    useEffect(() => {
-        if (document.querySelectorAll("#items-row").length > 0) {
-            document.querySelectorAll("#items-row")?.forEach(element => { element?.classList.add("elementToFadeInAndOut") });
-            setTimeout(() => {
-                document.querySelectorAll("#items-row")?.forEach(element => { element?.classList.remove("elementToFadeInAndOut") });
-            }, 1500)
-        }
-    }, [filterOptions])
-
     const changeSelectedFilterOptions = (price, viewBy) => {
         setSelectedFilterOpt(prev => ({
             brand: filterRecordsArr(filterOptions?.brands),
@@ -69,10 +74,21 @@ function Menu() {
             viewBy: !viewBy ? prev.viewBy : viewBy,
         }))
     }
+    useEffect(() => {
+        if (document.querySelectorAll("#items-row").length > 0) {
+            document.querySelectorAll("#items-row")?.forEach(element => { element?.classList.add("elementToFadeInAndOut") });
+            setTimeout(() => {
+                document.querySelectorAll("#items-row")?.forEach(element => { element?.classList.remove("elementToFadeInAndOut") });
+            }, 1500)
+        }
+
+    }, [filterOptions])
+
+
     return (
         <>
             <div className='d-flex justify-content-between mb-3'>
-                <h3>Icecreams</h3>
+                <h3>Showing results for "{state?.search}"</h3>
                 <div className='d-flex align-items-center'>
                     <label>Sort: </label>
                     <select className='form-control ms-2' onChange={e => changeSelectedFilterOptions(null, e.target.value)}>
@@ -103,4 +119,4 @@ function Menu() {
     )
 }
 
-export default Menu
+export default SearchResult

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { BASE_URL, BRANDS, IMAGE_URL } from "../constants/constant"
+import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import axios from "axios";
-import { BASE_URL, BRANDS, IMAGE_URL } from "../constants/constant"
-import { Link } from 'react-router-dom';
 function Brands() {
     const [data, setData] = useState([]);
     useEffect(() => {

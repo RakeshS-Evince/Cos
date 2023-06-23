@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import './orderDetails.scss'
 import { BASE_URL, CANCEL_ORDER, IMAGE_URL, MY_ORDER_DETAILS, RETRY_PAYMENT } from '../constants/constant';
 import Swal from 'sweetalert2';
 import { loadScript } from './razor';
-function OrderDetails() {
+function MyOrderDetails() {
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderAddress, setOrderAddress] = useState(null);
     const navigate = useNavigate()
@@ -14,7 +13,6 @@ function OrderDetails() {
     useEffect(() => {
         authApi.get(MY_ORDER_DETAILS + id).then(({ data }) => { setOrderDetails(data); setOrderAddress(JSON.parse(data.orderAddress)) }).catch(e => console.log(e.message));
     }, [id, authApi]);
-
     async function displayRazorpay() {
         const res = await loadScript(
             "https://checkout.razorpay.com/v1/checkout.js"
@@ -71,7 +69,7 @@ function OrderDetails() {
         <div>
             {orderDetails &&
                 <>
-                    <div className='d-flex justify-content-between'><h2>Order details</h2>
+                    <div className='d-flex justify-content-between'><h2>My Order Details</h2>
                         <Link to='/my-orders'>Back to My Orders</Link></div>
                     <div className='card' style={{ zIndex: 0 }}>
                         <div className='card-body p-3 row g-2'>
@@ -83,17 +81,24 @@ function OrderDetails() {
                                 return (
                                     <div key={ele.id + i} >
                                         <div className="d-flex">
-                                            <div className="me-3 position-relative">
-                                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill text-info">
-                                                    {ele.order_item?.quantity}
-                                                </span>
+                                            <div className="me-3">
                                                 <img alt="ice cream" src={IMAGE_URL + ele.image} style={{ height: "50px", width: "50px" }} className="img-sm rounded border" />
                                             </div>
                                             <div className="">
                                                 <Link to={'/icecream-details/' + ele.id} className="nav-link">
                                                     {ele.name} <br />
                                                 </Link>
-                                                <div className="price text-muted">Price: ₹ {parseFloat(ele.order_item?.quantity * ele.price).toFixed(2)}</div>
+                                                <div>
+                                                    Price:
+                                                    {JSON.parse(ele?.order_item?.additionalInfo)?.map((info, i) => (
+                                                        <div key={i}>
+                                                            <span>₹ {parseFloat(info.price * info.quantity)}</span>
+                                                            <span title='size x quantity' className='text-muted' style={{ fontSize: "12px" }}>
+                                                                {` [${!info.size ? "Regular" : info.size}  x ${info.quantity}]`}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                         <Link to={`/review/`} className='mb-3' state={{ iceCreamId: ele.id }} style={{ textDecoration: 'none' }}>Write a review</Link>
@@ -191,4 +196,4 @@ function OrderDetails() {
     )
 }
 
-export default OrderDetails
+export default MyOrderDetails

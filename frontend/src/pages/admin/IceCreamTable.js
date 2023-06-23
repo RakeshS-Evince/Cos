@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { ADMIN, IMAGE_URL, ICECREAM } from '../constants/constant';
+import { ADMIN, IMAGE_URL, ICECREAM } from '../../constants/constant';
 import Swal from 'sweetalert2';
 import IceCreamForm from './IceCreamForm';
+import useAuth from '../../axios/useApi';
 
 function IceCreamTable() {
     const [data, setData] = useState([]);

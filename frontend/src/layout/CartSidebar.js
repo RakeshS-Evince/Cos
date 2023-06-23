@@ -35,8 +35,8 @@ function CartSidebar() {
     return (
         <>
             <div className='cart_wrapper shadow' id="cartSidebar">
+                <i className="bi bi-x-lg btn btn-danger" onClick={() => toggleCart()} style={{ cursor: 'pointer' }}></i>
                 <div>
-                    <i className="bi bi-x-lg" onClick={() => toggleCart()} style={{ cursor: 'pointer' }}></i>
                     <h3 className='px-4 text-center text-info' >Items</h3>
                 </div>
                 {
@@ -50,18 +50,18 @@ function CartSidebar() {
                                         <div className='col-auto d-flex'>
                                             <img src={IMAGE_URL + ele.image} height="50px" width='50px' alt='iceCream' className='border border-grey rounded' />
                                             <div className='mx-3'>
-                                                <h6>{ele.name}</h6>
+                                                <div className='d-flex'><h6>{ele.name}</h6><span className='text-muted ms-1' style={{ fontSize: "12px" }}>{`(${ele.size?.size ? ele.size?.size : "Regular"})`}</span></div>
                                                 <span>₹ {parseFloat(ele.price * ele.quantity).toFixed(2)}</span>
                                             </div>
 
                                         </div>
                                         <div className=' btn-group col-md-3'>
                                             <div className='my-2'>
-                                                <Button color="primary" variant='outline-primary' onClick={() => dispatch(decreaseQuantity({ id: ele.id, price: ele.price }))}>-</Button>
+                                                <Button color="primary" variant='outline-primary' onClick={() => dispatch(decreaseQuantity({ id: ele.id, price: ele.price, size: ele.size }))}>-</Button>
                                             </div>
                                             <div className='m-2 mt-3'>{ele.quantity}</div>
                                             <div className='my-2'>
-                                                <Button color="primary" variant='outline-primary' disabled={ele.disable} onClick={() => dispatch(increaseQuantity({ id: ele.id, price: ele.price }))}>+</Button>
+                                                <Button color="primary" variant='outline-primary' disabled={ele.disable} onClick={() => dispatch(increaseQuantity({ id: ele.id, price: ele.price, size: ele.size }))}>+</Button>
                                             </div>
                                         </div>
                                     </div>

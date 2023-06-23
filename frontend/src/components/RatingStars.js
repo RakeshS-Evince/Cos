@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
-const Star = ({ marked, starId }) => {
+const Star = ({ marked, starId, size }) => {
     return (
         <span data-star-id={starId} style={{
             color: '#ff9933',
             cursor: 'pointer',
-            fontSize: "35px"
+            fontSize: `${size ? size : "32px"}`
         }} role="button">
             {marked ? '\u2605' : '\u2606'}
         </span>
     );
 };
 
-export const RatingStars = ({ value }) => {
+export const RatingStars = ({ value, size }) => {
     const [rating, setRating] = useState(0);
     useEffect(() => { setRating(value) }, [value])
     return (
@@ -22,6 +22,7 @@ export const RatingStars = ({ value }) => {
                     starId={i + 1}
                     key={`star_${i + 1}`}
                     marked={rating >= i + 1}
+                    size={size}
                 />
             ))}
         </div>

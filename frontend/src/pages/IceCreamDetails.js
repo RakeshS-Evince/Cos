@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import useAuth from '../axios/useApi';
 import { ICECREAM, IMAGE_URL, PUBLIC_REVIEWS } from '../constants/constant';
 import { useParams } from 'react-router-dom';
-import { RatingStars } from './RatingStars';
+import { RatingStars } from '../components/RatingStars';
 import { useDispatch } from 'react-redux';
 import { UserContext } from '../context/UserContextProvider';
 import { addToCartWithMoreQuantity } from '../feature/cartSlice'
@@ -92,17 +92,17 @@ function IceCreamDetails() {
                             <h4 className='pt-3'>Price: ₹{price || icDetails.price}</h4>
                             <h6 className={`pt-3`}>Stock: <span className={icDetails?.quantity >= 1 ? 'text-success' : 'text-danger'}>{icDetails?.quantity >= 1 ? 'Avaliable' : 'Out of stock'}</span></h6>
                             <p className='pt-3'>{icDetails?.description}</p>
-                            <div className='d-flex'>
-                                <div className='me-2'>
+                            <div className='d-flex flex-wrap'>
+                                <div className='me-2 my-2'>
                                     <input type='radio' id={"default"} checked={defaultActive} className="btn-check" autoComplete="off" onChange={(e) => changeDefaultActive()} />
                                     <label className="btn btn-outline-primary" htmlFor={"default"}>{"35ml"}</label><br></br>
                                 </div>
-                                {/* {sizes?.length && sizes.map((ele, i) => {
-                                    return <div key={i} className='me-2'>
+                                {sizes?.length && sizes.map((ele, i) => {
+                                    return <div key={i} className='me-2 my-2'>
                                         <input disabled={!ele.active} type='radio' id={ele.id + ele.size} checked={ele.selected} onChange={() => changeSizeHandler(ele)} className="btn-check" autoComplete="off" />
                                         <label className="btn btn-outline-primary" htmlFor={ele.id + ele.size}>{ele.size}</label><br></br>
                                     </div>
-                                })} */}
+                                })}
                             </div>
                             <div className='d-flex pt-3'>
                                 <input type='number' value={quantity} min={1} className='form-control me-3' onChange={quantityChangeHandler} style={{ width: '80px' }} />
@@ -114,7 +114,7 @@ function IceCreamDetails() {
                                     price: price,
                                     available: icDetails?.quantity,
                                     quantity: parseInt(quantity),
-                                    size: sizes.find(ele => ele.selected) ? sizes.find(ele => ele.selected).id : null
+                                    size: sizes.find(ele => ele.selected) ? { id: sizes.find(ele => ele.selected).id, size: sizes.find(ele => ele.selected).size } : null
                                 })} >Add to cart</button>
 
                             </div>
@@ -159,6 +159,7 @@ function IceCreamDetails() {
 
                 </div>
             </div>}
+            <hr />
         </div>
     )
 }

@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { ORDERS, ORDER_STATUS_UPDATE } from '../constants/constant';
+import { ORDERS, ORDER_STATUS_UPDATE } from '../../constants/constant';
 import Swal from 'sweetalert2';
 import OrderDetailsModal from './OrderDetailsModal';
+import useAuth from '../../axios/useApi';
 
 function OrderTable() {
     const [orders, setOrders] = useState([]);
-    const authApi = useAuth();
     const [id, setId] = useState();
     const [status, setStatus] = useState('')
     const [enableInput, setEnableInput] = useState(false);
     const [refetch, setRefetch] = useState(false)
+    const authApi = useAuth();
     useEffect(() => {
-        authApi.get(ORDERS).then(res => setOrders(res.data)).catch(e => console.log(e.response.data.message));
+        authApi.get(ORDERS).then(res => setOrders(res.data?.reverse())).catch(e => console.log(e.response.data.message));
     }, [refetch, authApi]);
+
     const toggleRefetch = () => { setRefetch(!refetch) }
     const changeStatus = () => {
         if (status === 'Select status' || !status) {
@@ -75,7 +76,7 @@ function OrderTable() {
                                         <td>{ele.customer.fullname || ele.username}</td>
                                         <td>{ele.status}</td>
                                         <td>{ele.date}</td>
-                                        <td>{ele.totalPrice}</td>
+                                        <td>₹ {parseFloat(ele.totalPrice).toFixed(2)}</td>
                                         <td>
                                             <button className='btn btn-info me-2' onClick={() => { setId(ele.id); }} data-bs-toggle="modal" data-bs-target="#exampleModal">View More</button>
                                             <button className='btn btn-success' onClick={() => { setId(ele.id); setEnableInput(true) }}>Change Status</button>

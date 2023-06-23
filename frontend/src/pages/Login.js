@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import './signIn.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -39,7 +38,7 @@ function Login() {
     }
     return (
         <div id="main-wrapper" className="container">
-            <div className="row justify-content-center align-items-center  pb-3 mt-5">
+            <div className="row justify-content-center">
                 <div className="col-xl-10 ">
                     <div className="card border-0 ">
                         <div className="card-body  p-0">

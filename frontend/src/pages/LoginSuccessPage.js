@@ -1,11 +1,11 @@
-import axios from 'axios'
 import React, { useContext, useEffect } from 'react'
 import { BASE_URL } from '../constants/constant'
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContextProvider';
+import axios from 'axios'
 function LoginSuccessPage() {
-    const navigate = useNavigate();
     const { saveUser } = useContext(UserContext)
+    const navigate = useNavigate();
     useEffect(() => {
         axios.get(BASE_URL + "auth/test", { withCredentials: "true" }).then(res => {
             saveUser({ isLoggedIn: true, token: res.data.token, userId: res.data.id, username: res.data.username });

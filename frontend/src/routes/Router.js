@@ -1,19 +1,19 @@
-import React from 'react'
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
+import React from 'react'
 import FullLayout from '../layout/FullLayout'
 import Checkout from '../pages/Checkout'
 import Menu from '../pages/Menu'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
-import Orders from '../pages/Orders'
-import OrderDetails from '../pages/OrderDetails'
+import MyOrders from '../pages/MyOrders'
+import MyOrderDetails from '../pages/MyOrderDetails'
 import ProtectedRoutes from '../components/ProtectedRoutes'
 import Brands from '../pages/Brands'
 import useRoleCheck from '../hooks/useRoleCheck'
-import AdminDashboard from '../pages/AdminDashboard'
-import OrderTable from '../pages/OrderTable'
-import BrandTable from '../pages/BrandTable'
-import IceCreamTable from '../pages/IceCreamTable'
+import AdminDashboard from '../pages/admin/AdminDashboard'
+import OrderTable from '../pages/admin/OrderTable'
+import BrandTable from '../pages/admin/BrandTable'
+import IceCreamTable from '../pages/admin/IceCreamTable'
 import ForgotPassword from '../pages/ForgotPassword'
 import ResetPassword from '../pages/ResetPassword'
 import IceCreamByBrand from '../pages/IceCreamsByBrand'
@@ -23,20 +23,21 @@ import NotFound from '../pages/NotFound'
 import AddressForm from '../pages/AddressForm'
 import About from '../pages/About/About'
 import Contact from '../pages/Contact/Contact'
-import MessagesTable from '../pages/MessagesTable'
-import Customers from '../pages/Customers'
-import ReviewForm from '../pages/ReviewForm'
-import ReviewsTable from '../pages/ReviewsTable'
 import IceCreamDetails from '../pages/IceCreamDetails'
-import CustomerOrders from '../pages/CustomerOrders'
-import StaffForm from '../pages/StaffForm'
-import StaffTable from '../pages/StaffTable'
-import StaffEditForm from '../pages/StaffEditForm'
 import PaymentFailure from '../pages/PaymentFailure'
 import PaymentSuccess from '../pages/PaymentSuccess'
 import Cart from '../pages/Cart'
 import Wishlist from '../pages/Wishlist'
 import LoginSuccessPage from '../pages/LoginSuccessPage'
+import SearchResult from '../pages/SearchResult'
+import ReviewForm from '../pages/ReviewForm'
+import MessagesTable from '../pages/admin/MessagesTable'
+import Customers from '../pages/admin/Customers'
+import ReviewsTable from '../pages/admin/ReviewsTable'
+import CustomerOrders from '../pages/admin/CustomerOrders'
+import StaffTable from '../pages/admin/StaffTable'
+import StaffForm from '../pages/admin/StaffForm'
+import StaffEditForm from '../pages/admin/StaffEditForm'
 const Profile = React.lazy(() => import('../pages/Profile'))
 function Router() {
     const { isAdmin, isStaff } = useRoleCheck();
@@ -58,6 +59,7 @@ function Router() {
                     <Route path="/brands" exact element={<Brands />} />
                     <Route path="/brands/:name" exact element={<IceCreamByBrand />} />
                     <Route path="/login-success" exact element={<LoginSuccessPage />} />
+                    <Route path="/search-results" exact element={<SearchResult />} />
                 </Route>
                 <Route element={<ProtectedRoutes />}>
                     <Route element={!(isAdmin || isStaff) ? <Outlet /> : <Navigate to='/unauthorized' />}>
@@ -67,8 +69,8 @@ function Router() {
                         <Route path="/payment-failure/:id" exact element={<PaymentFailure />} />
                         <Route path="/payment-success/:id" exact element={<PaymentSuccess />} />
                         <Route path="/checkout" exact element={<Checkout />} />
-                        <Route path="/my-orders" exact element={<Orders />} />
-                        <Route path="/my-orders/:id" exact element={<OrderDetails />} />
+                        <Route path="/my-orders" exact element={<MyOrders />} />
+                        <Route path="/my-orders/:id" exact element={<MyOrderDetails />} />
                         <Route path="/review" element={<ReviewForm />} />
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/wishlist" element={<Wishlist />} />

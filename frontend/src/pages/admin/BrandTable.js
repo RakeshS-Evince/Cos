@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { ADMIN, BRANDS, IMAGE_URL } from '../constants/constant';
+import { ADMIN, BRANDS, IMAGE_URL } from '../../constants/constant';
 import Swal from 'sweetalert2';
 import BrandForm from './BrandForm';
+import useAuth from '../../axios/useApi';
 
 function BrandTable() {
     const [data, setData] = useState([]);

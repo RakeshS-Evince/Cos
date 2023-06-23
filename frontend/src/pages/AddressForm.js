@@ -1,10 +1,12 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { ADDRESS, BASE_URL } from '../constants/constant';
-import Swal from 'sweetalert2';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import useAuth from '../axios/useApi';
-const intitalAddress = { firstname: "", lastname: "", phone: "", email: "", address: "", state: "", city: "", zip: "" }
+
+const intitalAddress = { firstname: "", lastname: "", phone: "", email: "", address: "", state: "", city: "", zip: "" };
+
 function AddressForm() {
     const authApi = useAuth();
     const [address, setAddress] = useState(intitalAddress);

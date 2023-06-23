@@ -62,7 +62,7 @@ export const cartSlice = createSlice({
             state.total += action.payload.price
         },
         addToCartWithMoreQuantity: (state, action) => {
-            let find = state.items.findIndex(item => action.payload.id === item.id);
+            /*let find = state.items.findIndex(item => action.payload.id === item.id);
             if (find >= 0) {
                 if ((state.items[find].quantity > state.items[find].available) || (parseInt(state.items[find].quantity) + parseInt(action.payload.quantity) > state.items[find].available)) {
                     alert('You have already added the item quantity available in our stock to the cart')
@@ -73,14 +73,23 @@ export const cartSlice = createSlice({
                 return
             }
             state.items.push(action.payload);
-            state.total += action.payload.price * action.payload.quantity
+            state.total += action.payload.price * action.payload.quantity */
+
+            //____________________________new add to cart method with size______________________________________________//
+            let find = state.items.findIndex(item => action.payload.id === item.id && action.payload.size?.id === item.size?.id);
+            if (find >= 0) {
+                return
+            }
+            state.items.push(action.payload);
+            state.total += (action.payload.price * action.payload.quantity)
         },
         removeFromCart: (state, action) => {
-            state.items = state.items.filter(item => item.id !== action.payload.id);
+            let find = state.items.findIndex(item => action.payload.id === item.id && action.payload.size?.id === item.size?.id);
+            state.items = state.items.filter((item, index) => index !== find);
             state.total -= (action.payload.price * action.payload.quantity)
         },
         increaseQuantity: (state, action) => {
-            let find = state.items.findIndex(item => action.payload.id === item.id);
+            let find = state.items.findIndex(item => action.payload.id === item.id && action.payload.size?.id === item.size?.id);
             if (state.items[find].quantity === state.items[find].available) {
                 state.items[find].disable = true
                 return
@@ -90,7 +99,7 @@ export const cartSlice = createSlice({
         },
         decreaseQuantity: (state, action) => {
             state.items = state.items.map((ele) => {
-                if (ele.id === action.payload.id) {
+                if (ele.id === action.payload.id && action.payload.size?.id === ele.size?.id) {
                     return { ...ele, quantity: ele.quantity - 1, disable: false };
                 }
                 return ele

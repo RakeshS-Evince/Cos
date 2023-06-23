@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { authApi } from '../axios/axios';
-import { ADMIN, BRANDS } from '../constants/constant';
+import { authApi } from '../../axios/axios';
+import { ADMIN, BRANDS } from '../../constants/constant';
 import Swal from 'sweetalert2';
 
 function BrandForm({ setShowBrandForm, prevBrandName, refetch, ...rest }) {

@@ -19,23 +19,23 @@ const intitalAddress = {
     state: "",
 }
 function Checkout() {
-    const items = useSelector(selectCart);
-    const dispatch = useDispatch();
-    const authApi = useAuth();
-    const total = useSelector(state => state.cart.total);
-    const [states, setStates] = useState({});
     const [discount] = useState(0);
+    const [states, setStates] = useState({});
     const [isEditable, setIsEditable] = useState(false);
     const [addAddress, setAddAddress] = useState(false);
     const [addressId, setAddressId] = useState();
     const [refetch, setRefetch] = useState(false);
-    const navigate = useNavigate();
     const [address, setAddress] = useState(intitalAddress);
     const [payment, setPayment] = useState({
         prepaid: false,
         cod: true
     })
     const shippingCost = 40;
+    const items = useSelector(selectCart);
+    const total = useSelector(state => state.cart.total);
+    const authApi = useAuth();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     useEffect(() => {
         authApi.get(ADDRESS_DEFAULT)
             .then(res => {
@@ -145,7 +145,7 @@ function Checkout() {
                     couponDiscount: discount,
                     totalPrice: total,
                     date: new Date().toLocaleDateString().replace(/[/]/g, '-'),
-                    orderItems: items.map(({ id, quantity }) => ({ id, quantity }))
+                    orderItems: items
                 }
                 if (orderDetails.paymentMethod === 'cod') {
                     authApi.post(PLACE_ORDER, orderDetails).then(({ data }) => {
@@ -320,7 +320,7 @@ function Checkout() {
                                         </div>
                                         <div className="">
                                             <Link to="#" className="nav-link">
-                                                {ele.name} <br />
+                                                <div className='d-flex'><h6>{ele.name}</h6><span className='text-muted ms-1' style={{ fontSize: "12px" }}>{`(${ele.size?.size ? ele.size?.size : "Regular"})`}</span></div>
                                                 {ele.desc || ""}
                                             </Link>
                                             <div className="price text-muted">Total: ₹{parseFloat(ele.price * ele.quantity).toFixed(2)}</div>

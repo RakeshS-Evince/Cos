@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
 import { Link } from 'react-router-dom';
-import { STAFF } from '../constants/constant';
+import { STAFF } from '../../constants/constant';
 import Swal from 'sweetalert2';
+import useAuth from '../../axios/useApi';
 
 function StaffTable() {
     const [customers, setCustomers] = useState([]);

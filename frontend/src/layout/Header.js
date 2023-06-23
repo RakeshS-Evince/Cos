@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import wishlist from "../assets/images/wishlist.png";
 import { api } from '../axios/axios';
 
+
 export default function Header() {
     // const toggleCart = () => {
     //     document.getElementById('cartSidebar').classList.toggle('cart_wrapper_show');
@@ -34,13 +35,10 @@ export default function Header() {
             }
         })
     }
+
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed='top' style={{
-            background: '#6a11cb',
-            background: '-webkit-linear-gradient(to right, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.9))',
-            background: ' linear-gradient(to right, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.9))',
-        }}>
-            <Container fluid>
+        <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: "#f3f3f3" }} >
+            <Container id='header-1'>
                 <Navbar.Brand href="/">Ice-Cream Shop</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">

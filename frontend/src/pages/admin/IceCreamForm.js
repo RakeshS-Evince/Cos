@@ -4,8 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import useAuth from '../axios/useApi';
-import { ADMIN, BRANDS, ICECREAM } from '../constants/constant';
+import useAuth from '../../axios/useApi';
+import { ADMIN, BRANDS, ICECREAM } from '../../constants/constant';
 import Swal from 'sweetalert2';
 const iceCreamSchema = yup.object({
     name: yup.string().required("Ice Cream name is required"),

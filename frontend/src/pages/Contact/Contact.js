@@ -36,8 +36,8 @@ function Contact() {
             <div className="address details">
               <i className="fas fa-map-marker-alt" />
               <div className="topic">Address</div>
-              <div className="text-one">Sector 27</div>
-              <div className="text-two">Pearl Height D-Block , Rourkela</div>
+              <div className="text-one">Ganesh Market</div>
+              <div className="text-two">Pearl Height D-Block , Brahmapur</div>
             </div>
             <div className="phone details">
               <i className="fas fa-phone-alt" />
@@ -48,8 +48,8 @@ function Contact() {
             <div className="email details">
               <i className="fas fa-envelope" />
               <div className="topic">Email</div>
-              <div className="text-one">coderamit97@gmail.com</div>
-              <div className="text-two">albertcode14@gmail.com</div>
+              <div className="text-one">demo@gmail.com</div>
+              <div className="text-two">demo2@gmail.com</div>
             </div>
           </div>
           <div className="right-side">

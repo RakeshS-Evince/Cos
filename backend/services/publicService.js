@@ -18,6 +18,14 @@ const findAllIcecream = async () => {
             });
             ele.dataValues.sizes = sizeArr;
         };
+        if (ele.dataValues.reviews.length) {
+            let avgRating = 0;
+            ele.dataValues.reviews.forEach(element => {
+                avgRating += element.dataValues.rating
+            });
+            ele.dataValues.averageRating = avgRating / ele.dataValues.reviews.length;
+        }
+        delete ele.dataValues.reviews
         return ele.dataValues;
     })
     if (!iceCreamData) throw new ApiError(StatusCodes.NOT_FOUND, "No Ice-creams found");
@@ -27,7 +35,25 @@ const findAllIcecream = async () => {
 const findIceCreamsByBrands = async (brandName) => {
     const iceCreamData = await iceCreamRepository.getAllIceCreamByBrand(brandName);
     if (!iceCreamData) throw new ApiError(StatusCodes.NOT_FOUND, "No Ice-creams found");
-    return iceCreamData;
+    let tempData = iceCreamData.map(ele => {
+        if (ele.dataValues.sizes.length) {
+            let sizeArr = [];
+            ele.dataValues.sizes.forEach(element => {
+                sizeArr.push(element.size)
+            });
+            ele.dataValues.sizes = sizeArr;
+        };
+        if (ele.dataValues.reviews.length) {
+            let avgRating = 0;
+            ele.dataValues.reviews.forEach(element => {
+                avgRating += element.dataValues.rating
+            });
+            ele.dataValues.averageRating = avgRating / ele.dataValues.reviews.length;
+        }
+        delete ele.dataValues.reviews
+        return ele.dataValues;
+    })
+    return tempData;
 }
 const findIceCreamsById = async (id) => {
     const iceCreamData = await iceCreamRepository.getOneIceCream(id);

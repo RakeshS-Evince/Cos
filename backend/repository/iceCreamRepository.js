@@ -1,19 +1,32 @@
+const { Op } = require('sequelize');
 const { db, sequelize } = require('../model/index');
 const IceCream = db.iceCream;
+const Review = db.review;
 const Size = db.size;
 const getAllIceCream = async () => {
     return IceCream.findAll({
-        include: {
+        include: [{
             model: Size,
             attributes: ["size"]
-        },
+        }, {
+            model: Review,
+            attributes: ['rating']
+        }]
     });
 }
 const findMinMax = async () => {
     return IceCream.findAll({ attributes: [[sequelize.fn('min', sequelize.col('price')), 'minPrice'], [sequelize.fn('max', sequelize.col('price')), 'maxPrice']] })
 }
 const getAllIceCreamByBrand = async (brand) => {
-    return IceCream.findAll({ where: { brandName: brand } });
+    return IceCream.findAll({
+        include: [{
+            model: Size,
+            attributes: ["size"]
+        }, {
+            model: Review,
+            attributes: ['rating']
+        }], where: { brandName: brand }
+    });
 }
 const getOneIceCream = async (id) => {
     return IceCream.findOne({

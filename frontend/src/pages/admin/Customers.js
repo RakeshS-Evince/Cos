@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import useAuth from '../axios/useApi';
-import { CUSTOMERS } from '../constants/constant';
+import useAuth from '../../axios/useApi';
+import { CUSTOMERS } from '../../constants/constant';
 import { useNavigate } from 'react-router-dom';
 
 function Customers() {

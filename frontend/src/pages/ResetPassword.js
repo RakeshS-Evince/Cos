@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
-import * as yup from 'yup';
+import { BASE_URL, RESET_PASSWORD } from "../constants/constant";
 import { yupResolver } from '@hookform/resolvers/yup';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { useForm } from "react-hook-form";
 import { authApi } from "../axios/axios";
-import { BASE_URL, RESET_PASSWORD } from "../constants/constant";
+import * as yup from 'yup';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import Swal from "sweetalert2";
 const schema = yup.object({
     newPassword: yup.string().required("Password is required")
@@ -31,30 +31,32 @@ const ResetPassword = () => {
         })
     }
     return (
-        <div className="card">
-            <div className="card-body p-5">
-                <h3>Reset Password</h3>
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="form-group mb-2">
-                        <label htmlFor="newPassword">New Password</label>
-                        <InputGroup hasValidation>
-                            <Form.Control type="password" isInvalid={errors?.newPassword?.message} id='newPassword' {...register('newPassword')} />
-                            <Form.Control.Feedback type="invalid" >
-                                {errors?.newPassword?.message}
-                            </Form.Control.Feedback>
-                        </InputGroup>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="role">Confirm Password</label>
-                        <InputGroup hasValidation>
-                            <Form.Control type="password" isInvalid={errors?.confirmPassword?.message} id='confirmPassword' {...register('confirmPassword')} />
-                            <Form.Control.Feedback type="invalid" >
-                                {errors?.confirmPassword?.message}
-                            </Form.Control.Feedback>
-                        </InputGroup>
-                    </div>
-                    <button type="submit" className=" mt-2 btn btn-primary">Reset Password</button>
-                </Form>
+        <div>
+            <div className="card">
+                <div className="card-body p-5">
+                    <h3>Reset Password</h3>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="form-group mb-2">
+                            <label htmlFor="newPassword">New Password</label>
+                            <InputGroup hasValidation>
+                                <Form.Control type="password" isInvalid={errors?.newPassword?.message} id='newPassword' {...register('newPassword')} />
+                                <Form.Control.Feedback type="invalid" >
+                                    {errors?.newPassword?.message}
+                                </Form.Control.Feedback>
+                            </InputGroup>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="role">Confirm Password</label>
+                            <InputGroup hasValidation>
+                                <Form.Control type="password" isInvalid={errors?.confirmPassword?.message} id='confirmPassword' {...register('confirmPassword')} />
+                                <Form.Control.Feedback type="invalid" >
+                                    {errors?.confirmPassword?.message}
+                                </Form.Control.Feedback>
+                            </InputGroup>
+                        </div>
+                        <button type="submit" className=" mt-2 btn btn-primary">Reset Password</button>
+                    </Form>
+                </div>
             </div>
         </div>
     )

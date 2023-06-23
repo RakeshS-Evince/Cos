@@ -1,11 +1,12 @@
 import React from 'react'
+import { IMAGE_URL } from '../constants/constant';
 import { useDispatch, useSelector } from 'react-redux'
 import { decreaseQuantity, increaseQuantity, selectCart, removeFromCart, addToWishlist } from '../feature/cartSlice'
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
-import { IMAGE_URL } from '../constants/constant';
 
 function Cart() {
+    const wishlistItems = useSelector(state => state.cart.wishlist)
     const items = useSelector(selectCart);
     const total = useSelector((state) => state.cart.total);
     const dispatch = useDispatch();
@@ -61,9 +62,7 @@ function Cart() {
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                                                    <p>
-                                                        <strong>{ele.name}</strong>
-                                                    </p>
+                                                    <div className='d-flex'><strong>{ele.name}</strong><span className='text-muted ms-1 mt-1' style={{ fontSize: "12px" }}>{`(${ele.size?.size ? ele.size?.size : "Regular"})`}</span></div>
                                                     <p>Price: {ele.price}</p>
                                                     <button
                                                         type="button"
@@ -85,18 +84,18 @@ function Cart() {
                                                             price: ele.price,
                                                             available: ele.quantity,
                                                             quantity: 1,
+                                                            size: ele.size
                                                         }))}
                                                         title="Move to the wish list"
                                                     >
-                                                        <i className="fas fa-heart" />
+                                                        <i className={`text-white bi bi-${wishlistItems.findIndex(item => item.id === ele.id) >= 0 ? "heart-fill" : "heart"}`} />
                                                     </button>
                                                 </div>
                                                 <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-
                                                     <div className="d-flex mb-4" style={{ maxWidth: 300 }}>
                                                         <button
                                                             className="btn btn-primary px-3 me-2"
-                                                            onClick={() => dispatch(decreaseQuantity({ id: ele.id, price: ele.price }))}
+                                                            onClick={() => dispatch(decreaseQuantity({ id: ele.id, price: ele.price, size: ele.size }))}
                                                         >
                                                             <i className="fas fa-minus" />
                                                         </button>
@@ -117,17 +116,16 @@ function Cart() {
                                                         <button
                                                             disabled={ele.disable}
                                                             className="btn btn-primary px-3 ms-2"
-                                                            onClick={() => dispatch(increaseQuantity({ id: ele.id, price: ele.price }))}
+                                                            onClick={() => dispatch(increaseQuantity({ id: ele.id, price: ele.price, size: ele.size }))}
                                                         >
                                                             <i className="fas fa-plus" />
                                                         </button>
                                                     </div>
-
                                                     <p className="text-start text-md-center">
                                                         <strong>₹ {parseFloat(ele.price * ele.quantity).toFixed(2)}</strong>
                                                     </p>
                                                 </div>
-                                                <hr className="my-4" />
+                                                <hr className="my-2" />
                                             </div>
                                         ))}
                                     </div>
