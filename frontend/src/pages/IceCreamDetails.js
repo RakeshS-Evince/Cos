@@ -7,10 +7,13 @@ import { useDispatch } from 'react-redux';
 import { UserContext } from '../context/UserContextProvider';
 import { addToCartWithMoreQuantity } from '../feature/cartSlice'
 import Swal from 'sweetalert2';
+import ReletedProductCarousel from '../components/ReletedProductCarousel';
 
 function IceCreamDetails() {
     const [icDetails, setIcDetails] = useState();
     const [reviews, setReviews] = useState();
+    const [relatedProduct, setRelatedProduct] = useState([]);
+    const { products } = useContext(UserContext);
     const [defaultActive, setDefaultActive] = useState(true);
     const [price, setPrice] = useState(icDetails?.price);
     const [quantity, setQuantity] = useState(1);
@@ -64,6 +67,11 @@ function IceCreamDetails() {
         });
 
     }, [authApi, id]);
+    useEffect(() => {
+        let temp = [];
+        temp = products?.filter(item => (item.id !== icDetails?.id && (item.categoryName === icDetails?.categoryName || item?.brandName === icDetails?.brandName)));
+        setRelatedProduct(temp)
+    }, [products, icDetails])
 
     const changeSizeHandler = (element) => {
         setDefaultActive(false);
@@ -128,7 +136,7 @@ function IceCreamDetails() {
                 </div>
                 <hr />
                 <h3 className='p-3'>Reviews</h3>
-                <div className='p-3'>
+                <div className='p-3 card'>
                     {reviews?.length ?
                         reviews?.map((rev, i) => {
                             return (
@@ -159,7 +167,14 @@ function IceCreamDetails() {
 
                 </div>
             </div>}
-            <hr />
+            <div>
+                <center>
+                    <span className='h3 pb-1' style={{ borderBottom: "3px solid #ff6b6b" }}>You may also like</span>
+                </center>
+                <div className='row g-3 mt-3'>
+                    <ReletedProductCarousel items={relatedProduct} />
+                </div>
+            </div>
         </div>
     )
 }

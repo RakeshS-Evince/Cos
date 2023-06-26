@@ -12,10 +12,11 @@ function useAuth() {
         let resInterceptor = authApi.interceptors.response.use(function (response) {
             return response;
         }, function (error) {
-            Swal.fire(error.response?.data.message, "", "error")
-            if (error.response.status === "403") {
+            debugger
+            if (error.response.status === 401) {
                 logout()
             }
+            Swal.fire(error.response?.data.message, "", "error")
             // console.log(error.response.data.message)
         }
         );
