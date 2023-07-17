@@ -24,7 +24,7 @@ export const ReactCarousel = ({ items }) => {
         <div>
             <Carousel responsive={responsive}>
                 {items?.map((element, index) => (
-                    <div key={index} className='cat-card m-2'  >
+                    <div key={index} className='m-2'  >
                         <CategoryComp name={element.name} />
                     </div>
                 ))}
