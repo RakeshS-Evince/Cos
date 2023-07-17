@@ -12,7 +12,7 @@ const publicRouter = require('./routes/publicRoutes');
 const userRouter = require('./routes/userRoutes');
 const adminRouter = require('./routes/adminRoutes');
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:3001", credentials: true }));
+app.use(cors());
 app.use(session({
     resave: false,
     saveUninitialized: true,
@@ -29,4 +29,4 @@ app.use("/admin", adminRouter);
 app.use(CheckErrorType);
 app.use(apiError);
 
-app.listen(process.env.PORT, () => console.log('Server is listening at port ' + process.env.PORT))
+app.listen(process.env.PORT || 3000, () => console.log('Server is listening at port ' + process.env.PORT))
