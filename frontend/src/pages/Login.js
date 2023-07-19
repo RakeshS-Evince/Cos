@@ -34,7 +34,7 @@ function Login() {
     }
 
     const googleLogin = async () => {
-        window.open("http://localhost:3000/auth/login/google", "_self");
+        window.open(process.env.REACT_APP_API_URL + "auth/login/google", "_self");
     }
     return (
         <div id="main-wrapper" className="container">
