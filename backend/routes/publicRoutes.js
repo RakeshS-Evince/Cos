@@ -25,8 +25,8 @@ publicRouter.get("/auth/test", isAuthenticated, (req, res) => { res.send(req.use
 publicRouter.get("/auth/login/google", passport.authenticate('google', { scope: ['profile', "email"] }));
 publicRouter.get("/auth/google/callback/", passport.authenticate('google',
     {
-        failureRedirect: process.env.URL + '/login',
-        successRedirect: process.env.URL + "#/login-success"
+        failureRedirect: process.env.URL + '/#/login',
+        successRedirect: process.env.URL + "/#/login-success"
     }),
     function (req, res) {
         res.send(req.user);
