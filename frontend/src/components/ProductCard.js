@@ -44,7 +44,7 @@ function ProductCard({ product }) {
     return (
         <>
             {product && <Card className='menu-card'>
-                <Card.Img className='menu-image' onClick={() => navigate('/icecream-details/' + product?.id)} variant="top" src={IMAGE_URL + product?.image} height={"250px"} />
+                <Card.Img className='menu-image' onClick={() => navigate('/icecream-details/' + product?.id)} variant="top" src={IMAGE_URL + product?.image} height={"250px"} alt="menu" />
                 <i style={{ right: 0, top: 0, zIndex: 2, fontSize: "27px", padding: "10px", cursor: "pointer" }} className={`text-danger bi bi-${wishlistItems.findIndex(item => item.id === product?.id) >= 0 ? "heart-fill" : "heart"} position-absolute `} onClick={() => {
                     wishlistClickHandler({
                         name: product?.name,
