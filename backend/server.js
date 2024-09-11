@@ -12,7 +12,7 @@ const publicRouter = require('./routes/publicRoutes');
 const userRouter = require('./routes/userRoutes');
 const adminRouter = require('./routes/adminRoutes');
 app.use(bodyParser.json());
-app.use(cors({ origin: process.env.URL, credentials: true }));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(session({
     resave: false,
     saveUninitialized: true,

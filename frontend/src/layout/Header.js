@@ -62,7 +62,7 @@ export default function Header() {
                             <div className='d-flex justify-content-center'>
                                 <div className='me-2' onClick={() => navigate("/wishlist")}>
                                     <img src={wishlist} alt="wishlist" height={"27px"} width={"27px"} />
-                                    <span style={{ right: "12px", top: "5px", color: "white", fontSize: "12px" }}>{wishlistItems.length}</span>
+                                    <span style={{ right: "12px", top: "5px", color: "white", fontSize: "12px" }}>{wishlistItems?.length}</span>
                                 </div>
                                 <div onClick={() => navigate("/cart")}> <i className="fa-sharp fa-solid fa-cart-shopping fa-lg mt-3" style={{ color: "grey" }} ></i>
                                     <span style={{ right: "5px", bottom: "12px" }} className="badge rounded-pill badge-notification bg-danger sm">{items.length}</span>
